@@ -1,0 +1,38 @@
+= API Overview =
+
+== Runtime ==
+The API application is '''Pulse.Api''' (ASP.NET Web API 2 on OWIN JWT bearer auth).
+
+== General Characteristics ==
+* Endpoint style is domain-grouped by area (projects, plants, notifications, auth-related surfaces, etc.).
+* Business logic is generally delegated to service/repository layers.
+* Authorization combines module claim checks and membership scope checks.
+
+== Representative Endpoint Families ==
+=== Projects ===
+* Project tree/node retrieval for overview workflows
+* Global project/task search constrained by user access scope
+* Project mutation endpoints gated by project membership/ownership
+
+=== Plants and Membership ===
+* Plant-scoped membership endpoints for user-group assignment
+* Allowed-plants lookups used by project creation and user-scoped selectors
+
+=== Notifications ===
+* Unread active notifications endpoint used by navbar dropdown
+* Grouped active notifications endpoint for dedicated notifications page
+* Mark-as-read transaction endpoint
+
+== Security Expectations ==
+* LIST/GET endpoints should typically require matching VIEW module claims.
+* POST/PUT/DELETE should require matching mutation claims.
+* Membership and plant scope restrictions should be applied before data return.
+
+== Integration with Pulse.Web ==
+Pulse.Web consumes API endpoints for interactive pages and AJAX workflows.
+JWT bearer tokens are injected into browser-side API calls by a prefilter script.
+
+== Related Pages ==
+* [[Authentication and Authorization]]
+* [[Web UI and Notifications]]
+* [[Projects and Roadmaps]]

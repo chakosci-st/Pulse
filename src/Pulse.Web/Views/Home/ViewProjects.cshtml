@@ -1,0 +1,642 @@
+@{
+    ViewBag.Title = "Project View";
+    ViewBag.TitleIcon = "bi bi-grid-3x3-gap-fill";
+    ViewBag.SubTitle = "Project cards with task health snapshots.";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+@section Styles {
+    <link href="~/Content/locals/stacked-userprofiles.css" rel="stylesheet" />
+    <style>
+        .project-view-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .project-view-hero {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(240px, 0.9fr);
+            gap: 1rem;
+            padding: 1.45rem 1.55rem;
+            border: 1px solid rgba(148, 163, 184, 0.26);
+            border-radius: 1.45rem;
+            background: linear-gradient(135deg, #0f172a 0%, #164e63 54%, #f8fafc 100%);
+            box-shadow: 0 22px 48px rgba(15, 23, 42, 0.12);
+        }
+
+            .project-view-hero::after {
+                content: "";
+                position: absolute;
+                inset: auto -60px -100px auto;
+                width: 230px;
+                height: 230px;
+                border-radius: 999px;
+                background: radial-gradient(circle, rgba(125, 211, 252, 0.24) 0%, rgba(125, 211, 252, 0) 70%);
+                pointer-events: none;
+            }
+
+        .project-view-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            color: #bae6fd;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .project-view-hero h1 {
+            margin: 0.85rem 0 0.45rem;
+            font-size: clamp(2rem, 2.9vw, 2.7rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: #f8fafc;
+        }
+
+        .project-view-hero p {
+            margin: 0;
+            max-width: 700px;
+            color: rgba(226, 232, 240, 0.84);
+            line-height: 1.68;
+        }
+
+        .project-view-hero__chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.95rem;
+        }
+
+        .project-view-hero__chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.52rem 0.74rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.26);
+            border: 1px solid rgba(186, 230, 253, 0.16);
+            color: #e0f2fe;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .project-view-hero__summary {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 0.8rem;
+            padding: 1rem;
+            border-radius: 1.15rem;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.78);
+            color: #0f172a;
+        }
+
+        .project-view-hero__summary-label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #475569;
+        }
+
+        .project-view-toolbar {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(180px, 0.55fr)) auto;
+            gap: 0.85rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6f9 100%);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+        }
+
+        .project-view-toolbar .form-control,
+        .project-view-toolbar .form-select {
+            border-radius: 0.8rem;
+            border-color: #cbd5e1;
+            min-height: 46px;
+        }
+
+        .project-view-mode-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            background: #ffffff;
+            min-height: 46px;
+            justify-self: end;
+        }
+
+        .project-view-mode-btn {
+            border: none;
+            background: transparent;
+            color: #475569;
+            border-radius: 999px;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .project-view-mode-btn.active {
+            background: linear-gradient(135deg, #0f766e 0%, #0f172a 100%);
+            color: #f8fafc;
+            box-shadow: 0 10px 18px rgba(15, 23, 42, 0.14);
+        }
+
+        .project-view-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 0.25rem;
+        }
+
+        .project-view-summary-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .project-view-summary-copy {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .project-view-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.85rem;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #075985;
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .project-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #dbe4ea;
+            border-radius: 1.2rem;
+            background: #ffffff;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+        }
+
+        .project-card-header {
+            position: relative;
+            padding: 1rem 1rem 0.85rem;
+            color: #f8fafc;
+            background:
+                radial-gradient(circle at top right, rgba(255,255,255,0.28), transparent 32%),
+                linear-gradient(135deg, #0f766e 0%, #0f172a 100%);
+        }
+
+        .project-card-header::after {
+            content: '';
+            position: absolute;
+            inset: auto -40px -60px auto;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .project-card-actions {
+            position: absolute;
+            top: 0.85rem;
+            right: 0.85rem;
+            display: flex;
+            gap: 0.45rem;
+            z-index: 2;
+        }
+
+        .project-card-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.88);
+            color: #0f172a;
+            text-decoration: none;
+        }
+
+        .project-card-kicker {
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        .project-card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 0.4rem;
+            margin-bottom: 0.5rem;
+            padding-right: 5rem;
+        }
+
+        .project-card-icon {
+            flex: 0 0 auto;
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.14);
+            backdrop-filter: blur(6px);
+            font-size: 1.15rem;
+        }
+
+        .project-card-heading {
+            font-size: 1.12rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .project-card-projectno {
+            font-size: 0.83rem;
+            opacity: 0.82;
+        }
+
+        .project-card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.8rem;
+        }
+
+        .project-card-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            background: rgba(255,255,255,0.16);
+            color: #f8fafc;
+        }
+
+        .project-card-body {
+            padding: 1rem;
+        }
+
+        .project-card-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .project-card-owner {
+            font-size: 0.88rem;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .project-card-dates {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 0.95rem;
+            padding: 0.85rem;
+            border-radius: 1rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .project-card-date-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .project-card-date-value {
+            font-size: 0.92rem;
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .project-card-members {
+            min-height: 44px;
+            margin-bottom: 0.9rem;
+        }
+
+        .project-card-section {
+            margin-bottom: 0.95rem;
+            padding: 0.9rem;
+            border-radius: 1rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .project-card-section-title {
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+            margin-bottom: 0.55rem;
+        }
+
+        .project-card-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .project-card-progress-track {
+            flex: 1 1 auto;
+            height: 9px;
+            border-radius: 999px;
+            background: #dbeafe;
+            overflow: hidden;
+        }
+
+        .project-card-progress-bar {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #06b6d4 0%, #0f766e 100%);
+        }
+
+        .project-card-progress-value {
+            flex: 0 0 auto;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .project-card-insights {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.65rem;
+        }
+
+        .project-card-insight {
+            padding: 0.75rem;
+            border-radius: 0.9rem;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+        }
+
+        .project-card-insight-value {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .project-card-insight-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            font-weight: 700;
+            margin-top: 0.25rem;
+        }
+
+        .project-card-timeline {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .project-card-timeline-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            font-size: 0.87rem;
+            color: #334155;
+        }
+
+        .project-card-timeline-label {
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .project-card-risk-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.65rem;
+        }
+
+        .project-card-risk-item {
+            padding: 0.85rem 0.75rem;
+            border-radius: 0.95rem;
+            text-align: center;
+            color: #0f172a;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+        }
+
+        .project-card-risk-item.is-alert {
+            background: #fff7ed;
+            border-color: #fdba74;
+        }
+
+        .project-card-risk-item.is-warning {
+            background: #fffbeb;
+            border-color: #fcd34d;
+        }
+
+        .project-card-risk-item.is-success {
+            background: #ecfdf5;
+            border-color: #6ee7b7;
+        }
+
+        .project-card-risk-value {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .project-card-risk-label {
+            margin-top: 0.3rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .project-card-ownership {
+            display: grid;
+            gap: 0.7rem;
+        }
+
+        .project-card-owner-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            font-size: 0.88rem;
+        }
+
+        .project-card-owner-line strong {
+            color: #0f172a;
+        }
+
+        .project-card-members.compact {
+            margin-bottom: 0;
+        }
+
+        .project-card-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .project-card-stat {
+            padding: 0.9rem 0.7rem;
+            text-align: center;
+        }
+
+        .project-card-stat + .project-card-stat {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .project-card-stat-value {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1;
+        }
+
+        .project-card-stat-label {
+            margin-top: 0.35rem;
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .project-card-empty {
+            padding: 3rem 1rem;
+            border: 1px dashed #cbd5e1;
+            border-radius: 1rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            text-align: center;
+            color: #64748b;
+        }
+
+        @@media (max-width: 991.98px) {
+            .project-view-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .project-view-toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .project-view-mode-toggle {
+                justify-self: stretch;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                border-radius: 1rem;
+            }
+        }
+
+        @@media (max-width: 575.98px) {
+            .project-card-stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .project-card-stat:nth-child(3),
+            .project-card-stat:nth-child(4) {
+                border-top: 1px solid #e2e8f0;
+            }
+
+            .project-card-stat:nth-child(3) {
+                border-left: none;
+            }
+
+            .project-card-risk-grid,
+            .project-card-insights {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+}
+
+<div class="project-view-shell">
+    <section class="project-view-hero">
+        <div>
+            <span class="project-view-hero__eyebrow"><i class="bi bi-view-stacked"></i> Portfolio explorer</span>
+            <h1>Browse projects in a card-first workspace.</h1>
+            <p>Shift between overview, schedule, risk, and ownership perspectives without losing the quick filters that keep the visible portfolio relevant.</p>
+            <div class="project-view-hero__chips">
+                <span class="project-view-hero__chip"><i class="bi bi-grid"></i> Card-based scanning</span>
+                <span class="project-view-hero__chip"><i class="bi bi-shield-exclamation"></i> Task health signals</span>
+                <span class="project-view-hero__chip"><i class="bi bi-people"></i> Ownership visibility</span>
+            </div>
+        </div>
+        <aside class="project-view-hero__summary">
+            <div class="project-view-hero__summary-label">Visible portfolio</div>
+            <div id="projectViewSummary" class="project-view-summary-copy">Loading project cards...</div>
+            <div id="projectViewCount" class="project-view-count">
+                <i class="bi bi-grid-3x3-gap-fill"></i>
+                <span>0 visible</span>
+            </div>
+        </aside>
+    </section>
+
+    <div class="project-view-toolbar">
+        <input id="projectViewSearch" type="search" class="form-control" placeholder="Search by project, product, owner, plant, or category" />
+        <select id="projectViewStatus" class="form-select">
+            <option value="">All statuses</option>
+            <option value="NOT STARTED">Not Started</option>
+            <option value="ONGOING">Ongoing</option>
+            <option value="AT RISK">At Risk</option>
+            <option value="HOLD">Hold</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="CANCELLED">Cancelled</option>
+        </select>
+        <select id="projectViewTaskFilter" class="form-select">
+            <option value="">All task health</option>
+            <option value="pending">Has pending tasks</option>
+            <option value="risk">Has at risk tasks</option>
+            <option value="closed-delayed">Has closed delayed tasks</option>
+        </select>
+        <div class="project-view-mode-toggle" role="tablist" aria-label="Project view mode">
+            <button type="button" class="project-view-mode-btn active" data-view-mode="overview">Overview</button>
+            <button type="button" class="project-view-mode-btn" data-view-mode="schedule">Schedule</button>
+            <button type="button" class="project-view-mode-btn" data-view-mode="risk">Risk</button>
+            <button type="button" class="project-view-mode-btn" data-view-mode="ownership">Ownership</button>
+        </div>
+    </div>
+
+    <div id="projectCardList" class="project-card-grid">
+        <div class="project-card-empty">Loading project cards...</div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/locals/stacked-userprofiles.js"></script>
+    <script src="~/Scripts/home/viewprojects.js"></script>
+}

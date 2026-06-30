@@ -1,0 +1,257 @@
+﻿@using Pulse.Web.Helpers
+@{
+    var selectedMenu = (ViewBag.SelectedMenu as string) ?? string.Empty;
+    var templatesNavItemClass = string.Equals(selectedMenu, "Templates", StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(selectedMenu) ? "active" : string.Empty;
+}
+
+
+<ul class="nav sidebar-menu flex-column"
+    data-lte-toggle="treeview"
+    role="navigation"
+    aria-label="Main navigation"
+    data-accordion="false"
+    id="navigation">
+
+    <li class="nav-item @templatesNavItemClass">
+        <a href="@Url.Action("Index", "Home", new { area = "Templates" })" class="nav-link @templatesNavItemClass @ViewBag.IsActiveDashboard">
+            <i class="nav-icon text-lg bi bi-boxes h3"></i>
+            <p class="text-lg">Templates</p>
+        </a>
+    </li>
+
+    <li class="nav-header">TEMPLATES</li>
+
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "CATGRYVIEW"))
+    {
+        <li class="nav-item @ViewBag.IsActiveTemplatesCategories">
+            <a href="#" class="nav-link  @ViewBag.IsActiveTemplatesCategories">
+                <i class="nav-icon bi bi-circle-square h3"></i>
+                <p>
+                    Categories
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "Categories", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesCategoriesReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Categories", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesCategoriesAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All Categories</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("New", "Categories", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesCategoriesNew">
+                        <i class="nav-icon bi bi-plus-circle"></i>
+                        <p>New Category</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "FIELDVIEW,FIELDADD,FIELDEDIT,FIELDDEL"))
+    {
+        <li class="nav-item @ViewBag.IsActiveTemplatesFields">
+            <a href="#" class="nav-link @ViewBag.IsActiveTemplatesFields">
+                <i class="nav-icon bi bi-input-cursor-text h3"></i>
+                <p>
+                    Fields
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                @if (AuthorizationHelper.IsInGroupsOrModules("", "FIELDVIEW"))
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("Reports", "Fields", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesFieldsReports">
+                            <i class="nav-icon bi bi-book"></i>
+                            <p>Reports</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Fields", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesFieldsAll">
+                            <i class="nav-icon bi bi-card-list"></i>
+                            <p>All Fields</p>
+                        </a>
+                    </li>
+                }
+                @if (AuthorizationHelper.IsInGroupsOrModules("", "FIELDADD"))
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("New", "Fields", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesFieldsNew">
+                            <i class="nav-icon bi bi-plus-circle"></i>
+                            <p>New Field</p>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "FORMVIEW"))
+    {
+        <li class="nav-item">
+            <a href="#" class="nav-link @ViewBag.IsActiveForms">
+                <i class="nav-icon bi bi-code-square h3"></i>
+                <p>
+                    Forms
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "Forms", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesFormsReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Forms", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesFormsAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All Forms</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("New", "Forms", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesFormsNew">
+                        <i class="nav-icon bi bi-plus-circle"></i>
+                        <p>New Form</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "MATVIEW"))
+    {
+        <li class="nav-item">
+            <a href="#" class="nav-link @ViewBag.IsActiveTemplatesMaturityLevels">
+                <i class="nav-icon bi bi-clock-history h3 @ViewBag.IsActiveTemplatesMaturityLevels"></i>
+                <p>
+                    Maturities
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "MaturityLevels", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesMaturityLevelsReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "MaturityLevels", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesMaturityLevelsAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All Maturity Levels</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("New", "MaturityLevels", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesMaturityLevelsNew">
+                        <i class="nav-icon bi bi-plus-circle"></i>
+                        <p>New Maturity Level</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "PDIVVIEW"))
+    {
+        <li class="nav-item @ViewBag.IsActiveTemplatesProductDivisions">
+            <a href="#" class="nav-link @ViewBag.IsActiveTemplatesProductDivisions">
+                <i class="nav-icon bi bi-layers-half h3"></i>
+                <p>
+                    Product Divisions
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "ProductDivisions", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductDivisionsReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "ProductDivisions", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductDivisionsAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All Product Divisions</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("New", "ProductDivisions", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductDivisionsNew">
+                        <i class="nav-icon bi bi-plus-circle"></i>
+                        <p>New Product Division</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "PGRPVIEW"))
+    {
+        <li class="nav-item @ViewBag.IsActiveTemplatesProductGroups">
+            <a href="#" class="nav-link @ViewBag.IsActiveTemplatesProductGroups">
+                <i class="nav-icon bi bi-node-plus-fill h3"></i>
+                <p>
+                    Product Groups
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "ProductGroups", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductGroupsReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "ProductGroups", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductGroupsAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All Product Groups</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("New", "ProductGroups", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductGroupsNew">
+                        <i class="nav-icon bi bi-plus-circle"></i>
+                        <p>New Product Groups</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "RMAPVIEW"))
+    {
+        <li class="nav-item">
+            <a href="#" class="nav-link @ViewBag.IsActiveTemplatesRoadmaps">
+                <i class="nav-icon bi bi-signpost-split h3"></i>
+                <p>
+                    Roadmaps
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "Roadmaps", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesRoadmapsReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Roadmaps", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesRoadmapsAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All Roadmaps</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("New", "Roadmaps", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesRoadmapsNew">
+                        <i class="nav-icon bi bi-plus-circle"></i>
+                        <p>New Roadmap</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+
+</ul>

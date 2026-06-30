@@ -1,0 +1,75 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Edit Product Division";
+    ViewBag.TitleIcon = "bi bi-pencil-square";
+    ViewBag.SubTitle = "Update this top-level division so portfolio structure stays aligned to the business.";
+    ViewBag.ContentHeaderChips = new[] { "Top-level portfolio structure", "Technology or market area", "Division governance" };
+    ViewBag.ContentHeaderAsideLabel = "Division maintenance";
+    ViewBag.ContentHeaderAsideTitle = "Keep the major technology or market grouping current as the organization evolves.";
+    ViewBag.ContentHeaderAsideBody = "Division edits help preserve a clean parent hierarchy for the product groups and projects beneath it.";
+    ViewBag.IsActiveTemplatesProductDivisions = "menu-open";
+    ViewBag.IsActiveTemplatesProductDivisionsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+<form id="productdivisionForm" class="needs-validation" novalidate="">
+    @Html.Hidden("TransactionKey")
+    
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        Update ProductDivision
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Update existing product division</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="Code" class="form-label">ProductDivision Code<span class="required-indicator sr-only"></span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Code" name="Code" required="" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">Product Division Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input class="form-control" id="Name" name="Name" placeholder="Enter Produt Division Name" required="">
+                            <div class="invalid-feedback">Please provide a product division.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Description" class="form-label">Product Division Description</label>
+                        <div class="input-group has-validation">
+                            <input class="form-control" id="Description" name="Description" placeholder="Enter Produt Division Description">
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <div id="isActive"></div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "ProductDivisions", new { area = "Templates" })" class="btn btn-default">Cancel</a> <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/Scripts/locals/switch-button.js"></script>
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/productdivisions/edit.js"></script>
+}

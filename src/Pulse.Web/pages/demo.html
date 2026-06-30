@@ -1,0 +1,1672 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Initialization (Improved Owners UI + Backend Mapping)</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- AdminLTE 3 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+
+
+    <style>
+        /* ======= GLOBAL ======= */
+        body {
+            background: radial-gradient(circle at top, #1f2937 0, #020617 45%);
+            color: #111827;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .page-shell {
+            min-height: 100vh;
+            padding: 24px 12px;
+        }
+
+        @media (min-width: 992px) {
+            .page-shell {
+                padding: 32px;
+            }
+        }
+
+        /* ======= HEADER CARD ======= */
+        .card-glass {
+            border-radius: 1.25rem;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: radial-gradient(circle at top left, rgba(59,130,246,0.25), transparent 55%), radial-gradient(circle at bottom right, rgba(16,185,129,0.25), transparent 55%), linear-gradient(135deg, #020617, #020617);
+            color: #e5e7eb;
+            box-shadow: 0 20px 50px rgba(15,23,42,0.6);
+        }
+
+            .card-glass .project-title {
+                font-size: 1.45rem;
+                font-weight: 650;
+                letter-spacing: 0.02em;
+            }
+
+        .project-chip {
+            font-size: 0.78rem;
+            border-radius: 999px;
+            padding: 0.18rem 0.75rem;
+            background-color: rgba(15,23,42,0.8);
+            border: 1px solid rgba(148,163,184,0.55);
+            color: #e5e7eb;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+            .project-chip i {
+                font-size: 0.8rem;
+            }
+
+        /* ======= MAIN CARD ======= */
+        .layout-main-card {
+            border-radius: 1.25rem;
+            background-color: #f9fafb;
+            border: none;
+            box-shadow: 0 22px 55px rgba(15,23,42,0.65);
+            margin-top: 1.25rem;
+            overflow: hidden;
+        }
+
+            .layout-main-card > .card-body {
+                padding: 1.5rem 1.5rem 1.25rem;
+            }
+
+        @media (min-width: 992px) {
+            .layout-main-card > .card-body {
+                padding: 2rem 2.25rem 1.75rem;
+            }
+        }
+
+        .section-title {
+            font-size: 0.95rem;
+            font-weight: 650;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+            .section-title i {
+                font-size: 0.9rem;
+            }
+
+        .section-subtitle {
+            font-size: 0.83rem;
+            color: #6b7280;
+            margin-bottom: 0.85rem;
+        }
+
+        /* ======= FORM FIELDS ======= */
+        .form-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-control,
+        .form-select {
+            font-size: 0.85rem;
+            border-radius: 0.55rem;
+            border-color: #e5e7eb;
+        }
+
+            .form-control:focus,
+            .form-select:focus {
+                border-color: #2563eb;
+                box-shadow: 0 0 0 2px rgba(37,99,235,0.18);
+            }
+
+        /* ======= BADGES ======= */
+        .badge-soft {
+            font-size: 0.7rem;
+            border-radius: 999px;
+            padding: 0.16rem 0.65rem;
+            background: #e0ecff;
+            color: #1d4ed8;
+            border: 1px solid rgba(37,99,235,0.18);
+        }
+
+        .badge-maturity {
+            font-size: 0.7rem;
+            border-radius: 999px;
+            padding: 0.08rem 0.5rem;
+            background: #0f172a;
+            color: #e5e7eb;
+            border: 1px solid rgba(148,163,184,0.35);
+        }
+
+        .badge-required {
+            font-size: 0.7rem;
+            border-radius: 999px;
+            padding: 0.08rem 0.5rem;
+            background: rgba(220,38,38,0.07);
+            color: #b91c1c;
+            border: 1px solid rgba(248,113,113,0.6);
+        }
+
+        .badge-optional {
+            font-size: 0.7rem;
+            border-radius: 999px;
+            padding: 0.08rem 0.5rem;
+            background: rgba(16,185,129,0.06);
+            color: #047857;
+            border: 1px solid rgba(52,211,153,0.6);
+        }
+
+        /* ======= MEMBERS ======= */
+        .member-pill {
+            border-radius: 999px;
+            padding: 0.2rem 0.6rem;
+            background-color: #e5e7eb;
+            color: #111827;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin: 0.15rem;
+        }
+
+            .member-pill button {
+                border: none;
+                background: transparent;
+                padding: 0;
+                font-size: 0.8rem;
+                line-height: 1;
+                color: #6b7280;
+            }
+
+                .member-pill button:hover {
+                    color: #111827;
+                }
+
+        /* ======= MILESTONES & TASKS ======= */
+        .milestones-header-row {
+            display: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.25rem;
+        }
+
+        @media (min-width: 768px) {
+            .milestones-header-row {
+                display: flex;
+            }
+        }
+
+        .milestone-row {
+            background: #ffffff;
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(15,23,42,0.04);
+            transition: box-shadow 0.15s ease, transform 0.15s ease;
+        }
+
+            .milestone-row:hover {
+                box-shadow: 0 10px 25px rgba(15,23,42,0.08);
+                transform: translateY(-1px);
+            }
+
+        .milestone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            gap: 1rem;
+            padding: 0.65rem 0.75rem;
+            background: linear-gradient(90deg, #f9fafb, #eff6ff);
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .milestone-title {
+            font-size: 0.95rem;
+            font-weight: 650;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+            .milestone-title i {
+                font-size: 0.9rem;
+            }
+
+        .milestone-meta {
+            font-size: 0.75rem;
+            color: #6b7280;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+        .milestone-toggle-icon {
+            font-size: 0.85rem;
+            color: #6b7280;
+            transition: transform 0.15s ease;
+        }
+
+        .milestone-header[aria-expanded="true"] .milestone-toggle-icon {
+            transform: rotate(90deg);
+        }
+
+        .milestone-body {
+            margin-top: 0;
+            padding: 0.75rem 0.75rem 0.65rem;
+            background-color: #ffffff;
+        }
+
+        .task-row {
+            padding: 0.45rem 0;
+            border-bottom: 1px dashed #e5e7eb;
+            font-size: 0.85rem;
+        }
+
+            .task-row:last-child {
+                border-bottom: none;
+            }
+
+        .task-name {
+            font-weight: 550;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+            .task-name i {
+                color: #4b5563;
+                font-size: 0.8rem;
+            }
+
+        .task-meta {
+            font-size: 0.72rem;
+            color: #6b7280;
+            margin-top: 0.1rem;
+        }
+
+        /* ======= OWNERS CHIP SELECTOR ======= */
+        .owners-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .owners-input {
+            min-height: 36px;
+            padding: 3px 32px 3px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background-color: #f9fafb;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.25rem;
+            cursor: text;
+            transition: border-color 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+        }
+
+            .owners-input.focused {
+                border-color: #2563eb;
+                box-shadow: 0 0 0 2px rgba(37,99,235,0.18);
+                background-color: #ffffff;
+            }
+
+        .owners-chip {
+            border-radius: 999px;
+            padding: 0.1rem 0.5rem;
+            background-color: #e0ecff;
+            color: #111827;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+            .owners-chip i {
+                font-size: 0.8rem;
+            }
+
+            .owners-chip button {
+                border: none;
+                background: transparent;
+                padding: 0;
+                font-size: 0.75rem;
+                line-height: 1;
+                color: #6b7280;
+            }
+
+                .owners-chip button:hover {
+                    color: #111827;
+                }
+
+        .owners-placeholder {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .owners-caret {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            pointer-events: none;
+        }
+
+        .owners-dropdown {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+            margin-top: 2px;
+            z-index: 20;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 14px 32px rgba(15,23,42,0.2);
+            border: 1px solid #e5e7eb;
+            max-height: 220px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+        }
+
+        .owners-item {
+            padding: 0.4rem 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.08s ease;
+        }
+
+            .owners-item:hover {
+                background-color: #eff6ff;
+            }
+
+            .owners-item.active-owner {
+                background-color: #dbeafe;
+                font-weight: 500;
+            }
+
+        .owners-item-name {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .owners-item-check {
+            color: #2563eb;
+            font-size: 0.8rem;
+        }
+
+        .owners-helper {
+            font-size: 0.72rem;
+            color: #6b7280;
+            margin-top: 0.15rem;
+        }
+
+        /* ======= PREVIEW ======= */
+        .preview-card {
+            border-radius: 1rem;
+            background: radial-gradient(circle at top left, rgba(59,130,246,0.4), transparent 55%), radial-gradient(circle at bottom right, rgba(16,185,129,0.32), transparent 50%), #020617;
+            color: #e5e7eb;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            padding: 0.85rem 1rem;
+        }
+
+        .preview-title {
+            font-size: 0.95rem;
+            font-weight: 650;
+        }
+
+        .preview-sub {
+            font-size: 0.78rem;
+            color: #9ca3af;
+        }
+
+            .preview-sub strong {
+                color: #e5e7eb;
+            }
+
+        /* Small helpers */
+        .text-gray-400 {
+            color: #9ca3af !important;
+        }
+
+        .text-gray-500 {
+            color: #6b7280 !important;
+        }
+    </style>
+</head>
+<body class="hold-transition layout-top-nav">
+
+    <div class="page-shell">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-xl-10 col-lg-11">
+
+                    <!-- Header -->
+                    <div class="card card-glass mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between flex-md-row flex-column gap-3 align-items-start">
+                                <div>
+                                    <div class="project-title mb-2">
+                                        <i class="fas fa-circle-plus me-2 text-success"></i>
+                                        Initialize New Project
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-2 mb-2">
+                                        <span class="project-chip">
+                                            <i class="fas fa-route"></i> Roadmap template
+                                        </span>
+                                        <span class="project-chip">
+                                            <i class="far fa-user"></i> Owner & team
+                                        </span>
+                                        <span class="project-chip">
+                                            <i class="fas fa-user-check"></i> Responsibilities
+                                        </span>
+                                    </div>
+                                    <div style="font-size:0.8rem;color:#9ca3af;">
+                                        Configure the project once and reuse the monitoring dashboard across multiple initiatives.
+                                    </div>
+                                </div>
+                                <div class="text-md-end">
+                                    <div class="small text-gray-400">Next step</div>
+                                    <div class="fw-semibold">
+                                        <i class="fas fa-diagram-project me-1 text-primary"></i>
+                                        Monitoring dashboard
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main card -->
+                    <div class="card layout-main-card">
+                        <div class="card-body">
+                            <form id="projectInitForm">
+
+                                <!-- 1. Roadmap Template -->
+                                <div class="mb-4">
+                                    <div class="section-title">
+                                        <i class="fas fa-route text-primary"></i>
+                                        Roadmap template
+                                    </div>
+                                    <div class="section-subtitle">
+                                        Choose a template to pre-load milestones and tasks from your reference roadmap. You can still adjust owners and timeline.
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Template</label>
+                                            <select class="form-select" id="templateSelect" required>
+                                                <option value="">-- Select roadmap template --</option>
+                                                <option value="standardLaunch">Standard Product Launch (static)</option>
+                                                <option value="agileSprint">Agile 3-Sprint Delivery (static)</option>
+                                                <option value="simple">Simple 3-Phase Project (static)</option>
+                                                <option value="backendTemplate">Backend Template (Sample JSON)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Template description</label>
+                                            <div class="form-control-plaintext" id="templateDescription" style="font-size:0.85rem;color:#6b7280;">
+                                                Select a template to see its structure.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <!-- 2. Project Info & Members -->
+                                <div class="mb-4">
+                                    <div class="section-title">
+                                        <i class="fas fa-folder-tree text-primary"></i>
+                                        Project info & team
+                                    </div>
+                                    <div class="section-subtitle">
+                                        Define the basic project information and the people who can be assigned to milestones and activities.
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-7">
+                                            <label class="form-label">Project title</label>
+                                            <input type="text" class="form-control" id="projectTitle" placeholder="e.g. Q4 New Product Launch" required>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="form-label">Project owner / manager</label>
+                                            <input type="text" class="form-control" id="projectOwner" placeholder="e.g. John Doe" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Start date</label>
+                                            <input type="date" class="form-control" id="projectStart" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Target completion date</label>
+                                            <input type="date" class="form-control" id="projectEnd" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <label class="form-label">Project description</label>
+                                        <textarea class="form-control" id="projectDescription" rows="2"
+                                                  placeholder="Short description, main objectives, scope..."></textarea>
+                                    </div>
+
+                                    <!-- Members -->
+                                    <div class="mt-3">
+                                        <div class="section-subtitle mb-1">
+                                            Define project members that can be assigned to milestones/activities.
+                                        </div>
+                                        <div class="row g-2 align-items-end">
+                                            <div class="col-md-4 col-sm-6">
+                                                <label class="form-label mb-1">Add member</label>
+                                                <input type="text" class="form-control form-control-sm" id="memberNameInput"
+                                                       placeholder="e.g. Alice">
+                                            </div>
+                                            <div class="col-md-3 col-sm-4">
+                                                <button type="button" class="btn btn-outline-primary btn-sm mt-2 mt-sm-0" id="btnAddMember">
+                                                    <i class="fas fa-user-plus me-1"></i>Add
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2" id="membersList">
+                                            <!-- Member pills -->
+                                        </div>
+                                        <div class="small text-muted mt-1">
+                                            The project owner is automatically included as an assignable member.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <!-- 3. Milestones & Tasks from Template -->
+                                <div class="mb-4">
+                                    <div class="section-title">
+                                        <i class="fas fa-flag-checkered text-warning"></i>
+                                        Milestones & activities
+                                    </div>
+                                    <div class="section-subtitle">
+                                        Imported from the selected template. Use the chip selector to assign one or more responsible users.
+                                    </div>
+
+                                    <div class="milestones-header-row px-1">
+                                        <div class="flex-grow-1">Milestone & Activities</div>
+                                        <div style="width: 220px;">Owners</div>
+                                        <div style="width: 200px;">Timeline</div>
+                                    </div>
+
+                                    <div id="milestonesContainer">
+                                        <!-- Generated milestone/task rows -->
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <!-- Actions & Preview -->
+                                <div class="row g-3 align-items-start">
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-check-circle me-1"></i>
+                                            Create project
+                                        </button>
+                                        <button type="reset" class="btn btn-outline-secondary ms-2">
+                                            Reset
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="preview-card d-none" id="previewCard">
+                                            <div class="d-flex justify-content-between gap-2">
+                                                <div>
+                                                    <div class="preview-title" id="previewTitle"></div>
+                                                    <div class="preview-sub" id="previewOwner"></div>
+                                                    <div class="preview-sub" id="previewDates"></div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <span class="badge-soft mb-1 d-inline-flex align-items-center gap-1">
+                                                        <i class="fas fa-users"></i>
+                                                        <span id="previewMemberCount">0</span> members
+                                                    </span>
+                                                    <div class="mt-1">
+                                                        <span class="badge-soft d-inline-flex align-items-center gap-1">
+                                                            <i class="fas fa-flag"></i>
+                                                            <span id="previewMilestoneCount">0</span> milestones
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-2 preview-sub" id="previewDescription"></div>
+                                            <div class="mt-2" id="previewMilestonesList"></div>
+                                            <div class="mt-2 preview-sub">
+                                                Project data is logged to console; send it to your backend or pass it to the monitoring page.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // --------------------------------------------------------------------
+            // 1. ORIGINAL STATIC TEMPLATES (you can keep or remove)
+            // --------------------------------------------------------------------
+            const templates = {
+                standardLaunch: {
+                    name: 'Standard Product Launch',
+                    description: 'Planning, design, build, test and launch phases for a typical product introduction.',
+                    milestones: [
+                        {
+                            name: 'Planning & Requirements',
+                            tasks: [
+                                { name: 'Collect business requirements' },
+                                { name: 'Define success metrics' }
+                            ]
+                        },
+                        {
+                            name: 'Design & Prototyping',
+                            tasks: [
+                                { name: 'Create UX/UI mockups' },
+                                { name: 'Prepare technical design' }
+                            ]
+                        },
+                        {
+                            name: 'Implementation & Testing',
+                            tasks: [
+                                { name: 'Develop core features' },
+                                { name: 'Execute integration tests' }
+                            ]
+                        }
+                    ]
+                },
+                agileSprint: {
+                    name: 'Agile 3-Sprint Delivery',
+                    description: 'Three sprints with planning, implementation and review tasks.',
+                    milestones: [
+                        {
+                            name: 'Sprint 1',
+                            tasks: [
+                                { name: 'Sprint planning' },
+                                { name: 'Sprint backlog implementation' },
+                                { name: 'Sprint review & retrospective' }
+                            ]
+                        },
+                        {
+                            name: 'Sprint 2',
+                            tasks: [
+                                { name: 'Sprint planning' },
+                                { name: 'Sprint backlog implementation' },
+                                { name: 'Sprint review & retrospective' }
+                            ]
+                        },
+                        {
+                            name: 'Sprint 3',
+                            tasks: [
+                                { name: 'Sprint planning' },
+                                { name: 'Sprint backlog implementation' },
+                                { name: 'Sprint review & retrospective' }
+                            ]
+                        }
+                    ]
+                },
+                simple: {
+                    name: 'Simple 3-Phase Project',
+                    description: 'Straightforward Init → Execute → Close project structure.',
+                    milestones: [
+                        {
+                            name: 'Initiation',
+                            tasks: [
+                                { name: 'Define scope' },
+                                { name: 'Identify stakeholders' }
+                            ]
+                        },
+                        {
+                            name: 'Execution',
+                            tasks: [
+                                { name: 'Perform planned activities' }
+                            ]
+                        },
+                        {
+                            name: 'Closure',
+                            tasks: [
+                                { name: 'Finalize documentation' },
+                                { name: 'Conduct lessons learned session' }
+                            ]
+                        }
+                    ]
+                }
+            };
+
+            // --------------------------------------------------------------------
+            // 2. SAMPLE BACKEND TEMPLATE JSON (your provided JSON)
+            //    In real use, this comes from the backend.
+            // --------------------------------------------------------------------
+            const sampleBackendTemplateJson = {
+                "treeData": [
+                    {
+                        "key": "46280CCB213506ADE06340655B0A7CC3",
+                        "id": "46280CCB213506ADE06340655B0A7CC3",
+                        "type": "milestone",
+                        "data": {
+                            "name": "Maturity 0",
+                            "desc": "Maturity 0",
+                            "maturity": "MAT0",
+                            "mandays": null,
+                            "isRequired": null
+                        },
+                        "children": [
+                            {
+                                "key": "46280CCB213706ADE06340655B0A7CC3",
+                                "id": "46280CCB213706ADE06340655B0A7CC3",
+                                "type": "activity",
+                                "data": {
+                                    "name": "MAT0 - Activity 1",
+                                    "desc": "Activity 1",
+                                    "maturity": null,
+                                    "mandays": "0",
+                                    "isRequired": true
+                                },
+                                "children": [],
+                                "forms": [],
+                                "prerequisites": [],
+                                "collapsed": false
+                            },
+                            {
+                                "key": "46280CCB213B06ADE06340655B0A7CC3",
+                                "id": "46280CCB213B06ADE06340655B0A7CC3",
+                                "type": "activity",
+                                "data": {
+                                    "name": "MAT0 - Activity 2",
+                                    "desc": "Activity 2",
+                                    "maturity": null,
+                                    "mandays": "0",
+                                    "isRequired": true
+                                },
+                                "children": [],
+                                "forms": [],
+                                "prerequisites": [],
+                                "collapsed": false
+                            },
+                            {
+                                "key": "46280CCB213F06ADE06340655B0A7CC3",
+                                "id": "46280CCB213F06ADE06340655B0A7CC3",
+                                "type": "activity",
+                                "data": {
+                                    "name": "MAT0 - Activity 3",
+                                    "desc": "Activity 3",
+                                    "maturity": null,
+                                    "mandays": "0",
+                                    "isRequired": false
+                                },
+                                "children": [
+                                    {
+                                        "key": "46280CCB214106ADE06340655B0A7CC3",
+                                        "id": "46280CCB214106ADE06340655B0A7CC3",
+                                        "type": "milestone",
+                                        "data": {
+                                            "name": "MAT0 - submilestone1",
+                                            "desc": "submilestone1",
+                                            "maturity": "MAT0",
+                                            "mandays": null,
+                                            "isRequired": null
+                                        },
+                                        "children": [
+                                            {
+                                                "key": "46280CCB214306ADE06340655B0A7CC3",
+                                                "id": "46280CCB214306ADE06340655B0A7CC3",
+                                                "type": "activity",
+                                                "data": {
+                                                    "name": "MAT0 - submilestone1 - Activity1",
+                                                    "desc": "subtask1",
+                                                    "maturity": null,
+                                                    "mandays": "0",
+                                                    "isRequired": false
+                                                },
+                                                "children": [
+                                                    {
+                                                        "key": "46280CCB214506ADE06340655B0A7CC3",
+                                                        "id": "46280CCB214506ADE06340655B0A7CC3",
+                                                        "type": "activity",
+                                                        "data": {
+                                                            "name": "MAT0 - submilestone1 - Activity1 - subtask1.1",
+                                                            "desc": "subtask1.1",
+                                                            "maturity": null,
+                                                            "mandays": "0",
+                                                            "isRequired": false
+                                                        },
+                                                        "children": [],
+                                                        "forms": [],
+                                                        "prerequisites": [
+                                                            "46280CCB213706ADE06340655B0A7CC3",
+                                                            "46280CCB213B06ADE06340655B0A7CC3"
+                                                        ],
+                                                        "collapsed": false
+                                                    },
+                                                    {
+                                                        "key": "46280CCB214B06ADE06340655B0A7CC3",
+                                                        "id": "46280CCB214B06ADE06340655B0A7CC3",
+                                                        "type": "activity",
+                                                        "data": {
+                                                            "name": "MAT0 - submilestone1 - Activity1 - subtask1.2",
+                                                            "desc": "subtask2",
+                                                            "maturity": null,
+                                                            "mandays": "0",
+                                                            "isRequired": false
+                                                        },
+                                                        "children": [],
+                                                        "forms": [],
+                                                        "prerequisites": [],
+                                                        "collapsed": false
+                                                    },
+                                                    {
+                                                        "key": "46280CCB214D06ADE06340655B0A7CC3",
+                                                        "id": "46280CCB214D06ADE06340655B0A7CC3",
+                                                        "type": "activity",
+                                                        "data": {
+                                                            "name": "MAT0 - submilestone1 - Activity1 - subtask1.3",
+                                                            "desc": "subtask1.2",
+                                                            "maturity": null,
+                                                            "mandays": "0",
+                                                            "isRequired": false
+                                                        },
+                                                        "children": [],
+                                                        "forms": [],
+                                                        "prerequisites": [],
+                                                        "collapsed": false
+                                                    }
+                                                ],
+                                                "forms": [],
+                                                "prerequisites": [
+                                                    "46280CCB213706ADE06340655B0A7CC3",
+                                                    "46280CCB213B06ADE06340655B0A7CC3"
+                                                ],
+                                                "collapsed": false
+                                            }
+                                        ],
+                                        "forms": [],
+                                        "prerequisites": [],
+                                        "collapsed": false
+                                    },
+                                    {
+                                        "key": "46280CCB215106ADE06340655B0A7CC3",
+                                        "id": "46280CCB215106ADE06340655B0A7CC3",
+                                        "type": "milestone",
+                                        "data": {
+                                            "name": "MAT0 - submilestone2",
+                                            "desc": "submilestone2",
+                                            "maturity": "MAT0",
+                                            "mandays": null,
+                                            "isRequired": null
+                                        },
+                                        "children": [],
+                                        "forms": [],
+                                        "prerequisites": [],
+                                        "collapsed": false
+                                    }
+                                ],
+                                "forms": [],
+                                "prerequisites": [
+                                    "46280CCB213706ADE06340655B0A7CC3",
+                                    "46280CCB213B06ADE06340655B0A7CC3"
+                                ],
+                                "collapsed": false
+                            }
+                        ],
+                        "forms": [],
+                        "prerequisites": [],
+                        "collapsed": false
+                    },
+                    {
+                        "key": "46280CCB215906ADE06340655B0A7CC3",
+                        "id": "46280CCB215906ADE06340655B0A7CC3",
+                        "type": "milestone",
+                        "data": {
+                            "name": "Maturity 10",
+                            "desc": "Maturity 10",
+                            "maturity": "MAT10",
+                            "mandays": null,
+                            "isRequired": null
+                        },
+                        "children": [
+                            {
+                                "key": "46280CCB215B06ADE06340655B0A7CC3",
+                                "id": "46280CCB215B06ADE06340655B0A7CC3",
+                                "type": "activity",
+                                "data": {
+                                    "name": "MAT10 - Activity1",
+                                    "desc": "T1",
+                                    "maturity": null,
+                                    "mandays": "0",
+                                    "isRequired": false
+                                },
+                                "children": [],
+                                "forms": [],
+                                "prerequisites": [],
+                                "collapsed": false
+                            },
+                            {
+                                "key": "46280CCB215D06ADE06340655B0A7CC3",
+                                "id": "46280CCB215D06ADE06340655B0A7CC3",
+                                "type": "activity",
+                                "data": {
+                                    "name": "MAT10 - Activity2",
+                                    "desc": "T2",
+                                    "maturity": null,
+                                    "mandays": "0",
+                                    "isRequired": false
+                                },
+                                "children": [],
+                                "forms": [],
+                                "prerequisites": [],
+                                "collapsed": false
+                            }
+                        ],
+                        "forms": [],
+                        "prerequisites": [],
+                        "collapsed": false
+                    },
+                    {
+                        "key": "46280CCB216106ADE06340655B0A7CC3",
+                        "id": "46280CCB216106ADE06340655B0A7CC3",
+                        "type": "milestone",
+                        "data": {
+                            "name": "Maturity 20",
+                            "desc": "Maturity 20",
+                            "maturity": "MAT20",
+                            "mandays": null,
+                            "isRequired": null
+                        },
+                        "children": [
+                            {
+                                "key": "46334C50A4D15673E06340655B0A9F08",
+                                "id": "46334C50A4D15673E06340655B0A9F08",
+                                "type": "activity",
+                                "data": {
+                                    "name": "mat20-act-1",
+                                    "desc": "mat20-act-1",
+                                    "maturity": null,
+                                    "mandays": "0",
+                                    "isRequired": false
+                                },
+                                "children": [],
+                                "forms": [],
+                                "prerequisites": [],
+                                "collapsed": false
+                            }
+                        ],
+                        "forms": [],
+                        "prerequisites": [],
+                        "collapsed": false
+                    },
+                    {
+                        "key": "46280CCB213306ADE06340655B0A7CC3",
+                        "id": "46280CCB213306ADE06340655B0A7CC3",
+                        "type": "activity",
+                        "data": {
+                            "name": "act-root-1",
+                            "desc": "act-root-1",
+                            "maturity": null,
+                            "mandays": "0",
+                            "isRequired": false
+                        },
+                        "children": [],
+                        "forms": [],
+                        "prerequisites": [],
+                        "collapsed": false
+                    },
+                    {
+                        "key": "46334C50A4D45673E06340655B0A9F08",
+                        "id": "46334C50A4D45673E06340655B0A9F08",
+                        "type": "activity",
+                        "data": {
+                            "name": "act-root-2",
+                            "desc": "act-root-2",
+                            "maturity": null,
+                            "mandays": "0",
+                            "isRequired": false
+                        },
+                        "children": [],
+                        "forms": [],
+                        "prerequisites": [],
+                        "collapsed": false
+                    }
+                ],
+                "rootForms": [
+                    {
+                        "key": "46280CCB216306ADE06340655B0A7CC3",
+                        "id": "46280CCB216306ADE06340655B0A7CC3",
+                        "sysid": "42621D5E29FD673CE06340655B0AC0FC",
+                        "name": "form3",
+                        "desc": "form3"
+                    }
+                ]
+            };
+
+            // --------------------------------------------------------------------
+            // 3. MAPPING FUNCTION: backend JSON -> UI template structure
+            // --------------------------------------------------------------------
+            function mapBackendTemplateToUiTemplate(backendTemplateJson, uiTemplateName, uiTemplateDescription) {
+                const { treeData = [] } = backendTemplateJson || {};
+
+                const uiTemplate = {
+                    name: uiTemplateName || 'Imported Template',
+                    description: uiTemplateDescription || '',
+                    milestones: []
+                };
+
+                const milestoneMap = new Map(); // id -> milestone object
+
+                function getOrCreateMilestone(node) {
+                    let ms = milestoneMap.get(node.id);
+                    if (!ms) {
+                        ms = {
+                            name: node.data ?.name || 'Untitled milestone',
+                            meta: {
+                                id: node.id,
+                                maturity: node.data ?.maturity || null,
+                                mandays: node.data ?.mandays || null,
+                                isRequired: node.data ?.isRequired ?? null,
+                                desc: node.data ?.desc || ''
+                },
+                            tasks: []
+                        };
+                        milestoneMap.set(node.id, ms);
+                        uiTemplate.milestones.push(ms);
+                    }
+                    return ms;
+                }
+
+                function addActivityTask(node, currentMilestone) {
+                    const data = node.data || {};
+                    const task = {
+                        name: data.name || 'Untitled activity',
+                        meta: {
+                            id: node.id,
+                            desc: data.desc || '',
+                            maturity: data.maturity || null,
+                            mandays: data.mandays || null,
+                            isRequired: data.isRequired ?? null,
+                            prerequisites: node.prerequisites || [],
+                            forms: node.forms || [],
+                            collapsed: node.collapsed ?? false
+              }
+                    };
+                    currentMilestone.tasks.push(task);
+                }
+
+                function traverse(node, currentMilestone) {
+                    const { type, children = [] } = node;
+                    const data = node.data || {};
+
+                    let milestoneForChildren = currentMilestone;
+
+                    if (type === 'milestone') {
+                        milestoneForChildren = getOrCreateMilestone(node);
+                    } else if (type === 'activity') {
+                        if (currentMilestone) {
+                            addActivityTask(node, currentMilestone);
+                        } else {
+                            // root-level activity -> attach to special "Root activities" milestone
+                            let rootMs = milestoneMap.get('__ROOT_ACTIVITIES__');
+                            if (!rootMs) {
+                                rootMs = {
+                                    name: 'Root activities',
+                                    meta: { id: '__ROOT_ACTIVITIES__', desc: 'Activities not under a milestone' },
+                                    tasks: []
+                                };
+                                milestoneMap.set('__ROOT_ACTIVITIES__', rootMs);
+                                uiTemplate.milestones.push(rootMs);
+                            }
+                            addActivityTask(node, rootMs);
+                            milestoneForChildren = rootMs;
+                        }
+                    }
+
+                    children.forEach(child => traverse(child, milestoneForChildren));
+                }
+
+                treeData.forEach(rootNode => traverse(rootNode, null));
+
+                return uiTemplate;
+            }
+
+            // Build UI template from the sample backend JSON and register it in templates
+            templates.backendTemplate = mapBackendTemplateToUiTemplate(
+                sampleBackendTemplateJson,
+                'Backend Template (Sample JSON)',
+                'Template mapped from backend treeData structure.'
+            );
+
+            // --------------------------------------------------------------------
+            // 4. MEMBERS & OWNER-CHIPS WIDGET (unchanged from your original)
+            // --------------------------------------------------------------------
+            const templateSelect = document.getElementById('templateSelect');
+            const templateDescription = document.getElementById('templateDescription');
+            const milestonesContainer = document.getElementById('milestonesContainer');
+
+            const membersListContainer = document.getElementById('membersList');
+            const memberNameInput = document.getElementById('memberNameInput');
+            const btnAddMember = document.getElementById('btnAddMember');
+            const projectOwnerInput = document.getElementById('projectOwner');
+            let members = []; // {name}
+
+            function getAllAssignableMembers() {
+                const owner = projectOwnerInput.value.trim();
+                const unique = new Set();
+                if (owner) unique.add(owner);
+                members.forEach(m => unique.add(m.name));
+                return Array.from(unique);
+            }
+
+            function renderMembers() {
+                membersListContainer.innerHTML = '';
+                members.forEach((m, idx) => {
+                    const pill = document.createElement('span');
+                    pill.className = 'member-pill';
+                    pill.innerHTML = `
+              <i class="far fa-user"></i>${m.name}
+              <button type="button" data-index="${idx}" title="Remove">
+                <i class="fas fa-times"></i>
+              </button>
+            `;
+                    membersListContainer.appendChild(pill);
+                });
+
+                membersListContainer.querySelectorAll('button[data-index]').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const i = parseInt(this.dataset.index, 10);
+                        members.splice(i, 1);
+                        renderMembers();
+                        refreshAllOwnerWidgets();
+                    });
+                });
+
+                refreshAllOwnerWidgets();
+            }
+
+            btnAddMember.addEventListener('click', function () {
+                const name = memberNameInput.value.trim();
+                if (!name) return;
+                if (members.some(m => m.name.toLowerCase() === name.toLowerCase())) {
+                    memberNameInput.value = '';
+                    return;
+                }
+                members.push({ name });
+                memberNameInput.value = '';
+                renderMembers();
+            });
+
+            projectOwnerInput.addEventListener('input', refreshAllOwnerWidgets);
+
+            // ------- OWNER CHIP SELECTOR WIDGET ------- //
+            function createOwnerWidget(initialSelected = []) {
+                const wrap = document.createElement('div');
+                wrap.className = 'owners-select-wrapper';
+                wrap.dataset.ownerWidget = 'true';
+
+                wrap.innerHTML = `
+            <div class="owners-input">
+              <span class="owners-placeholder">Select owner(s)...</span>
+            </div>
+            <span class="owners-caret"><i class="fas fa-caret-down"></i></span>
+            <div class="owners-dropdown d-none"></div>
+            <input type="hidden" class="owners-hidden" value="${JSON.stringify(initialSelected)}">
+            <div class="owners-helper">Click to select; click again to remove.</div>
+          `;
+
+                const inputArea = wrap.querySelector('.owners-input');
+                const dropdown = wrap.querySelector('.owners-dropdown');
+                const hidden = wrap.querySelector('.owners-hidden');
+
+                function getSelected() {
+                    try {
+                        return JSON.parse(hidden.value) || [];
+                    } catch (e) {
+                        return [];
+                    }
+                }
+
+                function setSelected(arr) {
+                    hidden.value = JSON.stringify(arr);
+                    renderChips();
+                    renderDropdownItems();
+                }
+
+                function toggleDropdown(show) {
+                    if (show) {
+                        dropdown.classList.remove('d-none');
+                        inputArea.classList.add('focused');
+                        renderDropdownItems();
+                    } else {
+                        dropdown.classList.add('d-none');
+                        inputArea.classList.remove('focused');
+                    }
+                }
+
+                function renderChips() {
+                    const selected = getSelected();
+                    inputArea.innerHTML = '';
+                    if (selected.length === 0) {
+                        const placeholder = document.createElement('span');
+                        placeholder.className = 'owners-placeholder';
+                        placeholder.textContent = 'Select owner(s)...';
+                        inputArea.appendChild(placeholder);
+                    } else {
+                        selected.forEach(name => {
+                            const chip = document.createElement('span');
+                            chip.className = 'owners-chip';
+                            chip.innerHTML = `
+                  <i class="far fa-user"></i>${name}
+                  <button type="button" title="Remove"><i class="fas fa-times"></i></button>
+                `;
+                            chip.querySelector('button').addEventListener('click', (ev) => {
+                                ev.stopPropagation();
+                                const current = getSelected().filter(n => n !== name);
+                                setSelected(current);
+                            });
+                            inputArea.appendChild(chip);
+                        });
+                    }
+                }
+
+                function renderDropdownItems() {
+                    const allMembers = getAllAssignableMembers();
+                    const selected = new Set(getSelected());
+                    dropdown.innerHTML = '';
+
+                    if (allMembers.length === 0) {
+                        const empty = document.createElement('div');
+                        empty.className = 'owners-item';
+                        empty.textContent = 'No members available';
+                        dropdown.appendChild(empty);
+                        return;
+                    }
+
+                    allMembers.forEach(name => {
+                        const item = document.createElement('div');
+                        item.className = 'owners-item' + (selected.has(name) ? ' active-owner' : '');
+                        item.innerHTML = `
+                <div class="owners-item-name">
+                  <i class="far fa-user"></i><span>${name}</span>
+                </div>
+                <div class="owners-item-check">
+                  ${selected.has(name) ? '<i class="fas fa-check"></i>' : ''}
+                </div>
+              `;
+                        item.addEventListener('click', (ev) => {
+                            ev.stopPropagation();
+                            const current = new Set(getSelected());
+                            if (current.has(name)) {
+                                current.delete(name);
+                            } else {
+                                current.add(name);
+                            }
+                            setSelected(Array.from(current));
+                        });
+                        dropdown.appendChild(item);
+                    });
+                }
+
+                inputArea.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    const visible = !dropdown.classList.contains('d-none');
+                    toggleDropdown(!visible);
+                });
+
+                document.addEventListener('click', () => {
+                    toggleDropdown(false);
+                });
+
+                // Initial render
+                setSelected(initialSelected);
+
+                return wrap;
+            }
+
+            function refreshAllOwnerWidgets() {
+                const widgets = milestonesContainer.querySelectorAll('[data-owner-widget="true"]');
+                widgets.forEach(w => {
+                    const hidden = w.querySelector('.owners-hidden');
+                    if (!hidden) return;
+                    const inputArea = w.querySelector('.owners-input');
+                    const dropdown = w.querySelector('.owners-dropdown');
+                    if (!dropdown || !inputArea) return;
+
+                    const allMembers = getAllAssignableMembers();
+                    const selected = new Set(JSON.parse(hidden.value || "[]"));
+                    dropdown.innerHTML = '';
+                    if (allMembers.length === 0) {
+                        const empty = document.createElement('div');
+                        empty.className = 'owners-item';
+                        empty.textContent = 'No members available';
+                        dropdown.appendChild(empty);
+                    } else {
+                        allMembers.forEach(name => {
+                            const item = document.createElement('div');
+                            item.className = 'owners-item' + (selected.has(name) ? ' active-owner' : '');
+                            item.innerHTML = `
+                  <div class="owners-item-name">
+                    <i class="far fa-user"></i><span>${name}</span>
+                  </div>
+                  <div class="owners-item-check">
+                    ${selected.has(name) ? '<i class="fas fa-check"></i>' : ''}
+                  </div>
+                `;
+                            item.addEventListener('click', (ev) => {
+                                ev.stopPropagation();
+                                const current = new Set(JSON.parse(hidden.value || "[]"));
+                                if (current.has(name)) current.delete(name);
+                                else current.add(name);
+                                hidden.value = JSON.stringify(Array.from(current));
+
+                                const selectedNow = Array.from(current);
+                                inputArea.innerHTML = '';
+                                if (selectedNow.length === 0) {
+                                    const placeholder = document.createElement('span');
+                                    placeholder.className = 'owners-placeholder';
+                                    placeholder.textContent = 'Select owner(s)...';
+                                    inputArea.appendChild(placeholder);
+                                } else {
+                                    selectedNow.forEach(n => {
+                                        const chip = document.createElement('span');
+                                        chip.className = 'owners-chip';
+                                        chip.innerHTML = `
+                        <i class="far fa-user"></i>${n}
+                        <button type="button" title="Remove"><i class="fas fa-times"></i></button>
+                      `;
+                                        chip.querySelector('button').addEventListener('click', (ev2) => {
+                                            ev2.stopPropagation();
+                                            const cur = new Set(JSON.parse(hidden.value || "[]"));
+                                            cur.delete(n);
+                                            hidden.value = JSON.stringify(Array.from(cur));
+                                            refreshAllOwnerWidgets();
+                                        });
+                                        inputArea.appendChild(chip);
+                                    });
+                                }
+                                refreshAllOwnerWidgets();
+                            });
+                            dropdown.appendChild(item);
+                        });
+                    }
+                });
+            }
+
+            // --------------------------------------------------------------------
+            // 5. RENDER TEMPLATE (USES templates[...] INCLUDING backendTemplate)
+            // --------------------------------------------------------------------
+            function renderTemplate(templateKey) {
+                milestonesContainer.innerHTML = '';
+                const tpl = templates[templateKey];
+                if (!tpl) {
+                    templateDescription.textContent = 'Select a template to see its structure.';
+                    return;
+                }
+
+                templateDescription.textContent = tpl.description || 'Template loaded.';
+
+                tpl.milestones.forEach((ms, msIndex) => {
+                    const msDiv = document.createElement('div');
+                    msDiv.className = 'milestone-row';
+                    const msId = 'ms_' + msIndex;
+
+                    const msOwnerWidget = createOwnerWidget([]);
+
+                    msDiv.innerHTML = `
+              <div class="milestone-header" data-bs-toggle="collapse" data-bs-target="#${msId}_body" aria-expanded="true">
+                <div>
+                  <div class="milestone-title">
+                    <i class="fas fa-flag text-primary me-1"></i>${ms.name}
+                  </div>
+                  <div class="text-muted" style="font-size:0.75rem;">
+                    ${ms.tasks.length} task(s)
+                  </div>
+                </div>
+                <div class="flex-grow-1"></div>
+              </div>
+              <div class="collapse show milestone-body" id="${msId}_body">
+                <div class="row g-2 mb-2">
+                  <div class="col-md-4">
+                    <label class="form-label mb-1">Milestone owners</label>
+                    <div class="ms-owner-widget"></div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label mb-1">Start date</label>
+                    <input type="date" class="form-control form-control-sm" data-type="ms-start" data-milestone-index="${msIndex}">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label mb-1">End date</label>
+                    <input type="date" class="form-control form-control-sm" data-type="ms-end" data-milestone-index="${msIndex}">
+                  </div>
+                </div>
+                <div class="mt-2">
+                  <div class="tasks-container"></div>
+                </div>
+              </div>
+            `;
+
+                    msDiv.querySelector('.ms-owner-widget').appendChild(msOwnerWidget);
+                    msOwnerWidget.dataset.type = 'milestone';
+                    msOwnerWidget.dataset.milestoneIndex = msIndex;
+
+                    const tasksContainer = msDiv.querySelector('.tasks-container');
+
+                    ms.tasks.forEach((t, tIndex) => {
+                        const taskRow = document.createElement('div');
+                        taskRow.className = 'task-row';
+                        const taskOwnerWidget = createOwnerWidget([]);
+
+                        taskRow.innerHTML = `
+                <div class="row g-2 align-items-center">
+                  <div class="col-md-4">
+                    <div class="task-name">${t.name}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label mb-1" style="font-size:0.8rem;">Task owners</label>
+                    <div class="task-owner-widget"></div>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label mb-1" style="font-size:0.8rem;">Start</label>
+                    <input type="date" class="form-control form-control-sm"
+                           data-type="task-start"
+                           data-milestone-index="${msIndex}"
+                           data-task-index="${tIndex}">
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label mb-1" style="font-size:0.8rem;">End</label>
+                    <input type="date" class="form-control form-control-sm"
+                           data-type="task-end"
+                           data-milestone-index="${msIndex}"
+                           data-task-index="${tIndex}">
+                  </div>
+                </div>
+              `;
+                        taskRow.querySelector('.task-owner-widget').appendChild(taskOwnerWidget);
+                        taskOwnerWidget.dataset.type = 'task';
+                        taskOwnerWidget.dataset.milestoneIndex = msIndex;
+                        taskOwnerWidget.dataset.taskIndex = tIndex;
+
+                        tasksContainer.appendChild(taskRow);
+                    });
+
+                    milestonesContainer.appendChild(msDiv);
+                });
+
+                refreshAllOwnerWidgets();
+            }
+
+            // --------------------------------------------------------------------
+            // 6. TEMPLATE SELECT CHANGE: static or backend-mapped
+            // --------------------------------------------------------------------
+            templateSelect.addEventListener('change', function () {
+                const key = this.value;
+                milestonesContainer.innerHTML = '';
+                if (!key) {
+                    templateDescription.textContent = 'Select a template to see its structure.';
+                    return;
+                }
+                renderTemplate(key);
+            });
+
+            // --------------------------------------------------------------------
+            // 7. FORM SUBMIT / PREVIEW (unchanged logic, works for all templates)
+            // --------------------------------------------------------------------
+            const form = document.getElementById('projectInitForm');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const title = document.getElementById('projectTitle').value.trim();
+                const owner = projectOwnerInput.value.trim();
+                const start = document.getElementById('projectStart').value;
+                const end = document.getElementById('projectEnd').value;
+                const description = document.getElementById('projectDescription').value.trim();
+                const templateKey = templateSelect.value;
+                const tpl = templates[templateKey];
+
+                if (!tpl) {
+                    alert('Please select a roadmap template.');
+                    return;
+                }
+
+                const memberNames = getAllAssignableMembers();
+
+                const resultMilestones = tpl.milestones.map((ms, msIndex) => {
+                    const msWidget = milestonesContainer.querySelector(
+                        `.ms-owner-widget [data-owner-widget="true"][data-milestone-index="${msIndex}"]`
+                    );
+                    let msOwners = [];
+                    if (msWidget) {
+                        const hidden = msWidget.querySelector('.owners-hidden');
+                        msOwners = hidden ? JSON.parse(hidden.value || "[]") : [];
+                    }
+
+                    const msStartInput = milestonesContainer.querySelector(
+                        `input[data-type="ms-start"][data-milestone-index="${msIndex}"]`
+                    );
+                    const msEndInput = milestonesContainer.querySelector(
+                        `input[data-type="ms-end"][data-milestone-index="${msIndex}"]`
+                    );
+
+                    const tasks = ms.tasks.map((t, tIndex) => {
+                        const tWidget = milestonesContainer.querySelector(
+                            `.task-owner-widget [data-owner-widget="true"][data-milestone-index="${msIndex}"][data-task-index="${tIndex}"]`
+                        );
+                        let tOwners = [];
+                        if (tWidget) {
+                            const hidden = tWidget.querySelector('.owners-hidden');
+                            tOwners = hidden ? JSON.parse(hidden.value || "[]") : [];
+                        }
+
+                        const tStartInput = milestonesContainer.querySelector(
+                            `input[data-type="task-start"][data-milestone-index="${msIndex}"][data-task-index="${tIndex}"]`
+                        );
+                        const tEndInput = milestonesContainer.querySelector(
+                            `input[data-type="task-end"][data-milestone-index="${msIndex}"][data-task-index="${tIndex}"]`
+                        );
+
+                        return {
+                            name: t.name,
+                            owners: tOwners,
+                            startDate: tStartInput ? tStartInput.value : '',
+                            endDate: tEndInput ? tEndInput.value : '',
+                            meta: t.meta || null
+                        };
+                    });
+
+                    return {
+                        name: ms.name,
+                        owners: msOwners,
+                        startDate: msStartInput ? msStartInput.value : '',
+                        endDate: msEndInput ? msEndInput.value : '',
+                        tasks,
+                        meta: ms.meta || null
+                    };
+                });
+
+                const projectData = {
+                    title,
+                    owner,
+                    startDate: start,
+                    endDate: end,
+                    description,
+                    templateKey,
+                    members: memberNames.map(n => ({ name: n })),
+                    milestones: resultMilestones
+                };
+
+                console.log('Initialized project (chips owners UI):', projectData);
+
+                const previewCard = document.getElementById('previewCard');
+                document.getElementById('previewTitle').textContent = title || 'Untitled project';
+                document.getElementById('previewOwner').textContent = owner ? 'Owner: ' + owner : '';
+                document.getElementById('previewDates').textContent =
+                    (start || '') + (start || end ? ' \u2192 ' : '') + (end || '');
+                document.getElementById('previewDescription').textContent =
+                    (description || tpl.description || '');
+
+                document.getElementById('previewMemberCount').textContent = projectData.members.length;
+                document.getElementById('previewMilestoneCount').textContent = projectData.milestones.length;
+
+                const listContainer = document.getElementById('previewMilestonesList');
+                listContainer.innerHTML = '';
+                const ul = document.createElement('ul');
+                ul.className = 'mb-0';
+                projectData.milestones.forEach(m => {
+                    const li = document.createElement('li');
+                    li.className = 'preview-sub';
+                    const ownersLabel =
+                        m.owners.length === 0 ? 'Unassigned' :
+                            (m.owners.length === 1 ? m.owners[0] : m.owners.join(', '));
+                    li.innerHTML =
+                        `<span class="text-white fw-semibold">${m.name}</span>` +
+                        ` <span class="text-gray-400">(${ownersLabel})</span>` +
+                        ` <span class="text-gray-500"> · tasks: ${m.tasks.length}</span>`;
+                    ul.appendChild(li);
+                });
+                listContainer.appendChild(ul);
+
+                previewCard.classList.remove('d-none');
+            });
+
+            // Reset behavior
+            form.addEventListener('reset', function () {
+                setTimeout(() => {
+                    milestonesContainer.innerHTML = '';
+                    members = [];
+                    renderMembers();
+                    templateSelect.value = '';
+                    templateDescription.textContent = 'Select a template to see its structure.';
+                    document.getElementById('previewCard').classList.add('d-none');
+                }, 0);
+            });
+        });
+    </script>
+
+</body>
+</html>

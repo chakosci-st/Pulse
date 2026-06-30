@@ -1,0 +1,79 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Edit User";
+    ViewBag.TitleIcon = "bi bi-pencil-square";
+    ViewBag.SubTitle = "Update user profile details and account activity status.";
+    ViewBag.ContentHeaderChips = new[] { "Profile update", "Account lifecycle", "Directory hygiene" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Keep user details accurate.";
+    ViewBag.ContentHeaderAsideBody = "Adjust names, contact data, and account status so assignments and notifications remain reliable.";
+    ViewBag.IsActiveAdminUsers = "menu-open";
+    ViewBag.IsActiveAdminUsersAll = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+<form id="userForm" class="needs-validation" novalidate>
+    @Html.Hidden("Id")
+    @Html.Hidden("TransactionKey")
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class="mb-3">
+                        Update User
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Update existing user profile</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="UserId" class="form-label">User ID</label>
+                        <input type="text" class="form-control" id="UserId" name="UserId" readonly>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="UserName" class="form-label">User Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="UserName" name="UserName" required>
+                            <div class="invalid-feedback">Please provide a user name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="FirstName" class="form-label">First Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="FirstName" name="FirstName" required>
+                            <div class="invalid-feedback">Please provide a first name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="LastName" class="form-label">Last Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="LastName" name="LastName" required>
+                            <div class="invalid-feedback">Please provide a last name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="Email" name="Email">
+                    </div>
+                    <div class="form-group my-3">
+                        <div id="isActive"></div>
+                    </div>
+                </div>
+                <div class="card-footer clearfix">
+                    <div class="m-0 float-end">
+                        <a href="@Url.Action("Index", "Users", new { area = "Admin" })" class="btn btn-default">Cancel</a>
+                        <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/Scripts/locals/switch-button.js"></script>
+    <script>
+        var id = '@ViewBag.Id';
+        $('#Id').val(id);
+    </script>
+    <script src="~/Areas/Admin/Scripts/users/edit.js"></script>
+}

@@ -1,0 +1,48 @@
+﻿.text-placeholder {
+    font-style:italic;
+}
+
+.sortable-ghost {
+    opacity: 0.4;
+}
+
+.field-actions {
+    float: right;
+}
+
+.access-badge {
+    font-size: 0.8em;
+}
+
+.tooltip-icon {
+    margin-left: 5px;
+    color: #0d6efd;
+    cursor: pointer;
+}
+
+.child-row {
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.dynamic-field-wrapper {
+    margin-bottom: 1rem;
+}
+
+.list-group-item {
+    cursor: pointer;
+}
+
+.move-handle {
+    cursor: move;
+}
+
+.form-floating > label > code {
+    font-size: 0.9em;
+}
+
+.dropzone {
+    min-height: 80px;
+    border: 2px dashed #0d6efd;
+    background: #f8f9fa;
+}

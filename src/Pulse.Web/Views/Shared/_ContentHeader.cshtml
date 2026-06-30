@@ -1,0 +1,94 @@
+﻿@{
+    var breadcrumbs = ViewBag.Breadcrumbs as List<Pulse.SharedUtilities.Helpers.Breadcrumb>;
+    var contentHeaderMode = Convert.ToString(ViewBag.ContentHeaderMode ?? string.Empty);
+    var breadcrumbsOnly = string.Equals(contentHeaderMode, "breadcrumbs-only", StringComparison.OrdinalIgnoreCase);
+    var hasBreadcrumbs = breadcrumbs != null && breadcrumbs.Any();
+    var contentHeaderChips = ViewBag.ContentHeaderChips as IEnumerable<string>;
+    var contentHeaderAsideLabel = Convert.ToString(ViewBag.ContentHeaderAsideLabel ?? string.Empty);
+    var contentHeaderAsideTitle = Convert.ToString(ViewBag.ContentHeaderAsideTitle ?? string.Empty);
+    var contentHeaderAsideBody = Convert.ToString(ViewBag.ContentHeaderAsideBody ?? string.Empty);
+    var showTitleCard = !breadcrumbsOnly;
+    var showContentHeader = hasBreadcrumbs || showTitleCard;
+}
+@if (showContentHeader)
+{
+<div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <div class="pulse-page-shell@(breadcrumbsOnly ? " pulse-page-shell--breadcrumbs-only" : string.Empty)">
+            <div class="pulse-page-shell__crumbs">
+                @if (hasBreadcrumbs)
+                {
+                    <nav class="breadcrumbs" aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            @for (int i = 0; i < breadcrumbs.Count; i++)
+                            {
+
+                                var crumb = breadcrumbs[i];
+                                if (!string.IsNullOrEmpty(crumb.Title))
+                                {
+                                    if (i < breadcrumbs.Count - 1)
+                                    {
+                                        <li class="breadcrumb-item">
+                                            <a href="@crumb.Url">@crumb.Title</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="breadcrumb-item active" aria-current="page">
+                                            @crumb.Title
+                                        </li>
+                                    }
+                                }
+
+                            }
+                        </ol>
+                    </nav>
+                }
+            </div>
+            @if (showTitleCard)
+            {
+            <section class="card card-glass page-hero-card">
+                    <div class="card-body">
+                        <div class="page-hero-card__layout">
+                            <div class="page-hero-card__main">
+                                <header class="page-header">
+                                    <h1><i id="headerIcon" class="@ViewBag.TitleIcon"></i><span id="headerTitle">@ViewBag.Title</span></h1>
+                                    <p class="page-header__subtitle">
+                                        @ViewBag.SubTitle
+                                    </p>
+                                </header>
+                                <div class="page-hero-card__chips d-flex flex-wrap gap-2" id="chips" data-preserve-default="@(contentHeaderChips != null && contentHeaderChips.Any(chip => !string.IsNullOrWhiteSpace(chip)) ? "true" : "false")">
+                                    @if (contentHeaderChips != null)
+                                    {
+                                        foreach (var chip in contentHeaderChips.Where(chip => !string.IsNullOrWhiteSpace(chip)))
+                                        {
+                                            <span class="project-chip">@chip</span>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <aside class="page-hero-card__aside" id="subcontent" data-preserve-default="@((!string.IsNullOrWhiteSpace(contentHeaderAsideLabel) || !string.IsNullOrWhiteSpace(contentHeaderAsideTitle) || !string.IsNullOrWhiteSpace(contentHeaderAsideBody)) ? "true" : "false")">
+                                @if (!string.IsNullOrWhiteSpace(contentHeaderAsideLabel))
+                                {
+                                    <div class="page-hero-card__aside-label">@contentHeaderAsideLabel</div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(contentHeaderAsideTitle))
+                                {
+                                    <div class="page-hero-card__aside-title">@contentHeaderAsideTitle</div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(contentHeaderAsideBody))
+                                {
+                                    <div class="page-hero-card__aside-copy">@contentHeaderAsideBody</div>
+                                }
+                            </aside>
+                        </div>
+                    </div>
+            </section>
+            }
+        </div>
+    </div>
+    <!--end::Container-->
+</div>
+}
+

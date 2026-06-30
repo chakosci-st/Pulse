@@ -1,0 +1,41 @@
+= Operations and Setup =
+
+== Solution Characteristics ==
+* Target framework family: .NET Framework 4.7.2
+* Main run surfaces: Pulse.Web and Pulse.Api
+* Oracle-backed persistence via managed Oracle provider and Dapper
+
+== Configuration Areas ==
+Review application configuration files for:
+* DB connection strings
+* JWT settings
+* Active Directory integration settings
+* SMTP settings
+* SSO logout redirect settings
+
+== Deployment Considerations ==
+* Keep Jwt:* values synchronized where token minting and validation occur.
+* Validate module claim issuance aligns with MODULES and access-right assignments.
+* Ensure Oracle schema permissions cover both read and mutation workloads used by services.
+
+== Common Troubleshooting Notes ==
+=== API Calls Authenticated with JWT ===
+If GET works but POST/PUT/DELETE returns 401, inspect request-specific AJAX hooks that might override token headers.
+
+=== Project Creation Scope ===
+Plant/product/roadmap lookup endpoints should be membership-scoped to current user context.
+
+=== Empty Plant Selection Edge ===
+Guard client calls that depend on selected plant code to avoid noisy or invalid lookup requests.
+
+== Suggested Validation Checklist ==
+# Confirm login, token minting, and authenticated API call path
+# Confirm module-claim-protected routes block/allow correctly
+# Confirm plant/project membership scope is enforced
+# Confirm notifications unread/grouped/read flows work end-to-end
+# Confirm roadmap snapshot, insertion, and sync scenarios
+
+== Related Pages ==
+* [[Authentication and Authorization]]
+* [[Projects and Roadmaps]]
+* [[Web UI and Notifications]]

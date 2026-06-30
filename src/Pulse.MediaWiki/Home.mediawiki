@@ -1,0 +1,52 @@
+= Pulse Application Wiki =
+
+This wiki documents the Pulse platform, including architecture, authentication, domain flows, API surface, and operational guidance.
+
+== Quick Links ==
+* [[Architecture]]
+* [[Authentication and Authorization]]
+* [[Projects and Roadmaps]]
+* [[Data Model]]
+* [[API Overview]]
+* [[Web UI and Notifications]]
+* [[React Migration]]
+* [[Operations and Setup]]
+* [[Glossary]]
+
+== Solution Map ==
+* '''Pulse.Web''' - ASP.NET MVC 5 web application (primary UI)
+* '''Pulse.Api''' - ASP.NET Web API 2 service (data + business endpoints)
+* '''Pulse.Core''' - entities and interfaces
+* '''Pulse.Infrastructure''' - Oracle/Dapper data access, repositories, infra services
+* '''Pulse.Services''' - business/domain services
+* '''Pulse.ViewModels''' and '''Pulse.DataTransformationObjects''' - request/response shaping models
+* '''pulse.react''' - React migration workspace (route-parity frontend)
+* '''TableSchema''' - schema and module definitions
+
+== Runtime Summary ==
+Pulse runs as a layered .NET Framework 4.7.2 system with two runtime entry points:
+* '''Pulse.Web''' for authenticated browser workflows and SignalR-backed UX patterns
+* '''Pulse.Api''' for authenticated API calls (including JWT bearer flows)
+
+== Domain Summary ==
+The main domain is project and roadmap execution across plants/products/categories, including:
+* project registration and roadmap snapshotting
+* milestone/activity planning and task execution
+* forms, comments, attachments, and audit trails
+* notifications and role-based access management
+
+== Conventions ==
+* Schema owner: '''NPITRACK'''
+* Data store: '''Oracle'''
+* Data access style: '''Dapper / Dapper.Oracle'''
+* Authorization style: module-code claims and membership-scoped access checks
+
+== Suggested Read Order ==
+# [[Architecture]]
+# [[Authentication and Authorization]]
+# [[Projects and Roadmaps]]
+# [[Data Model]]
+# [[API Overview]]
+# [[Operations and Setup]]
+
+Last updated: 2026-05-22

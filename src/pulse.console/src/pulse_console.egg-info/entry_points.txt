@@ -1,0 +1,2 @@
+[console_scripts]
+pulse-console = pulse_console.cli:main

@@ -1,0 +1,43 @@
+= Projects and Roadmaps =
+
+== Core Flow ==
+# Select template context (plant/category/product/roadmap)
+# Register project
+# Snapshot template roadmap structures into project tables
+# Execute milestones, activities, and tasks
+# Track status, comments, forms, attachments, and notifications
+
+== Snapshotting Model ==
+When a project is created, roadmap templates are materialized into project-owned tables.
+
+This enables:
+* immutable-at-time-of-registration structure
+* project-specific changes without mutating source templates
+* historical reproducibility and auditability
+
+== Milestone Insertion Rules ==
+Inserted project milestone roots are identified by a prefixed roadmap identifier rule:
+* inserted roots use a prefix form (for example '''INS-...''')
+* template descendants keep source roadmap identifiers
+
+Behavioral implications:
+* delete/move eligibility should be based on inserted-root logic
+* compatibility fallback should allow deletion of legacy inserted roots based on parent/source roadmap mismatch
+
+== Multi-Select Template Insert ==
+Project milestone insertion from templates supports multiple selected milestone IDs in one action.
+
+Service behavior collapses descendant selections under selected ancestors to prevent duplicate subtree insertion.
+
+== Configure Sync Rule ==
+Project configure operations that retrieve latest roadmap structure must compare roadmap IDs and prerequisite keys case-insensitively to avoid false deltas caused by GUID casing differences.
+
+== Key Data Families ==
+* Template side: ROADMAPS / ROADMAPMILESTONES / ROADMAPACTIVITIES / prerequisites
+* Project side: PROJECTROADMAPS / PROJECTROADMAPMILESTONES / PROJECTROADMAPACTIVITIES / prereqs
+* Execution side: PROJECTMILESTONES / PROJECTTASKS / status changes / comments / forms / attachments
+
+== Related Pages ==
+* [[Data Model]]
+* [[API Overview]]
+* [[Architecture]]

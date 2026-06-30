@@ -1,0 +1,6 @@
+C:\Source Code\Pulse.vscode\Pulse.EventHandlers\bin\Debug\Pulse.EventHandlers.dll
+C:\Source Code\Pulse.vscode\Pulse.EventHandlers\bin\Debug\Pulse.EventHandlers.pdb
+C:\Source Code\Pulse.vscode\Pulse.EventHandlers\obj\Debug\Pulse.EventHandlers.csprojAssemblyReference.cache
+C:\Source Code\Pulse.vscode\Pulse.EventHandlers\obj\Debug\Pulse.EventHandlers.csproj.CoreCompileInputs.cache
+C:\Source Code\Pulse.vscode\Pulse.EventHandlers\obj\Debug\Pulse.EventHandlers.dll
+C:\Source Code\Pulse.vscode\Pulse.EventHandlers\obj\Debug\Pulse.EventHandlers.pdb

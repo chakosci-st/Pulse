@@ -1,0 +1,1174 @@
+@{
+    ViewBag.Title = "Project Comparison";
+    ViewBag.TitleIcon = "bi bi-diagram-3-fill";
+    ViewBag.SubTitle = "Compare multiple project timelines, milestones, tasks, and form values side by side.";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+@section Styles {
+    <link href="~/Content/locals/dynamic-fields.css" rel="stylesheet" />
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+
+    <style>
+        .report3-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .report3-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.8fr);
+            gap: 1rem;
+            padding: 1.25rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1.25rem;
+            background: radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 38%), linear-gradient(135deg, #f8fbfd 0%, #eef7f5 52%, #f7fbff 100%);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+        }
+
+        .report3-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-bottom: 0.75rem;
+            color: #0f766e;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .report3-hero__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: clamp(1.75rem, 2.3vw, 2.35rem);
+            font-weight: 800;
+            line-height: 1.08;
+        }
+
+        .report3-hero__copy {
+            max-width: 60ch;
+            margin: 0.9rem 0 0;
+            color: #475569;
+            font-size: 0.98rem;
+            line-height: 1.65;
+        }
+
+        .report3-hero__stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.8rem;
+            align-self: stretch;
+        }
+
+        .report3-hero__stat {
+            padding: 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.26);
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.86);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+        }
+
+        .report3-hero__stat-label {
+            display: block;
+            margin-bottom: 0.35rem;
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .report3-hero__stat-value {
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .report3-app {
+            display: grid;
+            grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+            gap: 1rem;
+            min-height: 720px;
+        }
+
+        .report3-sidebar,
+        .report3-main {
+            border: 1px solid #dbe4ea;
+            border-radius: 1.25rem;
+            background: #ffffff;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
+            overflow: hidden;
+        }
+
+        .report3-sidebar {
+            display: grid;
+            grid-template-rows: auto auto auto minmax(0, 1fr);
+        }
+
+        .report3-sidebar__header {
+            padding: 1.1rem 1.1rem 0.85rem;
+            border-bottom: 1px solid #edf2f7;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbfd 100%);
+        }
+
+        .report3-sidebar__title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+            .report3-sidebar__title h2 {
+                margin: 0;
+                color: #0f172a;
+                font-size: 1.02rem;
+                font-weight: 800;
+            }
+
+        .report3-sidebar__count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.42rem 0.78rem;
+            border-radius: 999px;
+            background: #ecfeff;
+            color: #155e75;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .report3-sidebar__copy {
+            margin-top: 0.6rem;
+            color: #64748b;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        .report3-sidebar__search {
+            padding: 0.95rem 1.1rem 0;
+        }
+
+            .report3-sidebar__search .form-control {
+                min-height: 46px;
+                border-radius: 0.95rem;
+                border-color: #d6e1e7;
+                box-shadow: none;
+            }
+
+        .report3-sidebar__status {
+            padding: 0.9rem 1.1rem 0.85rem;
+            color: #64748b;
+            font-size: 0.83rem;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .report3-project-list {
+            overflow-y: auto;
+            padding: 0.4rem;
+            background: linear-gradient(180deg, rgba(248, 250, 252, 0.68) 0%, rgba(255, 255, 255, 0.98) 100%);
+        }
+
+        .report3-project-item {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 0.85rem;
+            align-items: start;
+            position: relative;
+            padding: 0.95rem;
+            border: 1px solid transparent;
+            border-radius: 1rem;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .report3-project-item__selection {
+            position: absolute;
+            top: 0.85rem;
+            right: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            background: #ffffff;
+            color: transparent;
+            font-size: 0.8rem;
+            transition: all 0.18s ease;
+        }
+
+        .report3-project-item:hover {
+            border-color: #d9e5eb;
+            background: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+        }
+
+        .report3-project-item.active {
+            border-color: rgba(8, 145, 178, 0.34);
+            background: linear-gradient(135deg, rgba(236, 254, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+            box-shadow: 0 16px 28px rgba(8, 145, 178, 0.12);
+        }
+
+            .report3-project-item.active .report3-project-item__selection {
+                border-color: #0891b2;
+                background: #0891b2;
+                color: #ffffff;
+            }
+
+        .report3-project-item__icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.16);
+        }
+
+        .report3-project-item__name {
+            margin: 0;
+            color: #0f172a;
+            font-size: 0.97rem;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .report3-project-item__meta {
+            margin-top: 0.18rem;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .report3-project-item__chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.75rem;
+        }
+
+        .report3-project-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.28rem 0.58rem;
+            border-radius: 999px;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 0.73rem;
+            font-weight: 700;
+        }
+
+        .report3-project-item__footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.65rem;
+            margin-top: 0.8rem;
+        }
+
+        .report3-sidebar-empty,
+        .report3-main-empty,
+        .report3-main-loading {
+            display: grid;
+            place-items: center;
+            min-height: 220px;
+            padding: 1.5rem;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .report3-main {
+            display: grid;
+            grid-template-rows: auto auto minmax(0, 1fr);
+            min-width: 0;
+        }
+
+        .report3-main__header {
+            padding: 1.2rem 1.2rem 1rem;
+            border-bottom: 1px solid #edf2f7;
+            background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.12), transparent 34%), linear-gradient(180deg, #ffffff 0%, #f8fbfd 100%);
+        }
+
+        .report3-main__headline {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .report3-main__title-wrap {
+            display: flex;
+            gap: 0.95rem;
+            min-width: 0;
+        }
+
+        .report3-main__icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            color: #ffffff;
+            font-size: 1.3rem;
+            box-shadow: 0 14px 24px rgba(15, 23, 42, 0.14);
+            flex-shrink: 0;
+        }
+
+        .report3-main__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.35rem;
+            color: #0f766e;
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .report3-main__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: clamp(1.3rem, 2vw, 1.85rem);
+            font-weight: 800;
+            line-height: 1.15;
+        }
+
+        .report3-main__subtitle {
+            margin-top: 0.35rem;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .report3-main__chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 0.9rem;
+        }
+
+        .report3-main__chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.42rem 0.72rem;
+            border-radius: 999px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 0.77rem;
+            font-weight: 700;
+        }
+
+        .report3-main__status {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            justify-content: flex-end;
+        }
+
+            .report3-main__status .btn {
+                border-radius: 999px;
+                font-weight: 700;
+            }
+
+        .report3-main__insight {
+            padding: 0.95rem 1.2rem 0;
+            color: #64748b;
+            font-size: 0.92rem;
+        }
+
+        .report3-compare-board {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(420px, 1fr);
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .report3-compare-column {
+            display: grid;
+            gap: 1rem;
+            min-width: 0;
+        }
+
+        .report3-compare-column__header {
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1.2rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbfd 100%);
+            box-shadow: 0 16px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .report3-compare-column__headline {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.85rem;
+        }
+
+        .report3-compare-column__title-wrap {
+            display: flex;
+            gap: 0.8rem;
+            min-width: 0;
+        }
+
+        .report3-compare-column__icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            color: #ffffff;
+            font-size: 1.15rem;
+            box-shadow: 0 12px 20px rgba(15, 23, 42, 0.14);
+            flex-shrink: 0;
+        }
+
+        .report3-compare-column__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 1.08rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .report3-compare-column__subtitle {
+            margin-top: 0.2rem;
+            color: #64748b;
+            font-size: 0.83rem;
+        }
+
+        .report3-compare-column__chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.8rem;
+        }
+
+        .report3-compare-column__meta {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.55rem;
+            margin-top: 0.95rem;
+        }
+
+        .report3-compare-column__metric {
+            padding: 0.7rem 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.9rem;
+            background: #ffffff;
+        }
+
+        .report3-compare-column__metric-label {
+            display: block;
+            color: #64748b;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .report3-compare-column__metric-value {
+            margin-top: 0.35rem;
+            color: #0f172a;
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+
+        .report3-compare-column__body {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .report3-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.85rem;
+            padding: 1rem 1.2rem 1.15rem;
+            border-bottom: 1px solid #edf2f7;
+            background: #ffffff;
+        }
+
+        .report3-metric {
+            padding: 0.95rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .report3-metric__label {
+            display: block;
+            color: #64748b;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .report3-metric__value {
+            margin-top: 0.45rem;
+            color: #0f172a;
+            font-size: 1.35rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .report3-metric__meta {
+            margin-top: 0.45rem;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .report3-timeline-wrap {
+            overflow: auto;
+            padding: 1.25rem;
+            background: linear-gradient(180deg, rgba(248, 250, 252, 0.76) 0%, rgba(255, 255, 255, 1) 18%);
+        }
+
+        .report3-timeline {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .report3-milestone {
+            position: relative;
+            padding: 1.15rem 1.15rem 1.15rem 1.35rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1.2rem;
+            background: #ffffff;
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+            overflow: hidden;
+        }
+
+            .report3-milestone::before {
+                content: "";
+                position: absolute;
+                top: 1.1rem;
+                bottom: 1.1rem;
+                left: 0.72rem;
+                width: 4px;
+                border-radius: 999px;
+                background: linear-gradient(180deg, #06b6d4 0%, #0f766e 100%);
+            }
+
+        .report3-milestone__header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .report3-milestone__label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-bottom: 0.35rem;
+            color: #0891b2;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .report3-milestone__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 1.08rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .report3-milestone__meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            margin-top: 0.55rem;
+            color: #64748b;
+            font-size: 0.82rem;
+        }
+
+        .report3-milestone__status {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .report3-milestone__progress {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.38rem 0.7rem;
+            border-radius: 999px;
+            background: #ecfeff;
+            color: #155e75;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+        .report3-task-list {
+            display: grid;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .report3-task {
+            padding: 0.95rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        }
+
+        .report3-task__header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .report3-task__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 0.96rem;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .report3-task__meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.45rem;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .report3-task__owners,
+        .report3-task__prereq {
+            margin-top: 0.65rem;
+            color: #475569;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .report3-task__comments {
+            margin-top: 0.75rem;
+            color: #475569;
+            font-size: 0.8rem;
+        }
+
+        .report3-task__comments .support-card {
+            border-radius: 1rem;
+            border: 1px solid #dbe5ef;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+            padding: 0.9rem;
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+        }
+
+        .report3-task__comments .section-title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 0.85rem;
+            font-weight: 800;
+        }
+
+        .report3-task__comments .comments-count {
+            margin-top: 0.3rem;
+            margin-bottom: 0.55rem;
+            color: #64748b;
+            font-size: 0.72rem;
+        }
+
+        .report3-comment-context-row {
+            display: grid;
+            grid-template-columns: 78px minmax(0, 1fr);
+            gap: 0.55rem;
+            align-items: center;
+            margin-bottom: 0.68rem;
+        }
+
+        .report3-task__comments .support-context-label {
+            margin: 0;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .report3-comment-context-value {
+            min-height: 30px;
+            border: 1px solid #dbe5ef;
+            border-radius: 0.65rem;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 0.74rem;
+            padding: 0.4rem 0.55rem;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .report3-comment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.68rem;
+        }
+
+        .report3-comment-item {
+            display: flex;
+            gap: 0.62rem;
+            align-items: flex-start;
+        }
+
+        .report3-comment-avatar-container.avatar__container {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 999px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0891b2, #0ea5e9);
+            color: #ffffff;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .report3-comment-avatar-container .avatar__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 999px;
+        }
+
+        .report3-comment-avatar-container .avatar__initials {
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            line-height: 1;
+            color: #ffffff;
+        }
+
+        .report3-comment-avatar-container.avatar__container--image-error .avatar__image {
+            display: none;
+        }
+
+        .report3-comment-avatar-container.avatar__container--image-error .avatar__initials {
+            display: inline-flex !important;
+        }
+
+        .report3-comment-body {
+            background: #f9fbfd;
+            border-radius: 0.86rem;
+            padding: 0.68rem 0.78rem;
+            border: 1px solid #e2e8f0;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .report3-comment-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.18rem;
+        }
+
+        .report3-comment-author {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 0.8rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .report3-comment-time {
+            font-size: 0.68rem;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+
+        .report3-comment-context {
+            font-size: 0.68rem;
+            color: #64748b;
+            margin-bottom: 0.26rem;
+        }
+
+        .report3-comment-text {
+            color: #334155;
+            font-size: 0.8rem;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.45;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 0.5rem;
+        }
+
+        .report3-comment-text p {
+            margin-bottom: 0.35rem;
+        }
+
+        .report3-comment-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .report3-comment-text ul,
+        .report3-comment-text ol {
+            margin: 0.2rem 0 0.4rem 1rem;
+            padding: 0;
+        }
+
+        .report3-comment-text blockquote {
+            margin: 0.35rem 0;
+            padding: 0.3rem 0.7rem;
+            border-left: 3px solid #7dd3fc;
+            background: #f0f9ff;
+            color: #0f172a;
+        }
+
+        .report3-comment-text a {
+            color: #0369a1;
+            text-decoration: underline;
+        }
+
+        .report3-comment-text img,
+        .report3-comment-text table,
+        .report3-comment-text iframe {
+            max-width: 100% !important;
+        }
+
+        .report3-comment-text::after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        .report3-task__forms .note-editor.note-frame {
+            border: 1px solid #dbe5f0;
+            border-radius: 0.85rem;
+            background: #ffffff;
+        }
+
+        .report3-richtext-readonly {
+            border: 1px solid #dbe5f0;
+            border-radius: 0.75rem;
+            background: #ffffff;
+            padding: 0.55rem 0.7rem;
+        }
+
+        .report3-richtext-readonly p:last-child {
+            margin-bottom: 0;
+        }
+
+        .report3-task__forms {
+            display: grid;
+            gap: 0.7rem;
+            margin-top: 0.8rem;
+        }
+
+        .report3-task-form {
+            padding: 0.8rem 0.9rem;
+            border: 1px dashed #cbd5e1;
+            border-radius: 0.95rem;
+            background: #f8fafc;
+        }
+
+        .report3-task-form__title {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.65rem;
+            color: #0f172a;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        .report3-task-form__grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.55rem;
+        }
+
+        .report3-task-form__field {
+            padding: 0.6rem 0.7rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.8rem;
+            background: #ffffff;
+        }
+
+        .report3-task-form__label {
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .report3-task-form__value {
+            margin-top: 0.35rem;
+            color: #0f172a;
+            font-size: 0.83rem;
+            font-weight: 600;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .report3-task__prereq-chips {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-left: 0.35rem;
+            vertical-align: middle;
+        }
+
+        .report3-prereq-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.22rem 0.5rem;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+            .report3-prereq-chip.is-complete {
+                background: #ecfdf5;
+                color: #047857;
+            }
+
+        .report3-empty-card {
+            padding: 1rem;
+            border: 1px dashed #cbd5e1;
+            border-radius: 1rem;
+            background: #f8fafc;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .report3-spinner {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #0f766e;
+            font-weight: 700;
+        }
+
+        @@media (max-width: 1199.98px) {
+            .report3-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .report3-metrics {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .report3-compare-board {
+                grid-auto-columns: minmax(360px, 1fr);
+            }
+
+            .report3-compare-column__meta {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @@media (max-width: 991.98px) {
+            .report3-app {
+                grid-template-columns: 1fr;
+                min-height: 0;
+            }
+
+            .report3-sidebar {
+                max-height: 420px;
+            }
+
+            .report3-main__headline,
+            .report3-compare-column__headline,
+            .report3-milestone__header,
+            .report3-task__header {
+                flex-direction: column;
+            }
+
+            .report3-main__status,
+            .report3-milestone__status {
+                justify-content: flex-start;
+            }
+
+            .report3-compare-board {
+                grid-auto-flow: row;
+                grid-template-columns: 1fr;
+                grid-auto-columns: unset;
+            }
+        }
+
+        @@media (max-width: 575.98px) {
+            .report3-hero__stats,
+            .report3-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .report3-task-form__grid {
+                grid-template-columns: 1fr;
+            }
+
+            .report3-main__title-wrap {
+                flex-direction: column;
+            }
+
+            .report3-compare-column__meta {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+}
+
+<div class="report3-shell">
+    <section class="report3-hero">
+        <div>
+            <div class="report3-hero__eyebrow">
+                <i class="bi bi-diagram-3"></i>
+                Project Comparison
+            </div>
+            <h1 class="report3-hero__title">Compare project delivery timelines side by side.</h1>
+            <p class="report3-hero__copy">
+                Select one or more projects from the left panel to compare milestones, tasks, due dates, owners, prerequisites, and form values in one view. The layout is built for review meetings, delivery checks, and portfolio-level comparisons.
+            </p>
+        </div>
+        <div class="report3-hero__stats">
+            <div class="report3-hero__stat">
+                <span class="report3-hero__stat-label">Left Pane</span>
+                <div class="report3-hero__stat-value">Project queue with search, status context, and quick health cues.</div>
+            </div>
+            <div class="report3-hero__stat">
+                <span class="report3-hero__stat-label">Right Pane</span>
+                <div class="report3-hero__stat-value">Milestones and tasks stacked vertically for clean walkthroughs.</div>
+            </div>
+            <div class="report3-hero__stat">
+                <span class="report3-hero__stat-label">Focus</span>
+                <div class="report3-hero__stat-value">Ordering, ownership, due dates, and prerequisites in one place.</div>
+            </div>
+            <div class="report3-hero__stat">
+                <span class="report3-hero__stat-label">Best Use</span>
+                <div class="report3-hero__stat-value">Daily reviews, milestone checks, and cross-functional handoffs.</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="report3-app">
+        <aside class="report3-sidebar">
+            <div class="report3-sidebar__header">
+                <div class="report3-sidebar__title">
+                    <h2>Projects</h2>
+                    <div id="report3ProjectCount" class="report3-sidebar__count">
+                        <i class="bi bi-kanban"></i>
+                        <span>0 loaded</span>
+                    </div>
+                </div>
+                <div class="report3-sidebar__copy">Search the portfolio and select multiple projects to compare them side by side.</div>
+            </div>
+
+            <div class="report3-sidebar__search">
+                <input id="report3ProjectSearch" type="search" class="form-control" placeholder="Search by project no, name, owner, plant, category, or products" />
+            </div>
+
+            <div id="report3ProjectStatus" class="report3-sidebar__status">Loading projects...</div>
+
+            <div id="report3ProjectList" class="report3-project-list">
+                <div class="report3-sidebar-empty">
+                    <div class="report3-spinner">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Loading projects...
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="report3-main">
+            <div class="report3-main__header">
+                <div class="report3-main__headline">
+                    <div class="report3-main__title-wrap">
+                        <div id="report3MainIcon" class="report3-main__icon" style="background:#0f766e; display:none;">
+                            <i class="bi bi-kanban-fill"></i>
+                        </div>
+                        <div>
+                            <div class="report3-main__eyebrow">Comparison Workspace</div>
+                            <h2 id="report3MainTitle" class="report3-main__title">Select projects from the left panel</h2>
+                            <div id="report3MainSubtitle" class="report3-main__subtitle">Selected projects will appear side by side for milestone and task comparison.</div>
+                            <div id="report3MainChips" class="report3-main__chips">
+                                <span class="report3-main__chip"><i class="bi bi-columns-gap"></i>Multi-project comparison</span>
+                                <span class="report3-main__chip"><i class="bi bi-diagram-3"></i>Timeline alignment</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="report3MainStatus" class="report3-main__status"><span class="badge bg-light text-dark border">No projects selected</span></div>
+                </div>
+            </div>
+
+            <div id="report3Insight" class="report3-main__insight">Use the left pane to compare multiple projects without switching screens.</div>
+
+            <div id="report3Metrics" class="report3-metrics">
+                <div class="report3-metric">
+                    <span class="report3-metric__label">Milestones</span>
+                    <div class="report3-metric__value">-</div>
+                    <div class="report3-metric__meta">Select a project to inspect its roadmap.</div>
+                </div>
+                <div class="report3-metric">
+                    <span class="report3-metric__label">Tasks</span>
+                    <div class="report3-metric__value">-</div>
+                    <div class="report3-metric__meta">Task cards will show assignees and due dates.</div>
+                </div>
+                <div class="report3-metric">
+                    <span class="report3-metric__label">In Progress</span>
+                    <div class="report3-metric__value">-</div>
+                    <div class="report3-metric__meta">A quick scan of the current execution load.</div>
+                </div>
+                <div class="report3-metric">
+                    <span class="report3-metric__label">Completed</span>
+                    <div class="report3-metric__value">-</div>
+                    <div class="report3-metric__meta">Completed and cancelled tasks count as closed.</div>
+                </div>
+            </div>
+
+            <div class="report3-timeline-wrap">
+                <div id="report3Timeline" class="report3-timeline">
+                    <div class="report3-main-empty">
+                        <div>
+                            <div class="mb-2"><i class="bi bi-chat-left-dots" style="font-size:2rem;color:#0891b2;"></i></div>
+                            <div class="fw-bold text-dark mb-1">No projects selected yet.</div>
+                            <div>Choose one or more projects from the left and they will render side by side for comparison.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+@section scripts {
+
+    <!-- Dependencies -->
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <script src="~/node_modules/sortablejs/Sortable.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+
+
+
+    <!-- local-dynamic-fields --> 
+
+    <script src="~/Scripts/locals/utils.js"></script>
+    <script src="~/Scripts/locals/dynamic-fields.js"></script>
+    <script src="~/Scripts/home/report3.js"></script>
+}

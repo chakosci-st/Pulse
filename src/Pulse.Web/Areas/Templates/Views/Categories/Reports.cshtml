@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Reports";
+    ViewBag.TitleIcon = "bi bi-bar-chart-line-fill";
+    ViewBag.SubTitle = "Analyze category usage, distribution, and reporting patterns across projects.";
+    ViewBag.ContentHeaderChips = new[] { "Project classification", "Portfolio grouping", "Reporting consistency" };
+    ViewBag.ContentHeaderAsideLabel = "Category insight";
+    ViewBag.ContentHeaderAsideTitle = "See how project categories are being applied across the portfolio.";
+    ViewBag.ContentHeaderAsideBody = "Category reporting helps surface whether classification is complete, balanced, and still aligned to business needs.";
+    ViewBag.IsActiveTemplatesCategories = "menu-open";
+    ViewBag.IsActiveTemplatesCategoriesReports = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+
+
+<div id="categoryList" class="row">
+
+
+
+    <!--begin::Col-->
+    <div id="containerAdd" class="col-lg-4 col-md-6 col-12">
+        <button id="btnAdd" type="button"
+                class="btn btn-default w-100"
+                style="height: 100%;">
+            <h1><i class="bi bi-plus-circle-fill" style="font-size:80pt"></i></h1>
+            <h5>Add new category</h5>
+        </button>
+    </div>
+    <!--end::Col-->
+</div>
+
+
+@section scripts{
+
+    <script src="~/Areas/Templates/Scripts/categories/reports.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#btnAdd').on('click', function (e) {
+                window.location.href = "@Url.Action("New", "Categories", new { area = "Templates" })";
+            });
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+

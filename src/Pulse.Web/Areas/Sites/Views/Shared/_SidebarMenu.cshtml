@@ -1,0 +1,95 @@
+﻿@{
+    var selectedMenu = (ViewBag.SelectedMenu as string) ?? string.Empty;
+    var sitesNavItemClass = string.Equals(selectedMenu, "Sites", StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(selectedMenu) ? "active" : string.Empty;
+}
+
+<ul class="nav sidebar-menu flex-column"
+    data-lte-toggle="treeview"
+    role="navigation"
+    aria-label="Main navigation"
+    data-accordion="false"
+    id="navigation">
+    <li class="nav-item @sitesNavItemClass">
+        <a href="@Url.Action("Index", "Sites")" class="nav-link @sitesNavItemClass @ViewBag.IsActiveSitesPlantsReports">
+            <i class="nav-icon text-lg bi bi-speedometer h3"></i>
+            <p class="text-lg">Dashboard</p>
+        </a>
+    </li>
+     
+    <li class="nav-header">SITE</li>
+ 
+    <li class="nav-item  @ViewBag.IsActiveSitesPlants">
+        <a href="#" class="nav-link @ViewBag.IsActiveSitesPlants">
+            <i class="nav-icon bi bi-building h3"></i>
+            <p>
+                Plants
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Plants", new { area = "Sites" })" class="nav-link @ViewBag.IsActiveSitesPlantsAll">
+                    <i class="nav-icon bi bi-card-list"></i>
+                    <p>All Plants</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("New", "Plants", new { area = "Sites" })" class="nav-link @ViewBag.IsActiveSitesPlantsNew">
+                    <i class="nav-icon bi bi-plus-circle"></i>
+                    <p>New Plant</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+
+
+ 
+
+
+      
+
+     
+    <li class="nav-header">REPORTS</li>
+    <li class="nav-item">
+        <a href="@Url.Action("Guide", "Home", new { area = "" })" class="nav-link  @ViewBag.IsActiveFAQ">
+            <i class="nav-icon bi bi-question-circle-fill h3"></i>
+            <p>FAQ</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("UserGuide", "Home", new { area = "" })" class="nav-link  @ViewBag.IsActiveUserGuide">
+            <i class="nav-icon bi bi-journal-bookmark-fill h3"></i>
+            <p>User Guide</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link">
+            <i class="nav-icon bi bi-file-earmark-bar-graph-fill h3  @ViewBag.IsActiveReports"></i>
+            <p>
+                Reports
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Report1", "Home", new { area = "" })" class="nav-link @ViewBag.IsActiveReport1">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Project Export</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Report2", "Home", new { area = "" })" class="nav-link @ViewBag.IsActiveReport2">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Monitoring Matrix</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Report3", "Home", new { area = "" })" class="nav-link @ViewBag.IsActiveReport3">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Project Comparison</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>

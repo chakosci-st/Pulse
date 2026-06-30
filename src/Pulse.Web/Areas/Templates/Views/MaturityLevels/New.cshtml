@@ -1,0 +1,99 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New Maturity Level";
+    ViewBag.TitleIcon = "bi bi-plus-circle";
+    ViewBag.SubTitle = "Create a maturity level that manufacturing teams can use within the product lifecycle model.";
+    ViewBag.ContentHeaderChips = new[] { "Lifecycle stages", "Manufacturing readiness", "Product maturity tracking" };
+    ViewBag.ContentHeaderAsideLabel = "New maturity stage";
+    ViewBag.ContentHeaderAsideTitle = "Define the lifecycle checkpoint that products will be evaluated against.";
+    ViewBag.ContentHeaderAsideBody = "Each maturity level should make readiness, progression, and manufacturing expectations easier to understand.";
+    ViewBag.IsActiveTemplatesMaturityLevels = "menu-open";
+    ViewBag.IsActiveTemplatesMaturityLevelsNew = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+
+<form id="maturitylevelForm" class="needs-validation" novalidate="">
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        New Maturity Level
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Create new maturity level</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="Code" class="form-label">Maturity Code<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Code" name="Code" placeholder="Enter Valid Maturity Code" required="">
+                            <div class="invalid-feedback">Please provide a valid maturity code.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="MaturityNumber" class="form-label">Maturity Number<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="number" class="form-control" id="MaturityNumber" name="MaturityNumber" placeholder="Enter Maturity Level Name" required="">
+                            <div class="invalid-feedback">Please provide a maturity number.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="SequenceNo" class="form-label">Sequence Number<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="number" class="form-control" id="SequenceNo" name="SequenceNo" placeholder="Enter Sequence Number" required="">
+                            <div class="invalid-feedback">Please provide a sequence number.</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "MaturityLevels", new { area = "Templates" })" class="btn btn-default">Cancel</a> <button class="btn btn-success">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+
+
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="~/Areas/Templates/Scripts/maturitylevels/new.js"></script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        ////(() => {
+        ////    'use strict';
+
+        ////    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        ////    const forms = document.querySelectorAll('.needs-validation');
+
+        ////    // Loop over them and prevent submission
+        ////    Array.from(forms).forEach((form) => {
+        ////        form.addEventListener(
+        ////            'submit',
+        ////            (event) => {
+        ////                if (!form.checkValidity()) {
+        ////                    event.preventDefault();
+        ////                    event.stopPropagation();
+        ////                }
+
+        ////                form.classList.add('was-validated');
+        ////            },
+        ////            false,
+        ////        );
+        ////    });
+        ////})();
+    </script>
+}

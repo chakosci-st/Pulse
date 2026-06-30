@@ -1,0 +1,75 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Display Form";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review this form template and the task-linked data collection structure it defines.";
+    ViewBag.ContentHeaderChips = new[] { "Task-linked forms", "Data collection design", "Reusable field templates" };
+    ViewBag.ContentHeaderAsideLabel = "Form review";
+    ViewBag.ContentHeaderAsideTitle = "Inspect the reusable structure before assigning this form to additional tasks.";
+    ViewBag.ContentHeaderAsideBody = "This view keeps the design intent visible so teams understand what data the form is expected to collect.";
+    ViewBag.IsActiveTemplatesForms = "menu-open";
+    ViewBag.IsActiveTemplatesFormsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card shadow-lg h-100">
+            <div class="card-body">
+                <h5 class="mb-3">Form Summary</h5>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label text-muted">Form ID</label>
+                        <div id="formSysId" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-muted">Status</label>
+                        <div id="formStatus" class="form-control bg-light d-flex align-items-center">-</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-muted">Form Name</label>
+                        <div id="formName" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-muted">Description</label>
+                        <div id="formDescription" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-muted">Field Count</label>
+                        <div id="formFieldCount" class="form-control bg-light">0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="m-0 float-end">
+                    <a href="@Url.Action("Index", "Forms", new { area = "Templates" })" class="btn btn-default">Back to list</a>
+                    <a href="@Url.Action("Edit", "Forms", new { area = "Templates", code = ViewBag.Id })" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card shadow-lg mb-4">
+            <div class="card-body">
+                <h5 class="mb-3">Fields</h5>
+                <ul id="formFieldList" class="list-group list-group-flush">
+                    <li class="list-group-item text-muted">Loading fields...</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="mb-3">Structure Preview</h5>
+                <pre id="formStructurePreview" class="bg-light border rounded-3 p-3 mb-0" style="max-height: 420px; overflow: auto; white-space: pre-wrap; word-break: break-word;">{}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/forms/display.js"></script>
+}

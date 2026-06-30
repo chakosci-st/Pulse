@@ -1,0 +1,1734 @@
+@{
+    ViewBag.Title = ViewBag.Title ?? "Pulse User Guide";
+    ViewBag.TitleIcon = ViewBag.TitleIcon ?? "bi bi-journal-bookmark-fill";
+    ViewBag.SubTitle = ViewBag.SubTitle ?? "A full walkthrough of Pulse features, user responsibilities, and proper ways of working.";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+@section Styles {
+    <style>
+        .help-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.9fr);
+            gap: 1rem;
+            padding: 1.35rem 1.4rem;
+            border: 1px solid rgba(191, 219, 254, 0.9);
+            border-radius: 1.25rem;
+            background:
+                radial-gradient(circle at top right, rgba(59, 130, 246, 0.16), transparent 34%),
+                linear-gradient(135deg, #f8fbff 0%, #eef6ff 52%, #f8fafc 100%);
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08);
+        }
+
+        .help-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.32rem 0.72rem;
+            border-radius: 999px;
+            font-size: 0.73rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1d4ed8;
+            background: rgba(219, 234, 254, 0.95);
+            border: 1px solid rgba(147, 197, 253, 0.9);
+            margin-bottom: 0.85rem;
+        }
+
+        .help-hero__title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0;
+            color: #0f172a;
+            font-size: clamp(1.35rem, 2vw, 1.95rem);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        .help-hero__title-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #1d4ed8;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.55);
+            flex: 0 0 auto;
+        }
+
+        .help-hero__copy {
+            max-width: 64ch;
+            margin: 0.8rem 0 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .help-hero__links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+        }
+
+        .help-chip-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.08);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #0f172a;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .help-chip-link:hover {
+            color: #0f172a;
+            border-color: rgba(96, 165, 250, 0.45);
+            background: rgba(219, 234, 254, 0.92);
+            transform: translateY(-1px);
+        }
+
+        .help-hero__panel {
+            display: grid;
+            gap: 0.8rem;
+            align-content: start;
+        }
+
+        .help-hero__stat {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            box-shadow: 0 12px 28px rgba(148, 163, 184, 0.16);
+        }
+
+        .help-hero__stat-label {
+            display: block;
+            margin-bottom: 0.28rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .help-hero__stat strong {
+            display: block;
+            font-size: 0.96rem;
+            color: #0f172a;
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 2.1fr);
+            gap: 1.25rem;
+            margin-top: 1.25rem;
+        }
+
+        .help-sidebar-card,
+        .help-section-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            background: #fff;
+            box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.05);
+        }
+
+        .help-sidebar-card {
+            position: sticky;
+            top: 1rem;
+        }
+
+        .help-sidebar-card .card-body,
+        .help-section-card .card-body {
+            padding: 1.25rem;
+        }
+
+        .help-sidebar-title,
+        .help-section-title {
+            font-size: 0.86rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 0.95rem;
+        }
+
+        .help-nav {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .help-nav a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.8rem 0.9rem;
+            border-radius: 0.8rem;
+            text-decoration: none;
+            color: #0f172a;
+            background: #f8fafc;
+            border: 1px solid transparent;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .help-nav a:hover {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .help-mini-note {
+            margin-top: 1rem;
+            padding: 0.9rem;
+            border-radius: 0.85rem;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 0.84rem;
+        }
+
+        .help-content {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .help-section-card h2 {
+            margin-bottom: 0.4rem;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .help-section-card > .card-body > p {
+            color: #64748b;
+            font-size: 0.94rem;
+            margin-bottom: 1rem;
+        }
+
+        .help-callout-grid,
+        .help-principle-grid,
+        .help-cta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .help-callout,
+        .help-principle,
+        .help-cta {
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.95rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .help-callout i,
+        .help-principle i {
+            font-size: 1.2rem;
+            color: #0f766e;
+        }
+
+        .help-callout h3,
+        .help-principle h3,
+        .help-cta h3,
+        .help-module h3,
+        .help-workflow-head h3 {
+            margin-top: 0.7rem;
+            margin-bottom: 0.45rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .help-callout p,
+        .help-principle p,
+        .help-cta p,
+        .help-module p,
+        .help-workflow-head p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+
+        .help-module-grid,
+        .help-role-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .help-audience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .help-module,
+        .help-role-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1rem;
+            background: #fff;
+        }
+
+        .help-audience-card,
+        .help-screenshot-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .help-audience-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #1e3a8a;
+            background: #dbeafe;
+            margin-bottom: 0.8rem;
+        }
+
+        .help-audience-card h3,
+        .help-screenshot-card h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .help-audience-card > p,
+        .help-screenshot-card > p {
+            margin: 0.45rem 0 0.85rem;
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+
+        .help-module-head,
+        .help-role-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .help-module-icon,
+        .help-role-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 1.1rem;
+            flex: 0 0 auto;
+        }
+
+        .help-role-card h3,
+        .help-module h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .help-list {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .help-list-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            color: #334155;
+            font-size: 0.88rem;
+        }
+
+        .help-list-item i {
+            color: #0ea5e9;
+            margin-top: 0.18rem;
+            font-size: 0.7rem;
+        }
+
+        .help-workflow {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .help-workflow + .help-workflow {
+            margin-top: 0.9rem;
+        }
+
+        .help-workflow-head {
+            padding: 0.95rem 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .help-steps {
+            display: grid;
+            gap: 0.9rem;
+            padding: 1rem;
+        }
+
+        .help-step {
+            display: grid;
+            grid-template-columns: 2rem 1fr;
+            gap: 0.8rem;
+        }
+
+        .help-step-number {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .help-step h4 {
+            margin: 0 0 0.2rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .help-step p {
+            margin: 0;
+            font-size: 0.87rem;
+            color: #64748b;
+        }
+
+        .help-screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .help-screenshot-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .help-screenshot-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 1.1rem;
+            flex: 0 0 auto;
+        }
+
+        .help-screenshot-frame {
+            min-height: 12.5rem;
+            display: grid;
+            place-items: center;
+            padding: 1.1rem;
+            border-radius: 0.95rem;
+            border: 1px dashed #93c5fd;
+            background:
+                linear-gradient(180deg, rgba(239, 246, 255, 0.95) 0%, rgba(248, 250, 252, 1) 100%),
+                repeating-linear-gradient(
+                    45deg,
+                    rgba(191, 219, 254, 0.2) 0,
+                    rgba(191, 219, 254, 0.2) 10px,
+                    rgba(219, 234, 254, 0.24) 10px,
+                    rgba(219, 234, 254, 0.24) 20px
+                );
+            text-align: center;
+            margin-bottom: 0.9rem;
+        }
+
+        .help-screenshot-frame--image {
+            padding: 0.7rem;
+            border-style: solid;
+            background: #fff;
+        }
+
+        .help-screenshot-image {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 0.7rem;
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
+        }
+
+        .help-screenshot-frame i {
+            display: block;
+            margin-bottom: 0.55rem;
+            font-size: 1.55rem;
+            color: #2563eb;
+        }
+
+        .help-screenshot-frame strong {
+            display: block;
+            color: #0f172a;
+            font-size: 0.98rem;
+            font-weight: 800;
+        }
+
+        .help-screenshot-frame span {
+            display: block;
+            margin-top: 0.4rem;
+            color: #475569;
+            font-size: 0.84rem;
+            line-height: 1.5;
+        }
+
+        @@media (max-width: 1199.98px) {
+            .help-hero,
+            .help-grid,
+            .help-callout-grid,
+            .help-principle-grid,
+            .help-module-grid,
+            .help-audience-grid,
+            .help-role-grid,
+            .help-cta-grid,
+            .help-screenshot-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .help-sidebar-card {
+                position: static;
+            }
+        }
+    </style>
+}
+
+<div class="page-shell">
+    <div class="container-fluid">
+        <section class="help-hero">
+            <div>
+                <span class="help-hero__eyebrow">
+                    <i class="bi bi-journal-bookmark"></i>
+                    Pulse User Guide
+                </span>
+                <h1 class="help-hero__title">
+                    <span class="help-hero__title-icon">
+                        <i class="bi bi-journal-text"></i>
+                    </span>
+                    <span>Pulse User Guide And Working Standards</span>
+                </h1>
+                <p class="help-hero__copy">
+                    This guide is written as an onboarding and operating manual. Use it to learn how Pulse is organized, which feature to use for each kind of work,
+                    what each role owns, and how to keep project, task, and governance data accurate across the application.
+                </p>
+                <div class="help-hero__links">
+                    <a class="help-chip-link" href="#getting-started"><i class="bi bi-compass"></i>Getting Started</a>
+                    <a class="help-chip-link" href="#training-path"><i class="bi bi-mortarboard"></i>Training Path</a>
+                    <a class="help-chip-link" href="#audience-views"><i class="bi bi-briefcase"></i>Audience Views</a>
+                    <a class="help-chip-link" href="#role-quick-start"><i class="bi bi-people"></i>Role Quick Start</a>
+                    <a class="help-chip-link" href="#module-playbook"><i class="bi bi-kanban"></i>Feature Playbook</a>
+                        <a class="help-chip-link" href="#dashboard-scope"><i class="bi bi-toggle2-on"></i>Dashboard Scope</a>
+                        <a class="help-chip-link" href="#profile-settings"><i class="bi bi-person-circle"></i>Profile</a>
+                        <a class="help-chip-link" href="#admin-users"><i class="bi bi-person-gear"></i>User Maintenance</a>
+                    <a class="help-chip-link" href="#training-screens"><i class="bi bi-image"></i>Screenshot Plan</a>
+                    <a class="help-chip-link" href="@Url.Action("Guide", "Home")"><i class="bi bi-question-circle"></i>FAQ</a>
+                </div>
+            </div>
+            <div class="help-hero__panel">
+                <div class="help-hero__stat">
+                    <span class="help-hero__stat-label">Audience</span>
+                    <strong>New users, executives, project owners, shop-floor users, coordinators, template managers, and administrators</strong>
+                </div>
+                <div class="help-hero__stat">
+                    <span class="help-hero__stat-label">Scope</span>
+                    <strong>Core workspace, collaboration, governance, configuration, and reporting entry points</strong>
+                </div>
+                <div class="help-hero__stat">
+                    <span class="help-hero__stat-label">Use This When</span>
+                    <strong>You need onboarding, process alignment, or a complete walkthrough instead of a quick answer</strong>
+                </div>
+            </div>
+        </section>
+
+        <div class="help-grid">
+            <aside class="card help-sidebar-card">
+                <div class="card-body">
+                    <div class="help-sidebar-title">Guide Sections</div>
+                    <nav class="help-nav">
+                        <a href="#getting-started">Getting Started <i class="bi bi-arrow-right"></i></a>
+                        <a href="#training-path">Training Path <i class="bi bi-arrow-right"></i></a>
+                        <a href="#audience-views">Audience Views <i class="bi bi-arrow-right"></i></a>
+                        <a href="#workspace-map">Workspace Map <i class="bi bi-arrow-right"></i></a>
+                        <a href="#roles">Who Does What <i class="bi bi-arrow-right"></i></a>
+                        <a href="#role-quick-start">Role Quick Start <i class="bi bi-arrow-right"></i></a>
+                        <a href="#module-playbook">Feature Playbook <i class="bi bi-arrow-right"></i></a>
+                        <a href="#dashboard-scope">Dashboard Scope <i class="bi bi-arrow-right"></i></a>
+                        <a href="#profile-settings">Profile And Account <i class="bi bi-arrow-right"></i></a>
+                        <a href="#admin-users">Admin User Maintenance <i class="bi bi-arrow-right"></i></a>
+                        <a href="#ways-of-working">Proper Ways Of Working <i class="bi bi-arrow-right"></i></a>
+                        <a href="#workflows">Common Workflows <i class="bi bi-arrow-right"></i></a>
+                        <a href="#statuses">Status Guide <i class="bi bi-arrow-right"></i></a>
+                        <a href="#training-screens">Screenshot Plan <i class="bi bi-arrow-right"></i></a>
+                        <a href="#quick-links">Quick Links <i class="bi bi-arrow-right"></i></a>
+                    </nav>
+                    <div class="help-mini-note">
+                        Use this page as the primary onboarding and process-reference document for the current Pulse application.
+                    </div>
+                </div>
+            </aside>
+
+            <div class="help-content">
+                <section class="card help-section-card" id="getting-started">
+                    <div class="card-body">
+                        <div class="help-section-title">Getting Started</div>
+                        <h2>How Pulse Is Organized</h2>
+                        <p>
+                            Pulse is centered on project lifecycle execution. Most users live in Dashboard, Register, Projects, Tasks, Notifications, and Chats.
+                            Power users and administrators also maintain shared setup data in Templates, Operations, and Admin.
+                        </p>
+                        <div class="help-callout-grid">
+                            <div class="help-callout">
+                                <i class="bi bi-speedometer2"></i>
+                                <h3>Monitor</h3>
+                                <p>Use Dashboard and Notifications to see portfolio health, overdue work, unread alerts, and open actions.</p>
+                            </div>
+                            <div class="help-callout">
+                                <i class="bi bi-kanban"></i>
+                                <h3>Execute</h3>
+                                <p>Use Register, Projects, and Tasks to create work, update delivery activity, and keep milestones and tasks current.</p>
+                            </div>
+                            <div class="help-callout">
+                                <i class="bi bi-sliders"></i>
+                                <h3>Govern</h3>
+                                <p>Use Templates, Operations, and Admin to maintain the reusable structures and access rules behind project execution.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="workspace-map">
+                    <div class="card-body">
+                        <div class="help-section-title">Workspace Map</div>
+                        <h2>What Each Major Area Is For</h2>
+                        <p>
+                            These groupings reflect the current user-facing navigation and the intended purpose of each area.
+                        </p>
+                        <div class="help-module-grid">
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-house-door"></i></div>
+                                    <div>
+                                        <h3>Core Workspace</h3>
+                                        <p>The main pages used for daily execution work.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Dashboard:</strong> monitor portfolio health, counts, due work, and trend summaries.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Register:</strong> create new projects using the defined roadmap and master data.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Projects:</strong> find, review, and manage project records.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Tasks:</strong> focus on execution items and due dates.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>View:</strong> supporting read-oriented browsing used in some environments.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-chat-dots"></i></div>
+                                    <div>
+                                        <h3>Coordination</h3>
+                                        <p>Communication and follow-up around active work.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Chats:</strong> broad ongoing discussion and coordination.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Notifications:</strong> unread and active alerts generated from the system.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Comments and attachments:</strong> best used inside the relevant project or task context to preserve history.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-boxes"></i></div>
+                                    <div>
+                                        <h3>Shared Configuration</h3>
+                                        <p>Reusable structures that shape project creation and reporting.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Templates:</strong> calendars, categories, forms, plants, product structures, maturity levels, and roadmaps.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Operations:</strong> plant and production-calendar oriented setup used by operational teams.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>These areas should be maintained carefully because projects inherit their structure and reference data.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-shield-lock"></i></div>
+                                    <div>
+                                        <h3>Governance</h3>
+                                        <p>Security, access, and formal reporting entry points.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Admin:</strong> modules, user groups, and broader platform governance.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Reports:</strong> exported or summary-oriented views used for review and communication.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Settings/Profile:</strong> personal or environment-specific configuration where exposed.</span></div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="training-path">
+                    <div class="card-body">
+                        <div class="help-section-title">Training Path</div>
+                        <h2>Recommended Onboarding Sequence</h2>
+                        <p>
+                            Use this sequence for new-user training, refresher sessions, or walkthroughs when someone is moving into a broader role in Pulse.
+                        </p>
+
+                        <div class="help-workflow">
+                            <div class="help-workflow-head">
+                                <h3>First Training Session</h3>
+                                <p>Build navigation confidence before asking users to update live work.</p>
+                            </div>
+                            <div class="help-steps">
+                                <div class="help-step">
+                                    <div class="help-step-number">1</div>
+                                    <div>
+                                        <h4>Confirm visible menus and access</h4>
+                                        <p>Review which menus appear for the user so they understand that Pulse access is role- and permission-based.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">2</div>
+                                    <div>
+                                        <h4>Tour Dashboard and Notifications</h4>
+                                        <p>Show how to spot open actions, unread reminders, and signals that require follow-up.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">3</div>
+                                    <div>
+                                        <h4>Open a project and a task</h4>
+                                        <p>Practice the difference between Projects, Details, Review, Overview, and the task-level editing flow.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">4</div>
+                                    <div>
+                                        <h4>Record one in-context update</h4>
+                                        <p>Have the user add a comment, attachment, or status update in the correct record so they learn the expected audit trail.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="help-workflow">
+                            <div class="help-workflow-head">
+                                <h3>First Week</h3>
+                                <p>Move from navigation familiarity into reliable day-to-day use.</p>
+                            </div>
+                            <div class="help-steps">
+                                <div class="help-step">
+                                    <div class="help-step-number">1</div>
+                                    <div>
+                                        <h4>Practice the normal daily routine</h4>
+                                        <p>Start with Dashboard or Notifications, move into Tasks or Projects, then update the source record directly.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">2</div>
+                                    <div>
+                                        <h4>Learn status and due-date discipline</h4>
+                                        <p>Teach users how stale dates, blank statuses, or off-system updates create misleading risk signals.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">3</div>
+                                    <div>
+                                        <h4>Use the role quick start</h4>
+                                        <p>Match the user to the role-based checklist below so they focus only on the parts of Pulse they truly own.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">4</div>
+                                    <div>
+                                        <h4>Review shared-setup boundaries</h4>
+                                        <p>Make clear which changes belong in Templates, Operations, or Admin so execution work and governance work stay separate.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="audience-views">
+                    <div class="card-body">
+                        <div class="help-section-title">Audience Views</div>
+                        <h2>How To Read Pulse Based On Your Audience</h2>
+                        <p>
+                            Not every audience should read the system the same way. Use these audience views when preparing onboarding, support, or working sessions.
+                        </p>
+                        <div class="help-audience-grid">
+                            <article class="help-audience-card">
+                                <span class="help-audience-label"><i class="bi bi-briefcase"></i>Executive Or Sponsor</span>
+                                <h3>Read Pulse At The Portfolio Level</h3>
+                                <p>Executives and sponsors usually need health, risk, ownership, and escalation signals rather than row-level editing detail.</p>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Start with:</strong> Dashboard, project health summaries, and reports.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Look for:</strong> at-risk work, overdue items, blocked ownership, and delivery trends.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Avoid:</strong> treating executive review screens as the place to perform detailed task maintenance.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-audience-card">
+                                <span class="help-audience-label"><i class="bi bi-person-badge"></i>Project Owner</span>
+                                <h3>Read Pulse As The Source Of Project Truth</h3>
+                                <p>Project owners need the full project picture, including setup quality, milestone movement, assignment clarity, and execution history.</p>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Start with:</strong> Register, Projects, Review, and Overview.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Look for:</strong> stale dates, incomplete members, unresolved blockers, and weak project context.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Avoid:</strong> managing important project changes outside Pulse where other users cannot see the history.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-audience-card">
+                                <span class="help-audience-label"><i class="bi bi-hammer"></i>Shop-Floor Or Execution User</span>
+                                <h3>Read Pulse As The Daily Work Queue</h3>
+                                <p>Execution users need clarity on what is due now, what is blocked, and what evidence or update must be posted back into the task or project.</p>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Start with:</strong> Notifications, Tasks, and the relevant project comments or attachments.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Look for:</strong> due dates, required status changes, missing data, and blocked dependencies.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Avoid:</strong> keeping updates only in messages, memory, or side spreadsheets without updating the source record.</span></div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="roles">
+                    <div class="card-body">
+                        <div class="help-section-title">Who Does What</div>
+                        <h2>Typical User Responsibilities</h2>
+                        <p>
+                            Pulse works best when each role updates the correct layer of information instead of mixing operational work with shared configuration.
+                        </p>
+                        <div class="help-role-grid">
+                            <article class="help-role-card">
+                                <div class="help-role-head">
+                                    <div class="help-role-icon"><i class="bi bi-person"></i></div>
+                                    <div>
+                                        <h3>Daily Or Shop-Floor User</h3>
+                                        <p>Executes assigned work and keeps status current.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Starts with Dashboard, Notifications, and Tasks to understand the day&apos;s priorities.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Updates tasks, dates, comments, and required supporting data in the source record.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Escalates blockers through comments, chats, or the project workspace instead of tracking them offline.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-role-card">
+                                <div class="help-role-head">
+                                    <div class="help-role-icon"><i class="bi bi-person-badge"></i></div>
+                                    <div>
+                                        <h3>Project Owner</h3>
+                                        <p>Owns the project record and delivery accuracy.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Creates projects or oversees registration quality and inherited execution structure.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Uses Details, Review, and Overview to manage scope, progress, blockers, and cross-team follow-up.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Reviews at-risk work regularly and confirms dates, members, and collaboration history stay current.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-role-card">
+                                <div class="help-role-head">
+                                    <div class="help-role-icon"><i class="bi bi-diagram-2"></i></div>
+                                    <div>
+                                        <h3>Template Or Operations Manager</h3>
+                                        <p>Maintains reusable structures and operational setup.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Updates roadmaps, forms, calendars, plants, and reference data deliberately.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Coordinates structural changes before large waves of project creation whenever possible.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Avoids making ad hoc shared-data changes without understanding the downstream impact on active projects.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-role-card">
+                                <div class="help-role-head">
+                                    <div class="help-role-icon"><i class="bi bi-shield-check"></i></div>
+                                    <div>
+                                        <h3>Administrator</h3>
+                                        <p>Controls access and governance.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Maintains user groups and module assignments.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Ensures users have the right access for their plant, project, and role responsibilities.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Resolves missing-menu or hidden-action issues by reviewing permission design instead of bypassing the authorization model.</span></div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="role-quick-start">
+                    <div class="card-body">
+                        <div class="help-section-title">Role Quick Start</div>
+                        <h2>What Each Role Should Do First</h2>
+                        <p>
+                            Use these quick starts when assigning a user to a role or when a current user needs a clearer operating routine.
+                        </p>
+                        <div class="help-role-grid">
+                            <article class="help-role-card">
+                                <div class="help-role-head">
+                                    <div class="help-role-icon"><i class="bi bi-person"></i></div>
+                                    <div>
+                                        <h3>Daily Or Shop-Floor User</h3>
+                                        <p>Focus on execution quality and response time.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Open first:</strong> Dashboard, Notifications, then Tasks.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Own:</strong> status, target dates, evidence, and comments for assigned work.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Escalate:</strong> blockers and missing information through the project context, not separate offline trackers.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-role-card">
+                                <div class="help-role-head">
+                                    <div class="help-role-icon"><i class="bi bi-person-badge"></i></div>
+                                    <div>
+                                        <h3>Project Owner</h3>
+                                        <p>Owns project completeness and execution rhythm.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Open first:</strong> Projects and the relevant Review or Overview page.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Own:</strong> project setup quality, milestone progress, member coordination, and health accuracy.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Review weekly:</strong> at-risk items, overdue tasks, and any stale project context.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-role-card">
+                                <div class="help-role-head">
+                                    <div class="help-role-icon"><i class="bi bi-diagram-2"></i></div>
+                                    <div>
+                                        <h3>Template Or Operations Manager</h3>
+                                        <p>Protects the shared structures behind execution.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Open first:</strong> Templates or Operations based on the change type.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Own:</strong> roadmaps, forms, calendars, plants, and other shared setup data.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Coordinate before change:</strong> review impact with project owners when active projects depend on the structure being changed.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-role-card">
+                                <div class="help-role-head">
+                                    <div class="help-role-icon"><i class="bi bi-shield-check"></i></div>
+                                    <div>
+                                        <h3>Administrator</h3>
+                                        <p>Maintains a clean and predictable access model.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Open first:</strong> Admin modules and user-group management.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Own:</strong> module visibility, group-based permissions, and governance consistency.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Resolve carefully:</strong> when a user cannot see a page, review permissions and plant or project scope before changing access.</span></div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="module-playbook">
+                    <div class="card-body">
+                        <div class="help-section-title">Feature Playbook</div>
+                        <h2>What Each Feature Is For And How To Use It Properly</h2>
+                        <p>
+                            The sections below map feature intent to the recommended way of working inside Pulse.
+                        </p>
+                        <div class="help-module-grid">
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-speedometer"></i></div>
+                                    <div>
+                                        <h3>Dashboard</h3>
+                                        <p>Use for monitoring, not detailed maintenance.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Start the day here to identify overdue work, stalled projects, and emerging risks.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use the scope toggle when you need to switch between your assigned work and the wider portfolio view, depending on your access.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Do not treat Dashboard as the place to make all updates; move into Projects or Tasks for actual edits.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-journal-plus"></i></div>
+                                    <div>
+                                        <h3>Register</h3>
+                                        <p>The standard path for creating new projects.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use when work needs a formal project record with roadmap-driven milestones and tasks.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Complete the business context carefully because downstream reporting and access depend on this data.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-columns-gap"></i></div>
+                                    <div>
+                                        <h3>Projects</h3>
+                                        <p>The main project workspace.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use list filters and search to find the right project quickly.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Open Details for context, Review for execution progress, and Overview for broader maintenance and support material.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-ui-checks"></i></div>
+                                    <div>
+                                        <h3>Tasks</h3>
+                                        <p>The execution queue for work items.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use this view for day-to-day task management, due-date review, and personal execution.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Keep task status, target dates, attachments, and comments current to avoid false risk signals.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-bell"></i></div>
+                                    <div>
+                                        <h3>Notifications</h3>
+                                        <p>System-generated reminders and unread follow-up items.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use the navbar unread indicator for quick checks and the Notifications page for a broader grouped review.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Treat notifications as prompts to act inside the source project or task, not as a separate tracking system.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-chat-dots"></i></div>
+                                    <div>
+                                        <h3>Chats And Collaboration</h3>
+                                        <p>Communication should stay close to the work.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use chats for live coordination and project/task comments for durable execution history.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Add attachments and commentary inside the relevant record so future reviewers have context.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-boxes"></i></div>
+                                    <div>
+                                        <h3>Templates</h3>
+                                        <p>Reusable project-building assets.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Maintain forms, roadmaps, categories, calendars, plants, and product structures here.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Change shared structures deliberately because future project creation and reporting depend on them.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-buildings"></i></div>
+                                    <div>
+                                        <h3>Operations</h3>
+                                        <p>Plant-level and calendar-oriented setup.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use for operational context that supports scheduling, plant ownership, and execution boundaries.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Coordinate plant changes with project owners when those changes affect active work.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-shield-lock"></i></div>
+                                    <div>
+                                        <h3>Admin</h3>
+                                        <p>Access control and governance.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use Modules, User Groups, and Users to control what people can see and do.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use User Maintenance to review user records, configure group access, allow or restrict plant access, and review user workload summaries.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Favor group-based access over one-off workarounds so authorization stays consistent.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-file-earmark-bar-graph"></i></div>
+                                    <div>
+                                        <h3>Reports And Settings</h3>
+                                        <p>Supporting features that vary by environment.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use reports for snapshots, exports, and summary review rather than operational editing.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use Settings/Profile to review account details, access groups, active notifications, task counts, and project ownership or membership counts.</span></div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="dashboard-scope">
+                    <div class="card-body">
+                        <div class="help-section-title">Dashboard Scope</div>
+                        <h2>Using The Personal And All-User Dashboard Views</h2>
+                        <p>
+                            The Dashboard can be read as a personal work queue or as a wider portfolio view. The scope toggle changes which records feed the counters, charts, and detailed project or milestone lists.
+                        </p>
+                        <div class="help-callout-grid">
+                            <div class="help-callout">
+                                <i class="bi bi-person-check"></i>
+                                <h3>My Work</h3>
+                                <p>Use this mode for daily execution. It focuses the dashboard on records tied to the logged-in user through ownership, membership, or assigned work.</p>
+                            </div>
+                            <div class="help-callout">
+                                <i class="bi bi-people-fill"></i>
+                                <h3>All Users</h3>
+                                <p>Use this mode for portfolio review, team coordination, and management follow-up when your permissions allow a broader view.</p>
+                            </div>
+                            <div class="help-callout">
+                                <i class="bi bi-save2"></i>
+                                <h3>Remembered Preference</h3>
+                                <p>Pulse remembers your last dashboard scope preference on your user profile so the dashboard opens the way you normally work.</p>
+                            </div>
+                        </div>
+                        <div class="help-workflow">
+                            <div class="help-workflow-head">
+                                <h3>Recommended Dashboard Routine</h3>
+                                <p>Use the toggle deliberately instead of mixing personal follow-up with portfolio review.</p>
+                            </div>
+                            <div class="help-steps">
+                                <div class="help-step">
+                                    <div class="help-step-number">1</div>
+                                    <div>
+                                        <h4>Start with the scope that matches your job for the day</h4>
+                                        <p>Individual contributors normally start with My Work. Managers, coordinators, and sponsors may start with All Users.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">2</div>
+                                    <div>
+                                        <h4>Use counters and charts as signals</h4>
+                                        <p>Dashboard values point you toward open work, overdue records, and data-quality issues. They should lead you back into Projects or Tasks for updates.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">3</div>
+                                    <div>
+                                        <h4>Switch scope before comparing data</h4>
+                                        <p>If a number looks different from someone else&apos;s view, confirm whether both users are looking at the same dashboard scope and have comparable access.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="profile-settings">
+                    <div class="card-body">
+                        <div class="help-section-title">Profile And Account</div>
+                        <h2>Reading Settings/Profile</h2>
+                        <p>
+                            Settings/Profile gives users a personal account summary and a quick workload snapshot. It is useful for confirming identity details, profile photo, access groups, notifications, task load, and project involvement.
+                        </p>
+                        <div class="help-module-grid">
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-person-circle"></i></div>
+                                    <div>
+                                        <h3>Identity And Photo</h3>
+                                        <p>Keep the profile recognizable for collaboration and user reports.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Review employee ID, username, display name, and contact details where available.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Upload or remove a profile photo if the action is available for your account.</span></div>
+                                </div>
+                            </article>
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-bar-chart-line"></i></div>
+                                    <div>
+                                        <h3>Workload Summary</h3>
+                                        <p>Use the summary to understand current activity at a glance.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Pending Tasks:</strong> open work that still needs action.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Completed Tasks:</strong> tasks already marked complete for the user.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Projects Owned:</strong> projects where the user is recorded as the project owner.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Projects as Member:</strong> distinct projects where the user participates as a project member.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Active Notifications:</strong> current prompts and updates connected to the user.</span></div>
+                                </div>
+                            </article>
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-shield-check"></i></div>
+                                    <div>
+                                        <h3>Access Groups</h3>
+                                        <p>Use group membership as the first clue when access differs between users.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Access groups explain why menu items, buttons, or records may be visible to one person and hidden for another.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>If access looks wrong, ask an administrator to review User Maintenance, User Groups, plant access, and module permissions.</span></div>
+                                </div>
+                            </article>
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-clock-history"></i></div>
+                                    <div>
+                                        <h3>Recent Activity</h3>
+                                        <p>Use recent activity as a lightweight audit view.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Review recent project, task, notification, or milestone activity to understand what changed recently.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use source records for final verification when an activity item needs follow-up.</span></div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="admin-users">
+                    <div class="card-body">
+                        <div class="help-section-title">Admin User Maintenance</div>
+                        <h2>Managing Users, Access, Plants, And User Reports</h2>
+                        <p>
+                            Admin Users is the central maintenance area for user records and user-specific access setup. It follows the same governance model as User Groups while adding user profile, workload, plant, and reporting context.
+                        </p>
+                        <div class="help-module-grid">
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-person-lines-fill"></i></div>
+                                    <div>
+                                        <h3>User List</h3>
+                                        <p>Find, filter, and open user records.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use the user list to search by identity details and open display, edit, or configure actions based on permissions.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Keep user records clean because profile, reporting, notifications, and access decisions depend on accurate identity data.</span></div>
+                                </div>
+                            </article>
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-person-plus"></i></div>
+                                    <div>
+                                        <h3>New And Edit</h3>
+                                        <p>Create or maintain user details with the standard form workflow.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use New for onboarding users who need Pulse access.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use Edit to maintain names, account attributes, status, and profile data when corrections are required.</span></div>
+                                </div>
+                            </article>
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-person-gear"></i></div>
+                                    <div>
+                                        <h3>Configure</h3>
+                                        <p>Assign user groups and plant access from one user-focused workspace.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use the User Groups table to allow or restrict group membership for the selected user.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use the Plants table to allow or restrict access through plant membership.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use the plant setup action to assign plant-specific user groups for that user when plant-level roles differ from general access.</span></div>
+                                </div>
+                            </article>
+                            <article class="help-module">
+                                <div class="help-module-head">
+                                    <div class="help-module-icon"><i class="bi bi-file-person"></i></div>
+                                    <div>
+                                        <h3>User Reports</h3>
+                                        <p>Review workload and profile cards across users.</p>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>User report cards show profile photo or initials, active status, projects owned, projects as member, and pending tasks.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Use search and status filters to identify owners with heavy workload, inactive users, or users who may need access cleanup.</span></div>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="help-workflow">
+                            <div class="help-workflow-head">
+                                <h3>Recommended User Maintenance Flow</h3>
+                                <p>Use this sequence when onboarding a user or correcting access.</p>
+                            </div>
+                            <div class="help-steps">
+                                <div class="help-step">
+                                    <div class="help-step-number">1</div>
+                                    <div>
+                                        <h4>Create or verify the user record</h4>
+                                        <p>Confirm the user&apos;s identity, employee reference, email, status, and profile details before configuring access.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">2</div>
+                                    <div>
+                                        <h4>Assign user groups</h4>
+                                        <p>Grant access through the user groups that match the user&apos;s job responsibilities and module permissions.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">3</div>
+                                    <div>
+                                        <h4>Configure plant access</h4>
+                                        <p>Allow or restrict the plants the user should work with, then assign plant-specific user groups when required.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">4</div>
+                                    <div>
+                                        <h4>Review the result</h4>
+                                        <p>Use Display, User Reports, and the user&apos;s Settings/Profile summary to confirm the user has the correct workload and access picture.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="ways-of-working">
+                    <div class="card-body">
+                        <div class="help-section-title">Proper Ways Of Working</div>
+                        <h2>Recommended Operating Principles In Pulse</h2>
+                        <p>
+                            These practices keep execution accurate and reduce rework across projects, tasks, and shared configuration.
+                        </p>
+                        <div class="help-principle-grid">
+                            <div class="help-principle">
+                                <i class="bi bi-1-circle"></i>
+                                <h3>Create Projects Through Register</h3>
+                                <p>Do not bypass the registration flow when the work should live as a managed project with inherited roadmap structure.</p>
+                            </div>
+                            <div class="help-principle">
+                                <i class="bi bi-2-circle"></i>
+                                <h3>Update The Source Record</h3>
+                                <p>When you receive a reminder or see a dashboard issue, open the related project or task and update the source record there.</p>
+                            </div>
+                            <div class="help-principle">
+                                <i class="bi bi-3-circle"></i>
+                                <h3>Keep Dates And Status In Sync</h3>
+                                <p>Pulse derives risk from dates and status, so stale dates or missing updates create misleading health signals.</p>
+                            </div>
+                            <div class="help-principle">
+                                <i class="bi bi-4-circle"></i>
+                                <h3>Separate Execution From Configuration</h3>
+                                <p>Use Projects and Tasks for active delivery work, and reserve Templates, Operations, and Admin for controlled setup changes.</p>
+                            </div>
+                            <div class="help-principle">
+                                <i class="bi bi-5-circle"></i>
+                                <h3>Collaborate In Context</h3>
+                                <p>Prefer comments, attachments, and project-linked conversations so the audit trail stays with the work item.</p>
+                            </div>
+                            <div class="help-principle">
+                                <i class="bi bi-6-circle"></i>
+                                <h3>Use Group-Based Access</h3>
+                                <p>Grant access through the correct user group and module combination rather than relying on informal exceptions.</p>
+                            </div>
+                            <div class="help-principle">
+                                <i class="bi bi-7-circle"></i>
+                                <h3>Use Notifications As Prompts</h3>
+                                <p>Notifications should drive users back into the source project or task rather than becoming a second system of record.</p>
+                            </div>
+                            <div class="help-principle">
+                                <i class="bi bi-8-circle"></i>
+                                <h3>Plan Shared Changes Deliberately</h3>
+                                <p>When you change templates, operations data, or permissions, consider the effect on current users and future project creation before saving.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="workflows">
+                    <div class="card-body">
+                        <div class="help-section-title">Common Workflows</div>
+                        <h2>How Users Typically Work In Pulse</h2>
+                        <p>
+                            These workflows show the intended path through the current screens for the most common kinds of work.
+                        </p>
+
+                        <div class="help-workflow">
+                            <div class="help-workflow-head">
+                                <h3>Registering A New Project</h3>
+                                <p>Use this when starting a new initiative that should be tracked through the standard Pulse structure.</p>
+                            </div>
+                            <div class="help-steps">
+                                <div class="help-step">
+                                    <div class="help-step-number">1</div>
+                                    <div>
+                                        <h4>Open Register</h4>
+                                        <p>Start from the Register menu entry instead of creating disconnected records elsewhere.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">2</div>
+                                    <div>
+                                        <h4>Complete the business context</h4>
+                                        <p>Provide title, plant, category, products, members, ownership, and the rest of the project metadata accurately.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">3</div>
+                                    <div>
+                                        <h4>Confirm inherited structure</h4>
+                                        <p>Review the roadmap-derived milestones and tasks so the project starts with the right execution baseline.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">4</div>
+                                    <div>
+                                        <h4>Move into project execution</h4>
+                                        <p>After save, continue in Projects, Review, Overview, and Tasks depending on the update you need to make.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="help-workflow">
+                            <div class="help-workflow-head">
+                                <h3>Managing Existing Projects</h3>
+                                <p>Use this when you need to inspect progress, resolve blockers, or coordinate execution.</p>
+                            </div>
+                            <div class="help-steps">
+                                <div class="help-step">
+                                    <div class="help-step-number">1</div>
+                                    <div>
+                                        <h4>Open Projects</h4>
+                                        <p>Use search and filters to locate the project by number, name, plant, or status.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">2</div>
+                                    <div>
+                                        <h4>Choose the correct project page</h4>
+                                        <p>Open Details for context, Review for milestone and activity execution, and Overview for broader project maintenance.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">3</div>
+                                    <div>
+                                        <h4>Update in context</h4>
+                                        <p>Keep comments, attachments, notifications follow-up, and status updates attached to the project or its tasks.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="help-workflow">
+                            <div class="help-workflow-head">
+                                <h3>Working Assigned Tasks</h3>
+                                <p>Use this when the priority is execution throughput and due-date discipline.</p>
+                            </div>
+                            <div class="help-steps">
+                                <div class="help-step">
+                                    <div class="help-step-number">1</div>
+                                    <div>
+                                        <h4>Open Tasks or follow a notification</h4>
+                                        <p>Enter the task list directly or use a notification to jump into a specific work item.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">2</div>
+                                    <div>
+                                        <h4>Review due date and status</h4>
+                                        <p>Check whether the task is still on schedule, on hold, completed, or already trending at risk.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">3</div>
+                                    <div>
+                                        <h4>Update the task record fully</h4>
+                                        <p>Change status, revise dates when justified, and attach evidence or comments instead of keeping updates outside the system.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="help-workflow">
+                            <div class="help-workflow-head">
+                                <h3>Maintaining Shared Setup And Access</h3>
+                                <p>Use this for controlled changes to the structures and permissions behind active work.</p>
+                            </div>
+                            <div class="help-steps">
+                                <div class="help-step">
+                                    <div class="help-step-number">1</div>
+                                    <div>
+                                        <h4>Templates and Operations</h4>
+                                        <p>Update master data, calendars, roadmaps, plants, forms, and related structures with awareness of downstream project impact.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">2</div>
+                                    <div>
+                                        <h4>Admin</h4>
+                                        <p>Grant or revise access through modules and user groups so permissions remain consistent and reviewable.</p>
+                                    </div>
+                                </div>
+                                <div class="help-step">
+                                    <div class="help-step-number">3</div>
+                                    <div>
+                                        <h4>Communicate structural changes</h4>
+                                        <p>Inform project owners and coordinators when shared structures or access rules change in ways that affect active work.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="statuses">
+                    <div class="card-body">
+                        <div class="help-section-title">Status Guide</div>
+                        <h2>How Status Works Across Projects, Milestones, And Tasks</h2>
+                        <p>
+                            Pulse uses one status language across execution records so users can interpret health consistently wherever they are working.
+                        </p>
+                        <div class="help-list">
+                            <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Not Started:</strong> the work has not begun yet. Blank values are also treated as Not Started.</span></div>
+                            <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Ongoing:</strong> the work is active and still within the expected schedule.</span></div>
+                            <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>At Risk:</strong> the work is still ongoing but the target date has already passed.</span></div>
+                            <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Hold:</strong> the work is intentionally paused.</span></div>
+                            <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Closed:</strong> the work is completed and no longer open.</span></div>
+                            <div class="help-list-item"><i class="bi bi-circle-fill"></i><span><strong>Cancelled:</strong> the work has been stopped and will not continue.</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="training-screens">
+                    <div class="card-body">
+                        <div class="help-section-title">Screenshot Plan</div>
+                        <h2>Training Screenshot Placeholders</h2>
+                        <p>
+                            Use these slots when turning the user guide into a training deck, SOP, or walkthrough document. Replace each placeholder with a current screenshot from your environment.
+                        </p>
+                        <div class="help-screenshot-grid">
+                            <article class="help-screenshot-card">
+                                <div class="help-screenshot-head">
+                                    <div class="help-screenshot-icon"><i class="bi bi-speedometer2"></i></div>
+                                    <div>
+                                        <h3>Dashboard Overview</h3>
+                                        <p>Best for executive, sponsor, project-owner, and new-user orientation because it shows the full command-center layout in one landing view.</p>
+                                    </div>
+                                </div>
+                                <div class="help-screenshot-frame help-screenshot-frame--image">
+                                    <img class="help-screenshot-image" src="@Url.Content("~/images/Screenshots/Screenshot_Home_Dashboard.png")" alt="Pulse dashboard screenshot showing the PULSE COMMAND CENTER header, KPI cards, decision support charts, owner capacity snapshot, and project and milestone tables." />
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>The top of the dashboard is a <strong>PULSE COMMAND CENTER</strong> view with live KPI tiles for Active Projects, In Progress, Completed Tasks, and Overdue work.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>The middle <strong>Decision Support</strong> section turns the live feed into portfolio-level signals, including Portfolio Health At A Glance, Portfolio Status Mix, Delivery Window, Completion Bands, Owner Capacity Snapshot, and Suggested Focus.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>The lower half moves from <strong>Projects &amp; Root Milestones (Summary)</strong> into a <strong>Detailed Projects &amp; Milestones</strong> grid with search and filters, and the captured example also exposes visible data-quality flags such as <strong>Invalid date</strong> rows that users should treat as follow-up items.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-screenshot-card">
+                                <div class="help-screenshot-head">
+                                    <div class="help-screenshot-icon"><i class="bi bi-journal-plus"></i></div>
+                                    <div>
+                                        <h3>Register Project</h3>
+                                        <p>Best for project-owner training because it shows the full template-driven project setup flow from roadmap selection through launch readiness.</p>
+                                    </div>
+                                </div>
+                                <div class="help-screenshot-frame help-screenshot-frame--image">
+                                    <img class="help-screenshot-image" src="@Url.Content("~/images/Screenshots/Screenshot_Project_Create.png")" alt="Pulse project registration screenshot showing the Project Setup Flow, template and site selectors, project information and team fields, referenced products, assignable members, project appearance settings, template-seeded milestones and tasks, and create project actions." />
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>The top of the screen is a <strong>Project Setup Flow</strong> workspace that starts with roadmap template selection, site and category context, launch posture, and a clear explanation that the chosen template seeds the project structure.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>The middle sections capture the business setup in one pass: <strong>Project info &amp; team</strong>, project title, owner or manager, product group and division, target timing, referenced products, assignable members, and project appearance settings such as icon and primary color.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>The lower half shows <strong>Milestones &amp; tasks</strong> generated from the selected template, including milestone owners, activity owners, start and end timing fields, required versus optional work, and the final <strong>Create project</strong> action with guidance about local draft storage and what happens after creation.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-screenshot-card">
+                                <div class="help-screenshot-head">
+                                    <div class="help-screenshot-icon"><i class="bi bi-diagram-3"></i></div>
+                                    <div>
+                                        <h3>Project Review Or Overview</h3>
+                                        <p>Best for explaining milestone progress and project-owner responsibilities.</p>
+                                    </div>
+                                </div>
+                                <div class="help-screenshot-frame">
+                                    <div>
+                                        <i class="bi bi-image"></i>
+                                        <strong>Insert project review screenshot</strong>
+                                        <span>Show milestones, activities, progress indicators, and the supporting panels used to manage project execution.</span>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Choose a project that shows realistic milestone states instead of an empty example.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Point out where owners diagnose risk, blockers, and progress movement.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-screenshot-card">
+                                <div class="help-screenshot-head">
+                                    <div class="help-screenshot-icon"><i class="bi bi-ui-checks"></i></div>
+                                    <div>
+                                        <h3>Task List Or Task Edit</h3>
+                                        <p>Best for shop-floor and execution-user training.</p>
+                                    </div>
+                                </div>
+                                <div class="help-screenshot-frame">
+                                    <div>
+                                        <i class="bi bi-image"></i>
+                                        <strong>Insert task-work screenshot</strong>
+                                        <span>Show status, due date, filters, and the task-edit area where users update progress, comments, and attachments.</span>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Show enough surrounding context that a user can tell how to get back to the project if needed.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Call out the fields that most often go stale in daily use.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-screenshot-card">
+                                <div class="help-screenshot-head">
+                                    <div class="help-screenshot-icon"><i class="bi bi-bell"></i></div>
+                                    <div>
+                                        <h3>Notifications Center</h3>
+                                        <p>Best for showing how reminders lead users back into the real work item.</p>
+                                    </div>
+                                </div>
+                                <div class="help-screenshot-frame">
+                                    <div>
+                                        <i class="bi bi-image"></i>
+                                        <strong>Insert notifications screenshot</strong>
+                                        <span>Show grouped notifications, unread state, and the path back to the underlying project or task that needs action.</span>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Capture both the list shape and the action users should take after opening a notification.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Make clear that notifications are prompts, not the long-term record of execution.</span></div>
+                                </div>
+                            </article>
+
+                            <article class="help-screenshot-card">
+                                <div class="help-screenshot-head">
+                                    <div class="help-screenshot-icon"><i class="bi bi-shield-lock"></i></div>
+                                    <div>
+                                        <h3>Templates, Operations, Or Admin</h3>
+                                        <p>Best for power-user and governance training.</p>
+                                    </div>
+                                </div>
+                                <div class="help-screenshot-frame">
+                                    <div>
+                                        <i class="bi bi-image"></i>
+                                        <strong>Insert shared-setup screenshot</strong>
+                                        <span>Use a roadmap, plant, form, module, or user-group view that illustrates how shared setup changes affect the broader application.</span>
+                                    </div>
+                                </div>
+                                <div class="help-list">
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Choose the screen that best matches the training audience you are preparing.</span></div>
+                                    <div class="help-list-item"><i class="bi bi-circle-fill"></i><span>Explain why structural and permission changes should be deliberate and communicated.</span></div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="quick-links">
+                    <div class="card-body">
+                        <div class="help-section-title">Quick Links</div>
+                        <h2>Jump To The Most Used Areas</h2>
+                        <p>
+                            Use these shortcuts when you are ready to act, not just read about the process.
+                        </p>
+                        <div class="help-cta-grid">
+                            <div class="help-cta">
+                                <h3>Dashboard</h3>
+                                <p>Monitor active work, counters, and current health signals.</p>
+                                <a href="@Url.Action("Index", "Home", new { area = "" })">Go to Dashboard</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Register Project</h3>
+                                <p>Start the standard project creation flow.</p>
+                                <a href="@Url.Action("Create", "Projects", new { area = "Projects" })">Open Register</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Projects</h3>
+                                <p>Browse and manage project records.</p>
+                                <a href="@Url.Action("Index", "Projects", new { area = "Projects" })">Open Projects</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Tasks</h3>
+                                <p>Focus on assigned execution items and due dates.</p>
+                                <a href="@Url.Action("Index", "ProjectTasks", new { area = "Projects" })">Open Tasks</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Notifications</h3>
+                                <p>Review active notifications and unread reminders.</p>
+                                <a href="@Url.Action("Notifications", "Home", new { area = "" })">Open Notifications</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>FAQ</h3>
+                                <p>Return to the quick-reference page for short answers.</p>
+                                <a href="@Url.Action("Guide", "Home")">Open FAQ</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

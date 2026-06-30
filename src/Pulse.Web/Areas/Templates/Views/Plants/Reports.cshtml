@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Reports";
+    ViewBag.TitleIcon = "bi bi-bar-chart-line-fill";
+    ViewBag.SubTitle = "Summary of plant activities and information";
+    ViewBag.IsActiveTemplatesPlants = "menu-open";
+    ViewBag.IsActiveTemplatesPlantsReports = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+@section styles{
+    <link href="~/Content/locals/stacked-userprofiles.css" rel="stylesheet" />
+    <style>
+    </style>
+}
+
+
+<div id="plantList" class="row">
+
+
+
+    <!--begin::Col-->
+    <div id="containerAdd" class="col-lg-4 col-md-6 col-12">
+        <button id="btnAdd" type="button"
+                class="btn btn-default w-100"
+                style="height: 100%;">
+            <h1><i class="bi bi-plus-circle-fill" style="font-size:80pt"></i></h1>
+            <h5>Add new plant</h5>
+        </button>
+    </div>
+    <!--end::Col-->
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/locals/stacked-userprofiles.js"></script>
+    <script src="~/Areas/Templates/Scripts/plants/reports.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#btnAdd').on('click', function (e) {
+                window.location.href = "@Url.Action("New", "Plants", new { area = "Templates" })";
+            });
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+

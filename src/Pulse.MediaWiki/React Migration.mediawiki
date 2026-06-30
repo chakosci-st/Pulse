@@ -1,0 +1,36 @@
+= React Migration =
+
+== Purpose ==
+The '''pulse.react''' workspace supports route-by-route migration from MVC views to a React frontend while preserving URL surface compatibility.
+
+== Stack ==
+* Vite 5
+* React 18
+* TypeScript
+* React Router
+* React Query
+* Axios
+* Bootstrap 5
+
+== Auth Bootstrap ==
+React app bootstraps identity and API access via existing web/auth surfaces:
+* user info endpoint for current identity context
+* token endpoint for JWT acquisition
+* JWT stored in session storage for API calls
+
+== Migration Strategy ==
+* keep route catalog aligned with Pulse.Web pages
+* move page features incrementally
+* preserve backend contracts during frontend swap
+
+== Local Build Baseline ==
+From the react workspace:
+* install dependencies
+* run production build command
+
+Expected outcome: successful compile and bundle generation.
+
+== Related Pages ==
+* [[Architecture]]
+* [[API Overview]]
+* [[Authentication and Authorization]]

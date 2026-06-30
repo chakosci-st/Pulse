@@ -1,0 +1,218 @@
+﻿@using Pulse.Web.Helpers
+@{
+    var selectedMenu = (ViewBag.SelectedMenu as string) ?? string.Empty;
+    var dashboardNavItemClass = string.IsNullOrEmpty(selectedMenu) ? "active" : string.Empty;
+    var templatesNavItemClass = string.Equals(selectedMenu, "Templates", StringComparison.OrdinalIgnoreCase) ? "active" : string.Empty;
+    var adminNavItemClass = string.Equals(selectedMenu, "Admin", StringComparison.OrdinalIgnoreCase) ? "active" : string.Empty;
+    var sitesNavItemClass = string.Equals(selectedMenu, "Sites", StringComparison.OrdinalIgnoreCase) ? "active" : string.Empty;
+    var operationsNavItemClass = string.Equals(selectedMenu, "Operations", StringComparison.OrdinalIgnoreCase) ? "active" : string.Empty;
+    var settingsNavItemClass = string.Equals((ViewBag.IsActiveSettings as string) ?? string.Empty, "active", StringComparison.OrdinalIgnoreCase) ? "active" : string.Empty;
+    var reportsMenuClass = string.Equals((ViewBag.IsActiveReports as string) ?? string.Empty, "menu-open", StringComparison.OrdinalIgnoreCase) ? "menu-open" : string.Empty;
+}
+
+<ul class="nav sidebar-menu flex-column"
+    data-lte-toggle="treeview"
+    role="navigation"
+    aria-label="Main navigation"
+    data-accordion="false"
+    id="navigation">
+    <li class="nav-item @dashboardNavItemClass">
+        <a href="/" class="nav-link @ViewBag.IsActiveDashboard" data-nav-key="Dashboard">
+            <i class="nav-icon text-lg bi bi-speedometer h3"></i>
+            <p class="text-lg">Dashboard</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("Create", "Projects", new { area = "Projects" })" class="nav-link  @ViewBag.IsActiveRegisterProject" data-nav-key="Register">
+            <i class="nav-icon bi bi-journal-plus h3"></i>
+            <p>Register</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("Index", "Projects", new { area = "Projects" })" class="nav-link @ViewBag.IsActiveProjects" data-nav-key="Projects">
+            <i class="nav-icon bi bi-columns-gap h3"></i>
+            <p>Projects</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("StatusBoard", "Projects", new { area = "Projects" })" class="nav-link @ViewBag.IsActiveProjectStatusBoard" data-nav-key="StatusBoard">
+            <i class="nav-icon bi bi-kanban h3"></i>
+            <p>Status Board</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("Index", "ProjectTasks", new { area = "Projects" })" class="nav-link  @ViewBag.IsActiveTasks" data-nav-key="Tasks">
+            <i class="nav-icon bi bi-ui-checks h3"></i>
+            <p>Tasks</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("ViewProjects", "Home", new { area = "" })" class="nav-link  @ViewBag.IsActiveView" data-nav-key="View">
+            <i class="nav-icon bi bi-binoculars-fill h3"></i>
+            <p>View</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="/chats" class="nav-link  @ViewBag.IsActiveChat" data-nav-key="Chats">
+            <i class="nav-icon fas fa-comments h3"></i>
+            <p>Chats</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("Notifications", "Home", new { area = "" })" class="nav-link @ViewBag.IsActiveNotifications" data-nav-key="Notifications">
+            <i class="nav-icon bi bi-bell-fill h3"></i>
+            <p>Notifications</p>
+        </a>
+    </li>
+
+
+
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "CALNDRVIEW,CALNDRGEN,PLANTVIEW,PLANTADD,PLANTEDIT"))
+    {
+        <li class="nav-item">
+            <a href="@Url.Action("Index", "Home", new { area = "Operations" })" class="nav-link @operationsNavItemClass" data-nav-key="Operations">
+                <i class="nav-icon text-lg bi bi-buildings-fill h3"></i>
+                <p class="text-lg">Operations</p>
+            </a>
+        </li>
+    }
+
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "MODULEVIEW,USRGRPVIEW"))
+    {
+        <li class="nav-item @adminNavItemClass">
+            <a href="@Url.Action("Index", "Home", new { area = "Admin" })" class="nav-link @adminNavItemClass" data-nav-key="Admin">
+                <i class="nav-icon text-lg bi bi-shield-lock-fill h3"></i>
+                <p class="text-lg">Admin</p>
+            </a>
+        </li>
+    }
+
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "CATGRYVIEW,FORMVIEW,MATVIEW,PDIVVIEW,PGRPVIEW,RMAPVIEW"))
+    {
+        <li class="nav-item @templatesNavItemClass">
+            <a href="@Url.Action("Index", "Home", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplates @templatesNavItemClass" data-nav-key="Templates">
+                <i class="nav-icon text-lg bi bi-boxes h3"></i>
+                <p class="text-lg">Templates</p>
+            </a>
+        </li>
+    }
+
+
+
+    <li class="nav-item @settingsNavItemClass">
+        <a href="@Url.Action("Index", "Profile", new { area = "Settings" })" class="nav-link  @ViewBag.IsActiveSettings" data-nav-key="Settings">
+            <i class="nav-icon text-lg bi bi-gear h3"></i>
+            <p class="text-lg">Settings</p>
+        </a>
+    </li>
+    <li class="nav-header">REPORTS</li>
+    <li class="nav-item">
+        <a href="@Url.Action("Guide", "Home", new { area = "" })" class="nav-link  @ViewBag.IsActiveFAQ" data-nav-key="FAQ">
+            <i class="nav-icon bi bi-question-circle-fill h3"></i>
+            <p>FAQ</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("UserGuide", "Home", new { area = "" })" class="nav-link  @ViewBag.IsActiveUserGuide" data-nav-key="UserGuide">
+            <i class="nav-icon bi bi-journal-bookmark-fill h3"></i>
+            <p>User Guide</p>
+        </a>
+    </li>
+    <li class="nav-item @reportsMenuClass">
+        <a href="#" class="nav-link @ViewBag.IsActiveReports" data-nav-key="Reports">
+            <i class="nav-icon bi bi-file-earmark-bar-graph-fill h3  @ViewBag.IsActiveReports"></i>
+            <p>
+                Reports
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Report1", "Home", new { area = "" })" class="nav-link @ViewBag.IsActiveReport1" data-nav-key="Report1">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Project Export</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Report2", "Home", new { area = "" })" class="nav-link @ViewBag.IsActiveReport2" data-nav-key="Report2">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Monitoring Matrix</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Report3", "Home", new { area = "" })" class="nav-link @ViewBag.IsActiveReport3" data-nav-key="Report3">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Project Comparison</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<script>
+    (function () {
+        const nav = document.getElementById('navigation');
+        if (!nav) {
+            return;
+        }
+
+        const storageKey = 'pulse.sidebar.last-nav-key';
+        const navLinks = Array.from(nav.querySelectorAll('.nav-link[data-nav-key]'));
+
+        function hasServerActiveState() {
+            return !!nav.querySelector('.nav-link.active, .nav-item.menu-open');
+        }
+
+        function applyClientActive(navKey) {
+            if (!navKey) {
+                return;
+            }
+
+            const link = navLinks.find(function (node) {
+                return node.getAttribute('data-nav-key') === navKey;
+            });
+
+            if (!link) {
+                return;
+            }
+
+            link.classList.add('active');
+            const navItem = link.closest('.nav-item');
+            if (navItem) {
+                navItem.classList.add('active');
+            }
+
+            const navTree = link.closest('.nav-treeview');
+            if (navTree) {
+                const parentItem = navTree.closest('.nav-item');
+                if (parentItem) {
+                    parentItem.classList.add('menu-open');
+                    const parentLink = parentItem.querySelector(':scope > .nav-link');
+                    if (parentLink) {
+                        parentLink.classList.add('active');
+                    }
+                }
+            }
+        }
+
+        navLinks.forEach(function (link) {
+            link.addEventListener('click', function () {
+                const navKey = this.getAttribute('data-nav-key');
+                if (navKey) {
+                    localStorage.setItem(storageKey, navKey);
+                }
+            });
+        });
+
+        if (hasServerActiveState()) {
+            const currentActive = nav.querySelector('.nav-link.active[data-nav-key]');
+            if (currentActive) {
+                localStorage.setItem(storageKey, currentActive.getAttribute('data-nav-key'));
+            }
+            return;
+        }
+
+        applyClientActive(localStorage.getItem(storageKey));
+    })();
+</script>
+

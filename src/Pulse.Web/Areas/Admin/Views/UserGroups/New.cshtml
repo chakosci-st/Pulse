@@ -1,0 +1,68 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New User Group";
+    ViewBag.TitleIcon = "bi bi-plus-circle";
+    ViewBag.SubTitle = "Create a user group that can be assigned to users and linked to the right access set.";
+    ViewBag.ContentHeaderChips = new[] { "Assignable groups", "Linkable access", "Consistent permissions" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Define a reusable group before assigning it to users.";
+    ViewBag.ContentHeaderAsideBody = "Create the group once, link the right access to it, and use that bundle wherever the same user permissions need to be applied.";
+    ViewBag.IsActiveAdminUserGroups = "menu-open";
+    ViewBag.IsActiveAdminUserGroupsNew = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+
+<form id="usergroupForm" class="needs-validation" novalidate=""> 
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        New User Group
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Create new user group</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">UserGroup Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Enter User Group Name" required="">
+                            <div class="invalid-feedback">Please provide a user group name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Description" class="form-label">User Group Description</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="Description" name="Description" placeholder="Enter User Group Description">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "UserGroups", new { area = "Admin" })" class="btn btn-default">Cancel</a> <button class="btn btn-success">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+
+
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="~/Areas/Admin/Scripts/usergroups/new.js"></script>
+    <script>
+ 
+    </script>
+}

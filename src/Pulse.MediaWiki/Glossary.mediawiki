@@ -1,0 +1,39 @@
+= Glossary =
+
+== A ==
+; Activity
+: A roadmap or project execution unit under milestones, often represented as a node with sequencing/prerequisite relationships.
+
+; AD
+: Active Directory, used for enterprise identity/group integration.
+
+== M ==
+; Module Code
+: Claim value that gates access to specific application capabilities (view/edit/delete, etc.).
+
+== P ==
+; Plant Scope
+: Authorization and data-visibility boundary tied to user membership in specific plants.
+
+; Project Snapshot
+: Project-local copy of selected template roadmap structures at registration time.
+
+== R ==
+; Roadmap Template
+: Master planning structure defined in template tables and copied into project context.
+
+== S ==
+; SignalR
+: Real-time communication framework integrated primarily in web UX components.
+
+; SYS_GUID-style ID
+: Oracle-generated GUID-like identifier often stored in VARCHAR2 columns for operational entities.
+
+== J ==
+; JWT
+: JSON Web Token used by Pulse.Api bearer authentication.
+
+== Related Pages ==
+* [[Home]]
+* [[Architecture]]
+* [[Data Model]]

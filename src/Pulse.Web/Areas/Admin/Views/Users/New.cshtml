@@ -1,0 +1,85 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New User";
+    ViewBag.TitleIcon = "bi bi-person-plus-fill";
+    ViewBag.SubTitle = "Create a user account and seed profile details from Active Directory when available.";
+    ViewBag.ContentHeaderChips = new[] { "User onboarding", "Directory sync", "Access readiness" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Register a new user profile in Pulse.";
+    ViewBag.ContentHeaderAsideBody = "Start from directory search, verify identity fields, then save to make the account available for group assignment and project access.";
+    ViewBag.IsActiveAdminUsers = "menu-open";
+    ViewBag.IsActiveAdminUsersNew = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+@section Styles {
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+}
+
+<form id="userForm" class="needs-validation" novalidate>
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class="mb-3">
+                        New User
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Create new user profile</small>
+                    </h5>
+
+                    <div class="form-group mb-3">
+                        <label for="DirectorySearch" class="form-label">Search in Active Directory</label>
+                        <select id="DirectorySearch" name="DirectorySearch" class="form-control" style="width:100%"></select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="UserId" class="form-label">User ID<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="UserId" name="UserId" placeholder="Enter User ID" required>
+                            <div class="invalid-feedback">Please provide a user id.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="UserName" class="form-label">User Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="UserName" name="UserName" placeholder="Enter User Name" required>
+                            <div class="invalid-feedback">Please provide a user name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="FirstName" class="form-label">First Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="Enter First Name" required>
+                            <div class="invalid-feedback">Please provide a first name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="LastName" class="form-label">Last Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Enter Last Name" required>
+                            <div class="invalid-feedback">Please provide a last name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Email" class="form-label">Email</label>
+                        <div class="input-group">
+                            <input type="email" class="form-control" id="Email" name="Email" placeholder="Enter Email">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer clearfix">
+                    <div class="m-0 float-end">
+                        <a href="@Url.Action("Index", "Users", new { area = "Admin" })" class="btn btn-default">Cancel</a>
+                        <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/node_modules/select2/dist/js/select2.min.js"></script>
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/Areas/Admin/Scripts/users/new.js"></script>
+}

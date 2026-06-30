@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PULSE - GitHub Workflow Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1f2630;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --accent: #58a6ff;
+      --accent-2: #2ea043;
+      --border: #30363d;
+      --code-bg: #0b0f14;
+      --warn: #d29922;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1f6feb, #238636);
+      padding: 32px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+    }
+
+    header p {
+      margin: 0;
+      color: #f0f6fc;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .note {
+      background: rgba(210, 153, 34, 0.12);
+      border: 1px solid rgba(210, 153, 34, 0.4);
+      color: #f2cc60;
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 1.35rem;
+      color: var(--accent);
+    }
+
+    section p {
+      color: var(--muted);
+      margin-top: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #ffffff;
+      font-size: 1.05rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: #c9d1d9;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 12px 0 0;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95rem;
+    }
+
+    .copy-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+
+    button.copy-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s ease;
+    }
+
+    button.copy-btn:hover {
+      background: #1f6feb;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 24px 12px 40px;
+      font-size: 0.95rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(88, 166, 255, 0.15);
+      border: 1px solid rgba(88, 166, 255, 0.35);
+      color: #cfe8ff;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      color: var(--muted);
+      padding-left: 20px;
+    }
+
+    .small {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PULSE GitHub Workflow Guide</h1>
+    <p>Copy-paste Git and GitHub snippets for your C# MVC multi-project repository</p>
+  </header>
+
+  <div class="container">
+    <div class="note">
+      Replace <strong>&lt;your-user-or-org&gt;</strong> and branch names with your real values before using the commands.
+    </div>
+
+    <section>
+      <h2>Recommended Branch Strategy</h2>
+      <p>Use a clean and simple workflow for development, bug fixing, and releases.</p>
+      <ul>
+        <li><strong>main</strong> → production-ready code</li>
+        <li><strong>develop</strong> → integration branch for ongoing work</li>
+        <li><strong>feature/&lt;name&gt;</strong> → new features</li>
+        <li><strong>bugfix/&lt;name&gt;</strong> → normal bug fixes</li>
+        <li><strong>hotfix/&lt;name&gt;</strong> → urgent production fixes</li>
+      </ul>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <div class="tag">Initial setup</div>
+        <h3>Initialize and push repository</h3>
+        <pre><code id="code1">git init
+git add .
+git commit -m "chore: initial commit"
+git branch -M main
+git remote add origin https://github.com/&lt;your-user-or-org&gt;/pulse.git
+git push -u origin main</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code1', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Develop branch</div>
+        <h3>Create and push develop branch</h3>
+        <pre><code id="code2">git checkout -b develop
+git push -u origin develop</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code2', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Feature</div>
+        <h3>Start a new feature</h3>
+        <pre><code id="code3">git checkout develop
+git pull origin develop
+git checkout -b feature/customer-search
+
+git add .
+git commit -m "feat: add customer search"
+git push -u origin feature/customer-search</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code3', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Bug fix</div>
+        <h3>Start a bugfix branch</h3>
+        <pre><code id="code4">git checkout develop
+git pull origin develop
+git checkout -b bugfix/login-validation
+
+git add .
+git commit -m "fix: correct login validation logic"
+git push -u origin bugfix/login-validation</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code4', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Production fix</div>
+        <h3>Create a hotfix from main</h3>
+        <pre><code id="code5">git checkout main
+git pull origin main
+git checkout -b hotfix/session-timeout-fix
+
+git add .
+git commit -m "fix: resolve session timeout issue"
+git push -u origin hotfix/session-timeout-fix</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code5', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Merge</div>
+        <h3>Merge feature into develop locally</h3>
+        <pre><code id="code6">git checkout develop
+git pull origin develop
+git merge feature/customer-search
+git push origin develop</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code6', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Delete branch</div>
+        <h3>Delete branch after merge</h3>
+        <pre><code id="code7">git branch -d feature/customer-search
+git push origin --delete feature/customer-search</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code7', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Release</div>
+        <h3>Create release tag</h3>
+        <pre><code id="code8">git checkout main
+git pull origin main
+git tag -a v1.0.0 -m "Initial release"
+git push origin v1.0.0</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code8', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Sync branch</div>
+        <h3>Update feature branch from develop</h3>
+        <pre><code id="code9">git checkout develop
+git pull origin develop
+git checkout feature/customer-search
+git merge develop
+git push origin feature/customer-search</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code9', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Conflict resolution</div>
+        <h3>Resolve merge conflict</h3>
+        <pre><code id="code10">git status
+
+# Edit conflicted files manually
+
+git add .
+git commit -m "fix: resolve merge conflict with develop"
+git push origin feature/customer-search</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code10', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Revert</div>
+        <h3>Revert a bad commit</h3>
+        <pre><code id="code11">git revert &lt;commit-hash&gt;
+git push origin develop</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code11', this)">Copy</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tag">Clone</div>
+        <h3>Clone repository</h3>
+        <pre><code id="code12">git clone https://github.com/&lt;your-user-or-org&gt;/pulse.git
+cd pulse
+git checkout develop</code></pre>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyCode('code12', this)">Copy</button>
+        </div>
+      </section>
+    </div>
+
+    <section>
+      <h2>Common commit messages</h2>
+      <pre><code id="code13">git commit -m "feat: add order export functionality"
+git commit -m "fix: prevent null reference in dashboard"
+git commit -m "refactor: move validation logic to service layer"
+git commit -m "test: add unit tests for order service"
+git commit -m "docs: update setup instructions"
+git commit -m "chore: add editorconfig and gitignore"</code></pre>
+      <div class="copy-row">
+        <button class="copy-btn" onclick="copyCode('code13', this)">Copy</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Useful Git commands</h2>
+      <pre><code id="code14">git status
+git branch
+git log --oneline --graph --decorate --all
+git diff
+git diff --cached</code></pre>
+      <div class="copy-row">
+        <button class="copy-btn" onclick="copyCode('code14', this)">Copy</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Recommended repository structure</h2>
+      <pre><code id="code15">pulse/
+├─ src/
+│  ├─ Pulse.Web/
+│  ├─ Pulse.Application/
+│  ├─ Pulse.Domain/
+│  ├─ Pulse.Infrastructure/
+│  ├─ Pulse.Shared/
+│  └─ Pulse.sln
+├─ tests/
+│  ├─ Pulse.Web.Tests/
+│  ├─ Pulse.Application.Tests/
+│  ├─ Pulse.Domain.Tests/
+│  └─ Pulse.Infrastructure.Tests/
+├─ docs/
+├─ scripts/
+├─ .github/
+│  └─ workflows/
+├─ README.md
+├─ CHANGELOG.md
+├─ .gitignore
+├─ .editorconfig
+├─ Directory.Build.props
+└─ global.json</code></pre>
+      <div class="copy-row">
+        <button class="copy-btn" onclick="copyCode('code15', this)">Copy</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Basic GitHub Actions CI</h2>
+      <p class="small">Save this as <code>.github/workflows/ci.yml</code></p>
+      <pre><code id="code16">name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/**
+      - bugfix/**
+      - hotfix/**
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore ./src/Pulse.sln
+
+      - name: Build
+        run: dotnet build ./src/Pulse.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ./src/Pulse.sln --configuration Release --no-build</code></pre>
+      <div class="copy-row">
+        <button class="copy-btn" onclick="copyCode('code16', this)">Copy</button>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    PULSE GitHub Guide • C# MVC Multi-Project Repository
+  </footer>
+
+  <script>
+    async function copyCode(id, button) {
+      const text = document.getElementById(id).innerText;
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = button.innerText;
+        button.innerText = "Copied!";
+        setTimeout(() => {
+          button.innerText = original;
+        }, 1200);
+      } catch (err) {
+        alert("Copy failed. Please copy manually.");
+      }
+    }
+  </script>
+</body>
+</html>

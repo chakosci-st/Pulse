@@ -1,0 +1,76 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Edit Maturity Level";
+    ViewBag.TitleIcon = "bi bi-pencil-square";
+    ViewBag.SubTitle = "Refine this maturity level so lifecycle tracking stays meaningful for manufacturing teams.";
+    ViewBag.ContentHeaderChips = new[] { "Lifecycle stages", "Manufacturing readiness", "Product maturity tracking" };
+    ViewBag.ContentHeaderAsideLabel = "Maturity maintenance";
+    ViewBag.ContentHeaderAsideTitle = "Keep lifecycle stage definitions aligned to how products are actually assessed.";
+    ViewBag.ContentHeaderAsideBody = "Use updates to clarify the meaning of each stage and keep product progression reporting trustworthy.";
+    ViewBag.IsActiveTemplatesMaturityLevels = "menu-open";
+    ViewBag.IsActiveTemplatesMaturityLevelsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+<form id="maturitylevelForm" class="needs-validation" novalidate="">
+    @Html.Hidden("TransactionKey")
+    
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        Update MaturityLevel
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Update existing maturitylevel</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="Code" class="form-label">MaturityLevel Code<span class="required-indicator sr-only"></span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Code" name="Code" required="" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="MaturityNumber" class="form-label">Maturity Number<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="number" class="form-control" id="MaturityNumber" name="MaturityNumber" placeholder="Enter Maturity Number" required="">
+                            <div class="invalid-feedback">Please provide a maturity number.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="SequenceNo" class="form-label">Sequence Number<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="number" class="form-control" id="SequenceNo" name="SequenceNo" placeholder="Enter Sequence Number" required="">
+                            <div class="invalid-feedback">Please provide a sequence number.</div>
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <div id="isActive"></div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "MaturityLevels", new { area = "Templates" })" class="btn btn-default">Cancel</a> <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/Scripts/locals/switch-button.js"></script>
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/maturitylevels/edit.js"></script>
+}

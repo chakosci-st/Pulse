@@ -1,0 +1,150 @@
+﻿@{
+    ViewBag.Title = "About";
+    ViewBag.TitleIcon = "bi bi-info-circle-fill";
+    ViewBag.SubTitle = ViewBag.Message ?? "Background information about Pulse and the workspace.";
+}
+
+@section Styles {
+    <style>
+        .about-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.9fr);
+            gap: 1rem;
+            padding: 1.35rem 1.4rem;
+            border: 1px solid rgba(191, 219, 254, 0.9);
+            border-radius: 1.25rem;
+            background:
+                radial-gradient(circle at top right, rgba(59, 130, 246, 0.16), transparent 34%),
+                linear-gradient(135deg, #f8fbff 0%, #eef6ff 52%, #f8fafc 100%);
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08);
+            margin-bottom: 2rem;
+        }
+        .about-hero__title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #0f172a;
+            font-size: clamp(1.35rem, 2vw, 1.95rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+        }
+        .about-hero__title-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #1d4ed8;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.55);
+        }
+        .about-hero__copy {
+            max-width: 64ch;
+            margin: 0.8rem 0 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+        .about-section {
+            margin-top: 1.5rem;
+            display: grid;
+            gap: 1.2rem;
+        }
+        .about-section-block {
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 24px rgba(15,23,42,0.06);
+            border: 1px solid #e2e8f0;
+            padding: 1.2rem 1.5rem 1.1rem 1.5rem;
+        }
+        .about-section h5 {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: #1d4ed8;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .about-section h5 i {
+            font-size: 1.1rem;
+        }
+        .about-section p {
+            color: #475569;
+            font-size: 1.01rem;
+            margin-bottom: 0.7rem;
+        }
+        @@media (max-width: 1199.98px) {
+            .about-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+}
+
+<div class="about-hero">
+    <div>
+        <h1 class="about-hero__title">
+            <span class="about-hero__title-icon">
+                <i class="bi bi-info-circle-fill"></i>
+            </span>
+            <span>About Pulse -  Project Updates, Logging, Scheduling & Execution</span>
+        </h1>
+        <p class="about-hero__copy">
+            This tool helps gate new product deliverables, ensuring adherence to requirements and consistent NPI discipline. It is designed to prevent missing documentation and support quality handover to mass production.
+        </p>
+        <div class="about-section">
+            <div class="about-section-block">
+                <h5><i class="bi bi-person-badge"></i> Developer</h5>
+                <p>
+                    <strong>Charles Riann C. Legaspi</strong> (<a href="mailto:charles.legaspi@st.com">charles.legaspi@st.com</a>)<br />
+                    <span class="text-muted">Digital Transformation & IT (DTIT)</span><br />
+                    Charles is responsible for the design, development, and ongoing improvement of the Pulse NPI Projects QA Tracker. He ensures the tool is robust, user-friendly, and aligned with the evolving needs of NPI QA teams.
+                </p>
+            </div>
+            <div class="about-section-block">
+                <h5><i class="bi bi-people"></i> Application Owner</h5>
+                <p>
+                    <strong>NPI QA Team</strong> – Mairel Diocera, Corazon Llamas<br />
+                    The NPI QA team provides domain expertise, requirements, and guidance to ensure the tracker supports quality assurance processes for new product introductions. Their leadership guarantees the tool remains relevant and effective for all stakeholders.
+                </p>
+            </div>
+            <div class="about-section-block">
+                <h5><i class="bi bi-lightbulb"></i> Brief Description of Change</h5>
+                <p>
+                    The Pulse NPI Projects QA Tracker was created to address the growing need for a centralized, transparent, and systematic way to monitor and manage new product introduction (NPI) milestones and deliverables. It streamlines the QA process, making it easier to identify gaps and ensure all requirements are met before mass production.
+                </p>
+            </div>
+            <div class="about-section-block">
+                <h5><i class="bi bi-journal-text"></i> Detailed Description of Change</h5>
+                <p>
+                    This tool acts as a gatekeeper for new product deliverables. It enforces adherence to NPI requirements, prevents missing or incomplete documentation, and ensures that every step in the NPI process is followed rigorously. By providing a structured workflow, the tracker helps teams document progress, assign responsibilities, and maintain a clear audit trail for every milestone.<br />
+                    <br />
+                    The system is designed to be collaborative, allowing multiple stakeholders to contribute and review deliverables. Automated notifications and status updates keep everyone informed, reducing the risk of miscommunication and delays.
+                </p>
+            </div>
+            <div class="about-section-block">
+                <h5><i class="bi bi-shield-check"></i> Justification for Change</h5>
+                <p>
+                    In the fast-paced environment of new product development, it is critical to address risks early and ensure quality is built in from the start. The tracker provides visibility into each milestone, helping teams proactively identify and resolve issues. This reduces the likelihood of quality problems during the handover to mass production and supports a culture of continuous improvement within NPI.
+                </p>
+            </div>
+            <div class="about-section-block">
+                <h5><i class="bi bi-graph-up-arrow"></i> Expected Outcome of Change</h5>
+                <p style="margin-bottom:0;">
+                    With the Pulse NPI Projects QA Tracker, teams can:
+                    <ul style="margin-top:0.5rem;">
+                        <li>Track and monitor the availability, history, and status of every NPI milestone and deliverable</li>
+                        <li>Establish a repository of lessons learned for future projects</li>
+                        <li>Enable more effective risk assessment and mitigation for each new product release</li>
+                        <li>Foster accountability and collaboration across all NPI stakeholders</li>
+                        <li>Drive continuous improvement in quality assurance processes</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

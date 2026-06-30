@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Thumbnails Demo</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts for modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootbox.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootbox@5.5.2/dist/bootbox.min.js"></script>
+    <!-- html2canvas -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="../Scripts/locals/utils.js"></script>
+    <script src="../Scripts/locals/dynamic-fields.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f4f6f8;
+        }
+        h2 {
+            font-weight: 600;
+            color: #222;
+        }
+        #formThumbnails .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            transition: box-shadow 0.2s;
+            background: #fff;
+        }
+        #formThumbnails .card:hover {
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+        }
+        .card-img-top {
+            object-fit: contain;
+            max-height: 180px;
+            background: linear-gradient(135deg, #e3eafc 0%, #f8f9fa 100%);
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            padding: 1rem;
+        }
+        .card-body {
+            padding: 1.25rem;
+        }
+        .preview-btn {
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(90deg, #4f8cff 0%, #38c6fa 100%);
+            border: none;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+            transition: background 0.2s;
+        }
+        .preview-btn:hover {
+            background: linear-gradient(90deg, #38c6fa 0%, #4f8cff 100%);
+            color: #fff;
+        }
+        #hiddenFormPreview {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 400px;
+        }
+        /* Modal form styling */
+        .bootbox-form-container {
+            background: #f8f9fa;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+        .bootbox-form-container .dynamic-field-wrapper {
+            margin-bottom: 1.25rem;
+        }
+        .bootbox-form-container label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .bootbox-form-container input,
+        .bootbox-form-container select,
+        .bootbox-form-container textarea {
+            border-radius: 0.5rem;
+            border: 1px solid #dbeafe;
+            background: #fff;
+            font-size: 1rem;
+        }
+        .bootbox-form-container input:focus,
+        .bootbox-form-container select:focus,
+        .bootbox-form-container textarea:focus {
+            border-color: #4f8cff;
+            box-shadow: 0 0 0 2px #e3eafc;
+        }
+        .bootbox-form-container .form-check-input {
+            border-radius: 0.25rem;
+        }
+        .bootbox-form-container .form-check-label {
+            font-weight: 400;
+            color: #555;
+        }
+        .bootbox-form-container .invalid-feedback {
+            font-size: 0.95em;
+            color: #e53e3e;
+        }
+        /* Responsive grid */
+        @media (max-width: 767px) {
+            #formThumbnails .col-md-4 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container py-5">
+    <h2 class="mb-4">Form Thumbnails Demo</h2>
+    <div id="formThumbnails" class="row g-4"></div>
+</div>
+<!-- Hidden container for rendering form previews -->
+<div id="hiddenFormPreview"></div>
+
+<script>
+window.currentUserCode = "*";
+
+// Sample: Many fields per form, all with readAccess and writeAccess set to "*"
+window.formsList = [
+    [
+        { title: "Full Name", type: "text", name: "full_name", isrequired: true, placeholder: "Enter your full name", readAccess: "*", writeAccess: "*" },
+        { title: "Email", type: "text", name: "email", isrequired: true, placeholder: "Enter your email", readAccess: "*", writeAccess: "*" },
+        { title: "Phone", type: "text", name: "phone", placeholder: "Enter your phone number", readAccess: "*", writeAccess: "*" },
+        { title: "Date of Birth", type: "date", name: "dob", readAccess: "*", writeAccess: "*" },
+        { title: "Gender", type: "selection", name: "gender", options: ["Male", "Female", "Other"], readAccess: "*", writeAccess: "*" },
+        { title: "Country", type: "selection", name: "country", options: ["USA", "Canada", "UK", "Australia", "Other"], readAccess: "*", writeAccess: "*" },
+        { title: "Subscribe to newsletter", type: "checkbox", name: "newsletter", readAccess: "*", writeAccess: "*" },
+        { title: "Bio", type: "textarea", name: "bio", placeholder: "Tell us about yourself", readAccess: "*", writeAccess: "*" }
+    ],
+    [
+        { title: "Project Name", type: "text", name: "project_name", isrequired: true, readAccess: "*", writeAccess: "*" },
+        { title: "Description", type: "textarea", name: "description", readAccess: "*", writeAccess: "*" },
+        { title: "Start Date", type: "date", name: "start_date", readAccess: "*", writeAccess: "*" },
+        { title: "End Date", type: "date", name: "end_date", readAccess: "*", writeAccess: "*" },
+        { title: "Status", type: "selection", name: "status", options: ["Planned", "In Progress", "Completed", "On Hold"], readAccess: "*", writeAccess: "*" },
+        { title: "Budget", type: "number", name: "budget", readAccess: "*", writeAccess: "*" },
+        { title: "Manager", type: "text", name: "manager", readAccess: "*", writeAccess: "*" },
+        { title: "Priority", type: "radio", name: "priority", options: ["Low", "Medium", "High"], readAccess: "*", writeAccess: "*" }
+    ],
+    [
+        { title: "Product Name", type: "text", name: "product_name", isrequired: true, readAccess: "*", writeAccess: "*" },
+        { title: "Category", type: "selection", name: "category", options: ["Electronics", "Books", "Clothing", "Home", "Other"], readAccess: "*", writeAccess: "*" },
+        { title: "Price", type: "number", name: "price", isrequired: true, readAccess: "*", writeAccess: "*" },
+        { title: "Available", type: "checkbox", name: "available", readAccess: "*", writeAccess: "*" },
+        { title: "Tags", type: "checkboxcollection", name: "tags", options: ["New", "Sale", "Popular", "Limited"], readAccess: "*", writeAccess: "*" },
+        { title: "Image", type: "file", name: "image", fileTypes: ".jpg,.png", fileMaxSize: 2, readAccess: "*", writeAccess: "*" },
+        { title: "Description", type: "textarea", name: "description", readAccess: "*", writeAccess: "*" }
+    ]
+];
+
+// Utility to generate a thumbnail for a form
+function generateFormThumbnail(formFields, callback) {
+    var $hidden = $('#hiddenFormPreview').empty();
+    $hidden.dynamicField({ fields: formFields, userCode: window.currentUserCode, showAccessBadges: false });
+    html2canvas($hidden[0], { backgroundColor: "#fff", scale: 0.5 }).then(function(canvas) {
+        var imgData = canvas.toDataURL("image/png");
+        callback(imgData);
+    });
+}
+
+// Render all thumbnails
+function renderThumbnails() {
+    var $container = $('#formThumbnails').empty();
+    window.formsList.forEach(function(formFields, idx) {
+        generateFormThumbnail(formFields, function(imgData) {
+            var $col = $(`
+                <div class="col-md-4 d-flex">
+                    <div class="card shadow-sm flex-fill">
+                        <img src="${imgData}" class="card-img-top" alt="Form Thumbnail">
+                        <div class="card-body text-center">
+                            <button class="preview-btn" data-idx="${idx}">Preview</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+            $container.append($col);
+        });
+    });
+}
+
+// Show form in modal when thumbnail is clicked
+$(document).on('click', '.preview-btn', function() {
+    var idx = $(this).data('idx');
+    var formFields = window.formsList[idx];
+    var $formContainer = $('<form class="bootbox-form-container"></form>');
+    $formContainer.dynamicField({ fields: formFields, userCode: window.currentUserCode });
+    bootbox.dialog({
+        title: "Form Preview",
+        message: $formContainer,
+        size: 'large',
+        buttons: {
+            cancel: {
+                label: "Close",
+                className: 'btn-secondary'
+            },
+            submit: {
+                label: "Submit",
+                className: 'btn-primary',
+                callback: function () {
+                    var values = $formContainer.dynamicFieldGetValues();
+                    bootbox.alert({
+                        title: "Form Values",
+                        message: `<pre>${JSON.stringify(values, null, 2)}</pre>`
+                    });
+                    return false;
+                }
+            }
+        }
+    });
+});
+
+// Initial render
+$(function() {
+    renderThumbnails();
+});
+</script>
+</body>
+</html>

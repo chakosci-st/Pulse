@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "Plants";
+    ViewBag.TitleIcon = "bi bi-building-fill";
+    ViewBag.SubTitle = "List of available plants";
+    ViewBag.IsActivePlants = "menu-open";
+    ViewBag.IsActivePlantsAll = "active";
+}
+
+@section Styles {
+    <link href="~/node_modules/datatables/media/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/Content/datatables-bs5-fix.css" rel="stylesheet" />
+ 
+}
+<!--begin::Row-->
+<div class="row">
+    <div class="col ">
+        <div class="card card-danger shadow-lg">
+            <div class="card-header bg-primary-subtle pulse-index-card-header">
+                <h3 class="card-title">
+                    Available Plant List
+                </h3>
+                <div class="card-tools pulse-index-toolbar">
+                    <a href="/plant/new" type="button" class="btn btn-tool">
+                        <i class="bi bi-plus-circle"></i> Add
+                    </a>
+
+
+                    <span class="card-tools-plantsTable-filter mx-2 float-end"></span>
+                    <span class="card-tools-plantsTable-length mx-2 float-end"></span>
+                    <span class="mx-2 float-end">
+                        <select class="form-select form-select-sm" id="isActiveFilter">
+                            <option value="">All</option>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </span>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <table id="plantsTable" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="col-4">Plant</th>
+                            <th class="col-1">Status</th>
+                            <th class="col-2">Ongoing Projects</th>
+                            <th class="col-2">Ongoing Tasks</th>
+                            <th class="col-2">Product Count</th>
+                            <th class="col-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix pulse-index-footer">
+                <div class="card-tools-plantsTable-size" style="float:left"></div> <div class="card-tools-plantsTable-pagination float-end"></div>
+            </div>
+            <!-- /.card-footer -->
+        </div>
+
+
+
+
+    </div>
+    <!-- /.col -->
+
+</div>
+<!--end::Row-->
+
+
+@section scripts{
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <script src="~/Scripts/locals/plant/index.js"></script>
+}

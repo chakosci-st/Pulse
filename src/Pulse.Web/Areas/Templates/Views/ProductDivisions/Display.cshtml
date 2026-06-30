@@ -1,0 +1,60 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Display Product Division";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review this product division and the top-level portfolio context it defines.";
+    ViewBag.ContentHeaderChips = new[] { "Top-level portfolio structure", "Technology or market area", "Division governance" };
+    ViewBag.ContentHeaderAsideLabel = "Division review";
+    ViewBag.ContentHeaderAsideTitle = "Inspect the division before updating related groups, plants, or portfolio reporting.";
+    ViewBag.ContentHeaderAsideBody = "This view keeps the major organizational context visible so downstream structure remains coherent.";
+    ViewBag.IsActiveTemplatesProductDivisions = "menu-open";
+    ViewBag.IsActiveTemplatesProductDivisionsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="mb-3">
+                    Product Division Details
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Read-only information for the selected product division</small>
+                </h5>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Product Division Code</label>
+                        <div id="productDivisionCode" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Status</label>
+                        <div id="productDivisionStatus" class="form-control bg-light d-flex align-items-center">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Product Division Name</label>
+                        <div id="productDivisionName" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Description</label>
+                        <div id="productDivisionDescription" class="form-control bg-light">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="m-0 float-end">
+                    <a href="@Url.Action("Index", "ProductDivisions", new { area = "Templates" })" class="btn btn-default">Back to list</a>
+                    <a href="@Url.Action("Edit", "ProductDivisions", new { area = "Templates", code = ViewBag.Id })" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/productdivisions/display.js"></script>
+}

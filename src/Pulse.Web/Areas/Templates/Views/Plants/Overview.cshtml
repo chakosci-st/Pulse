@@ -1,0 +1,639 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Plant Overview";
+    ViewBag.TitleIcon = "bi bi-speedometer2";
+    ViewBag.SubTitle = "";
+    ViewBag.IsActiveTemplatesPlants = "menu-open";
+    ViewBag.IsActiveTemplatesPlantsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+@section Styles {
+    <!-- Datatables -->
+    <link href="~/node_modules/datatables/media/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/Content/datatables-bs5-fix.css" rel="stylesheet" />
+    <!-- Select2 -->
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- local-floating menu -->
+    <link href="~/Content/locals/sticky-menu.css" rel="stylesheet" />
+
+    <style>
+        .select2-container .select2-selection--single {
+            padding: .375rem .75rem !important;
+            font-size: 1rem !important;
+            font-weight: 400 !important;
+            line-height: 1.5 !important;
+            height: 38px !important;
+            color: var(--bs-body-color) !important;
+            background-color: var(--bs-body-bg) !important;
+            background-clip: padding-box !important;
+            border: var(--bs-border-width) solid var(--bs-border-color) !important;
+            border-radius: var(--bs-border-radius) !important;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out !important;
+        }
+
+        body.sidebar-open .configurable--sticky {
+            left: 230px; /* Adjust to your sidebar width */
+        }
+
+
+        .status-switch .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+        }
+
+            .status-switch .form-check-input:checked {
+                background-color: #22c55e;
+                border-color: #22c55e;
+            }
+
+        .status-pill {
+            border-radius: 50rem;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+        }
+
+        .status-pill-on {
+            background-color: rgba(34, 197, 94, 0.12);
+            color: #16a34a;
+        }
+
+        .status-pill-off {
+            background-color: rgba(148, 163, 184, 0.16);
+            color: #64748b;
+        }
+
+        .table thead th {
+            border: 0;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .item-desc {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.12rem 0.45rem;
+            border-radius: 999px;
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+    </style>
+}
+ 
+
+@Html.Hidden("PlantCode")
+@Html.Hidden("PlantName")
+<div class="row mb-5">
+    <div class="col-lg-3">
+        <div class="configurable--sticky" style="top: calc(95px + 2rem); width: auto;">
+            <div class="card" style="width:100%">
+                <ul class="nav flex-column bg-white border-radius-lg p-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark d-flex" data-scroll="" href="#profile">
+                            <i class="bi bi-building text-lg me-2"></i>
+                            <span class="text-sm">Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item pt-2">
+                        <a class="nav-link text-dark d-flex" data-scroll="" href="#basic-info">
+                            <i class="bi bi-receipt text-lg me-2"></i>
+                            <span class="text-sm">Basic Info</span>
+                        </a>
+                    </li>
+                    <li class="nav-item pt-2">
+                        <a class="nav-link text-dark d-flex" data-scroll="" href="#members">
+                            <i class="bi bi-person-vcard text-lg me-2"></i>
+                            <span class="text-sm">Members</span>
+                        </a>
+                    </li>
+                    <li class="nav-item pt-2">
+                        <a class="nav-link text-dark d-flex" data-scroll="" href="#roadmap">
+                            <i class="bi bi-signpost-split text-lg me-2"></i>
+                            <span class="text-sm">Roadmap Configurations</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item pt-2">
+                        <a class="nav-link text-dark d-flex" data-scroll="" href="#delete">
+                            <i class="bi bi-trash text-lg me-2"></i>
+                            <span class="text-sm">Delete Plant</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="col-lg-9 mt-lg-0 mt-4">
+        <!-- Card Profile -->
+        <div class="card card-body" id="profile">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-sm-auto col-4">
+                    <div class="user-avatar shadow medium site-md">
+                        <div class="profile-circle">
+                            <img id="imgPlantBanner" src="/content/uploads/plantfiles/Error.jpg" alt="User" class="profile-img" onerror="showInitial(this)">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-auto col-8 my-auto">
+                    <div class="h-100">
+                        <h5 class="mb-1 font-weight-bolder">
+                            <label id="labelPlantName">Plant Name</label>
+                        </h5>
+                        <p class="mb-0 font-weight-normal text-sm">
+                            <label id="labelPlantCode">Plant Code</label>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-auto ms-sm-auto mt-sm-0 mt-3 d-flex">
+                    @*<label class="form-check-label mb-0">
+                            <small id="profileVisibility">
+                                Switch to active
+                            </small>
+                        </label>
+                        <div class="form-check form-switch ms-2 my-auto">
+                            <input class="form-check-input" type="checkbox" id="isActive" checked="">
+                        </div>*@
+                </div>
+            </div>
+        </div>
+        <!-- Card Basic Info -->
+        <div class="card mt-4" id="basic-info">
+
+            <div class="card-body pt-0">
+                <div class="py-2">
+                    <h5>Basic Info</h5>
+                </div>
+
+                <form id="formUpdatePlant" class="needs-validation" method="put" novalidate="">
+                    @Html.Hidden("TransactionKey")
+                    @Html.Hidden("IsActive")
+                    <div class="form-group mb-3">
+                        <label for="Code" class="form-label">Plant Code<span class="required-indicator sr-only"></span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Code" name="Code" disabled readonly>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">Plant Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Enter Plant Name" required="">
+                            <div class="invalid-feedback">Please provide a plant name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="siteImage" class="form-label">Banner Image</label>
+                        <div class="input-group mb-3">
+                            <input type="file" class="form-control" id="siteImage" accept=".jpg,image/jpeg">
+                            <label class="input-group-text" for="siteImage">Upload</label>
+                        </div>
+                    </div>
+                    <img id="profileImage" alt="Profile Image" style="width:150px;cursor:pointer;" onerror="this.style.display='none'; document.getElementById('fileUpload').style.display='block';" />
+
+                    <div class="row">
+                        <div class="col-12">
+                            <button class="btn btn-outline-dark m-0 float-end" type="submit">Update basic info</button>
+
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+        <!-- Card Change Password -->
+        <div class="card mt-4" id="members">
+
+            <div class="card-body">
+
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Members</h5>
+                    </div>
+                    <div class="col-6">
+                        <div class=" float-end">
+                            @*<input type="text" placeholder="Search user to add (First Name, Last Name, Username, Email)" class="form-control rounded-0 me-1">*@
+                            <form id="formAddPlantMember" class="needs-validation" method="post" novalidate="">
+                                <div class="d-flex align-items-stretch gap-1">
+                                    <select id="UserSearch" style="width: 100%;" name="UserSearch" required class="form-control" placeholder="Search user to add (First Name, Last Name, Username, Email)"></select>
+                                    <span class="input-group-append">
+                                        <button type="submit" id="AddMember" class="btn btn-outline-dark btn-flat">Add</button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="pb-2">
+                    <table id="tableMembers" class="display table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="col-10">Name</th>
+                                <th class="col-1"></th>
+                                <th class="col-1"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- Card Roadmap Configurations -->
+        <div class="card mt-4" id="roadmap">
+
+
+            <div class="card-body">
+
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Roadmap Configurations</h5>
+                        <p class="text-sm mb-0">Here you can setup and manage availabe roadmaps.</p>
+                    </div>
+                    <div class="col-6">
+
+                        <a id="buttonAddRoadmap" data-action="deactivate" href="@Url.Action("New", "Roadmaps", new { area = "Templates" })" class="btn btn-outline-secondary mb-3 mb-md-0 ms-auto float-end" name="button">Add Roadmap Configuration</a>
+                    </div>
+                </div>
+
+                <hr class="horizontal dark">
+                <div class="pb-2">
+                    <table id="tableRoadmaps" class="display table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="col-3">NAME</th>
+                                <th class="col-7">DESCRIPTION</th>
+                                <th class="col-1"></th>
+                                <th class="col-1"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Card Accounts -->
+        <div class="card mt-4" id="accounts" style="display:none">
+            <div class="card-header">
+                <h5>Accounts</h5>
+                <p class="text-sm">Here you can setup and manage your integration settings.</p>
+            </div>
+            <div class="card-body pt-0">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-slack.svg" alt="logo_slack">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Slack</h5>
+                            <a class="text-sm text-body" href="javascript:;">Show less <i class="fas fa-chevron-up text-xs ms-1" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <p class="text-sm text-secondary ms-auto me-3 my-auto">Enabled</p>
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault1">
+                    </div>
+                </div>
+                <div class="ps-5 pt-3 ms-3">
+                    <p class="mb-0 text-sm">You haven't added your Slack yet or you aren't authorized. Please add our Slack Bot to your account by clicking on <a href="javascript">here</a>. When you've added the bot, send your verification code that you have received.</p>
+                    <div class="d-sm-flex bg-gray-100 border-radius-lg p-2 my-4 is-filled">
+                        <p class="text-sm font-weight-bold my-auto ps-sm-2">Verification Code</p>
+                        <input class="form-control form-control-sm ms-sm-auto mt-sm-0 mt-2 w-sm-15 w-40" type="text" value="1172913" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Copy!" data-bs-original-title="Copy!" onfocus="focused(this)" onfocusout="defocused(this)">
+                    </div>
+                    <div class="d-sm-flex bg-gray-100 border-radius-lg p-2 my-4">
+                        <p class="text-sm font-weight-bold my-auto ps-sm-2">Connected account</p>
+                        <h6 class="text-sm ms-auto me-3 my-auto">hello@creative-tim.com</h6>
+                        <button class="btn btn-sm bg-gradient-dark my-sm-auto mt-2 mb-0" type="button" name="button">Delete</button>
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-spotify.svg" alt="logo_spotify">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Spotify</h5>
+                            <p class="mb-0 text-sm">Music</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-secondary ms-auto me-3 my-auto">Enabled</p>
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault2">
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-atlassian.svg" alt="logo_atlassian">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Atlassian</h5>
+                            <p class="mb-0 text-sm">Payment vendor</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-secondary ms-auto me-3 my-auto">Enabled</p>
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault3">
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-asana.svg" alt="logo_asana">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Asana</h5>
+                            <p class="mb-0 text-sm">Organize your team</p>
+                        </div>
+                    </div>
+                    <div class="form-check form-switch ms-auto my-auto">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault4">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Card Notifications -->
+        <div class="card mt-4" id="notifications" style="display:none">
+            <div class="card-header">
+                <h5>Notifications</h5>
+                <p class="text-sm">Choose how you receive notifications. These notification settings apply to the things you’re watching.</p>
+            </div>
+            <div class="card-body pt-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-1" colspan="4">
+                                    <p class="mb-0">Activity</p>
+                                </th>
+                                <th class="text-center">
+                                    <p class="mb-0">Email</p>
+                                </th>
+                                <th class="text-center">
+                                    <p class="mb-0">Push</p>
+                                </th>
+                                <th class="text-center">
+                                    <p class="mb-0">SMS</p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <span class="text-dark d-block text-sm">Mentions</span>
+                                        <span class="text-xs font-weight-normal">Notify when another user mentions you in a comment</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault11">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault12">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault13">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <span class="text-dark d-block text-sm">Comments</span>
+                                        <span class="text-xs font-weight-normal">Notify when another user comments your item.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault14">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault15">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault16">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <span class="text-dark d-block text-sm">Follows</span>
+                                        <span class="text-xs font-weight-normal">Notify when another user follows you.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault17">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault18">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault19">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <p class="text-sm mb-0">Log in from a new device</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault20">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault21">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault22">
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Card Sessions -->
+        <div class="card mt-4" id="sessions" style="display:none">
+            <div class="card-header pb-3">
+                <h5>Sessions</h5>
+                <p class="text-sm">This is a list of devices that have logged into your account. Remove those that you do not recognize.</p>
+            </div>
+            <div class="card-body pt-0">
+                <div class="d-flex align-items-center">
+                    <div class="text-center w-5">
+                        <i class="fas fa-desktop text-lg opacity-6"></i>
+                    </div>
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <p class="text-sm mb-1">
+                                Bucharest 68.133.163.201
+                            </p>
+                            <p class="mb-0 text-xs">
+                                Your current session
+                            </p>
+                        </div>
+                    </div>
+                    <span class="badge badge-success badge-sm my-auto ms-auto me-3">Active</span>
+                    <p class="text-secondary text-sm my-auto me-3">EU</p>
+                    <a href="javascript:;" class="text-primary text-sm icon-move-right my-auto">
+                        See more
+                        <i class="fas fa-arrow-right text-xs ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex align-items-center">
+                    <div class="text-center w-5">
+                        <i class="fas fa-desktop text-lg opacity-6"></i>
+                    </div>
+                    <p class="my-auto ms-3">Chrome on macOS</p>
+                    <p class="text-secondary text-sm ms-auto my-auto me-3">US</p>
+                    <a href="javascript:;" class="text-primary text-sm icon-move-right my-auto">
+                        See more
+                        <i class="fas fa-arrow-right text-xs ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex align-items-center">
+                    <div class="text-center w-5">
+                        <i class="fas fa-mobile text-lg opacity-6"></i>
+                    </div>
+                    <p class="my-auto ms-3">Safari on iPhone</p>
+                    <p class="text-secondary text-sm ms-auto my-auto me-3">US</p>
+                    <a href="javascript:;" class="text-primary text-sm icon-move-right my-auto">
+                        See more
+                        <i class="fas fa-arrow-right text-xs ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Card Delete Plant -->
+        <div class="card mt-4" id="delete">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-sm-0 mb-4">
+                    <div class="w-50">
+                        <h5>Delete Plant</h5>
+                        <p class="text-sm mb-0">Once you delete this plant, there is no going back. Please be certain.</p>
+                    </div>
+                    <div class="w-50 text-end">
+                        <button id="buttonIsActive" data-action="deactivate" class="btn btn-outline-secondary mb-3 mb-md-0 ms-auto" type="button" name="button">Deactivate</button>
+                        <button id="buttonDeletePlant" class="btn bg-gradient-danger mb-0 ms-2" type="button" name="button">Delete Plant</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+@section scripts{
+    <!-- datatables -->
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/node_modules/select2/dist/js/select2.min.js"></script>
+    <!-- jquery-validate -->
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/Scripts/locals/switch-button.js"></script>
+    <script>
+        //selected
+        //switchInput.checked = true;
+
+// Initialize on page load
+
+
+        var id = '@ViewBag.Id';
+
+        function setStickyMenuWidth() {
+            const menu = document.querySelector('.configurable--sticky');
+            const col = document.querySelector('.col-lg-3');
+            if (menu && col) {
+                menu.style.width = col.offsetWidth - 20 + 'px';
+            }
+        }
+
+        // Set on load and on resize
+        window.addEventListener('DOMContentLoaded', setStickyMenuWidth);
+        window.addEventListener('resize', setStickyMenuWidth);
+
+
+
+
+        @*// Function to load tab content via AJAX
+        function loadTabContent(tabId, url) {
+            var $tabPane = $(tabId);
+            if ($tabPane.data('loaded')) return; // Prevent reloading
+
+            $.get(url, function (data) {
+                $tabPane.html(data);
+                $tabPane.data('loaded', true);
+            });
+        }
+
+        $(document).ready(function () {
+            // Load the first tab by default
+            loadTabContent('#tab1-content', '@Url.Action("Tab1", "Dashboard")');
+
+            // Handle tab shown event
+            $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).data('bs-target');
+                if (target === '#tab1-content') {
+                    loadTabContent('#tab1-content', '@Url.Action("Tab1", "Plants", new { area = "Sites" })');
+                } else if (target === '#tab2-content') {
+                    loadTabContent('#tab2-content', '@Url.Action("Tab2", "Dashboard")');
+                }
+            });
+        });*@
+
+    </script>
+    <script src="~/Areas/Templates/Scripts/plants/Overview.js"></script>
+}

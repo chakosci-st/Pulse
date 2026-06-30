@@ -1,0 +1,56 @@
+﻿<!-- Side Drawer -->
+<aside class="drawer" id="drawerNewRequest" aria-hidden="true">
+    <div class="drawer-header">
+        <h2 class="drawer-title">Submit Workflow Approval Request</h2>
+        <button class="drawer-close" type="button" aria-label="Close" id="btnCloseDrawer">&times;</button>
+    </div>
+    <div class="drawer-body">
+        <small class="text-muted d-block mb-3">
+            Choose the category, form and site for the new request. Your last selections are pre‑filled.
+        </small>
+
+        <form id="formNewRequest">
+            <div class="form-group">
+                <label for="nrCategory" class="small font-weight-semibold">Category</label>
+                <select class="custom-select" id="nrCategory" required>
+                    <option value="">Select a category…</option>
+                    <option selected>Facilities</option>
+                    <option>Supply Chain</option>
+                    <option>Finance</option>
+                    <option>IT</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="nrForm" class="small font-weight-semibold">Form</label>
+                <select class="custom-select" id="nrForm" required>
+                    <option value="">Select a form…</option>
+                    <option selected>Project WO Process Execution</option>
+                    <option>Material Codification</option>
+                    <option>Budget Approval</option>
+                    <option>General Change Request</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="nrSite" class="small font-weight-semibold">Site</label>
+                <select class="custom-select" id="nrSite" required>
+                    <option value="">Select a site…</option>
+                    <option selected>BOUSKOURA</option>
+                    <option>BOUSKOURA01</option>
+                    <option>CASABLANCA</option>
+                    <option>REMOTE</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <div class="drawer-footer">
+        <button type="button" class="btn btn-outline-secondary btn-sm mr-2" id="btnCancelDrawer">
+            Cancel
+        </button>
+        <button type="submit" form="formNewRequest" class="btn btn-primary btn-sm">
+            Start Request
+        </button>
+    </div>
+</aside>

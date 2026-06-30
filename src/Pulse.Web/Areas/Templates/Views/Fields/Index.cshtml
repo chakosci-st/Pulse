@@ -1,0 +1,208 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Fields";
+    ViewBag.TitleIcon = "bi bi-input-cursor-text";
+    ViewBag.SubTitle = "Reusable single field templates that can be linked to forms for consistent data capture.";
+    ViewBag.ContentHeaderChips = new[] { "Reusable field templates", "Single-field designer", "Consistent form inputs" };
+    ViewBag.ContentHeaderAsideLabel = "Field purpose";
+    ViewBag.ContentHeaderAsideTitle = "Design and manage reusable fields that can be linked across multiple forms.";
+    ViewBag.ContentHeaderAsideBody = "Fields define the exact input structure so teams collect data consistently wherever the field is reused.";
+    ViewBag.IsActiveTemplatesFields = "menu-open";
+    ViewBag.IsActiveTemplatesFieldsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+@section Styles {
+    <style>
+        .card {
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+        }
+
+        .request-card {
+            transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.08s ease;
+        }
+
+            .request-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
+                background-color: #f9fafb;
+            }
+
+        .table-filter-toolbar {
+            display: grid;
+            grid-template-columns: minmax(180px, max-content) minmax(180px, 220px) minmax(220px, 260px) minmax(300px, 1fr);
+            gap: 0.85rem;
+            align-items: stretch;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6f9 100%);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+        }
+
+            .table-filter-toolbar > * {
+                min-width: 0;
+            }
+
+            .table-filter-toolbar .table-filter-toolbar__item {
+                display: flex;
+                align-items: stretch;
+                min-width: 0;
+            }
+
+                .table-filter-toolbar .table-filter-toolbar__item .btn,
+                .table-filter-toolbar .table-filter-toolbar__item .form-select,
+                .table-filter-toolbar .table-filter-toolbar__item .form-control {
+                    width: 100%;
+                }
+
+            .table-filter-toolbar .card-tools-fieldsTable-length,
+            .table-filter-toolbar .card-tools-fieldsTable-filter,
+            .table-filter-toolbar .toolbar-search {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .table-filter-toolbar .dt-length,
+            .table-filter-toolbar .dt-search {
+                width: 100%;
+                margin: 0;
+            }
+
+                .table-filter-toolbar .dt-length select,
+                .table-filter-toolbar .dt-search input {
+                    width: 100%;
+                    min-height: 46px;
+                    margin: 0;
+                    border-radius: 0.8rem;
+                    border: 1px solid #cbd5e1;
+                    background: #ffffff;
+                    color: #0f172a;
+                    box-shadow: none;
+                }
+
+        @@media (max-width: 1399px) {
+            .table-filter-toolbar {
+                grid-template-columns: repeat(3, minmax(180px, 1fr));
+            }
+
+                .table-filter-toolbar .toolbar-search {
+                    grid-column: span 2;
+                }
+        }
+
+        @@media (max-width: 991px) {
+            .table-filter-toolbar {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+                .table-filter-toolbar .toolbar-search {
+                    grid-column: span 2;
+                }
+        }
+
+        @@media (max-width: 767px) {
+            .table-filter-toolbar {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+                .table-filter-toolbar .toolbar-search {
+                    grid-column: auto;
+                }
+        }
+    </style>
+
+    <link href="~/node_modules/dropzone/dist/dropzone.css" rel="stylesheet" />
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Summernote -->
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+
+    <link href="~/Content/locals/dynamic-fields.css" rel="stylesheet" />
+}
+
+<div class="table-filter-toolbar">
+    <div class="table-filter-toolbar__item">
+        <a href="/templates/fields/new" type="button" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> New Field
+        </a>
+    </div>
+    <div class="table-filter-toolbar__item">
+        <select class="form-select" id="isActiveFilter">
+            <option value="">All</option>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+        </select>
+    </div>
+    <div class="table-filter-toolbar__item">
+        <span class="card-tools-fieldsTable-length"></span>
+    </div>
+    <div class="table-filter-toolbar__item toolbar-search">
+        <span class="card-tools-fieldsTable-filter"></span>
+    </div>
+</div>
+
+<div class="card-body p-0">
+    <table id="fieldsTable" class="display" style="width:100%;">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<div class="card-footer clearfix">
+    <div class="card-tools-fieldsTable-size" style="float:left"></div>
+    <div class="card-tools-fieldsTable-pagination float-end"></div>
+</div>
+
+<div class="modal fade" id="fieldPreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title mb-0">Field Preview</h5>
+                    <small class="text-muted">Write mode and read mode views</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="border rounded-3 p-3 h-100 bg-white">
+                            <div class="small text-uppercase text-muted fw-semibold mb-2">Write Mode</div>
+                            <div id="fieldPreviewWrite"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="border rounded-3 p-3 h-100 bg-light">
+                            <div class="small text-uppercase text-muted fw-semibold mb-2">Read Mode</div>
+                            <div id="fieldPreviewRead"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+    <script src="~/node_modules/html2canvas/dist/html2canvas.min.js"></script>
+    <script src="~/Scripts/locals/utils.js"></script>
+    <script src="~/Scripts/locals/dynamic-fields.js"></script>
+
+    <script src="~/Areas/Templates/Scripts/fields/index.js"></script>
+}

@@ -1,0 +1,264 @@
+@{
+    ViewBag.Title = "Search";
+    ViewBag.TitleIcon = "bi bi-search";
+    ViewBag.SubTitle = ViewBag.SubTitle ?? "Search across projects, milestones, tasks, and key Pulse modules.";
+}
+
+@section Styles {
+    <style>
+        .global-search-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .global-search-toolbar {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 0.85rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6f9 100%);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+        }
+
+        .global-search-input-wrap {
+            position: relative;
+        }
+
+        .global-search-input-wrap i {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        .global-search-input {
+            min-height: 50px;
+            padding-left: 2.75rem;
+            border-radius: 999px;
+            border-color: #cbd5e1;
+            font-size: 1rem;
+        }
+
+        .global-search-submit {
+            min-width: 140px;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .global-search-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 0.15rem;
+        }
+
+        .global-search-summary-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .global-search-summary-copy {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .global-search-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #075985;
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .global-search-section {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .global-search-section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .global-search-section-title h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .global-search-section-title p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .global-search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .global-search-card {
+            display: grid;
+            gap: 0.85rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: #ffffff;
+            box-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
+        }
+
+        .global-search-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .global-search-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #0f766e;
+        }
+
+        .global-search-card-title {
+            margin: 0.2rem 0 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .global-search-card-subtitle {
+            margin: 0.15rem 0 0;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .global-search-path {
+            padding: 0.75rem 0.85rem;
+            border-radius: 0.9rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: 0.82rem;
+            color: #334155;
+        }
+
+        .global-search-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+        }
+
+        .global-search-meta-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.65rem;
+            border-radius: 999px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 0.76rem;
+            font-weight: 600;
+        }
+
+        .global-search-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .global-search-empty,
+        .global-search-loading {
+            padding: 1.4rem 1.2rem;
+            border: 1px dashed #cbd5e1;
+            border-radius: 1rem;
+            background: #f8fafc;
+            text-align: center;
+            color: #64748b;
+        }
+
+        @@media (max-width: 767.98px) {
+            .global-search-toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .global-search-submit {
+                width: 100%;
+            }
+
+            .global-search-summary {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+}
+
+<div class="global-search-shell">
+    <form id="globalSearchForm" class="global-search-toolbar" action="/Home/Search" method="get">
+        <div class="global-search-input-wrap">
+            <i class="bi bi-search"></i>
+            <input id="globalSearchInput"
+                   class="form-control global-search-input"
+                   type="search"
+                   name="q"
+                   value="@ViewBag.SearchQuery"
+                   placeholder="Search projects, milestones, tasks, reports, help, and other modules..."
+                   aria-label="Global search query" />
+        </div>
+        <button type="submit" class="btn btn-primary global-search-submit">Search Pulse</button>
+    </form>
+
+    <div class="global-search-summary">
+        <div>
+            <div id="globalSearchSummaryTitle" class="global-search-summary-title">Global Search</div>
+            <div id="globalSearchSummaryCopy" class="global-search-summary-copy">Search across project records and key application modules.</div>
+        </div>
+        <div id="globalSearchSummaryCount" class="global-search-chip">Waiting for query</div>
+    </div>
+
+    <section class="global-search-section">
+        <div class="global-search-section-title">
+            <div>
+                <h3>Modules</h3>
+                <p>Quick destinations across the Pulse application.</p>
+            </div>
+        </div>
+        <div id="globalSearchModuleResults"></div>
+    </section>
+
+    <section class="global-search-section">
+        <div class="global-search-section-title">
+            <div>
+                <h3>Project Results</h3>
+                <p>Matching projects, milestones, and task records available to the signed-in user.</p>
+            </div>
+        </div>
+        <div id="globalSearchProjectResults"></div>
+    </section>
+</div>
+
+@section scripts {
+    <script>
+        window.pulseSearchModules = @Html.Raw(Json.Encode(ViewBag.SearchModules ?? new object[0]));
+    </script>
+    <script src="~/Scripts/home/search.js"></script>
+}

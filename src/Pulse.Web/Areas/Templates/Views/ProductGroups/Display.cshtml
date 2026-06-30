@@ -1,0 +1,60 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Display Product Group";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review this product group and the mid-level portfolio structure it supports.";
+    ViewBag.ContentHeaderChips = new[] { "Mid-level portfolio grouping", "Division alignment", "Shared product families" };
+    ViewBag.ContentHeaderAsideLabel = "Group review";
+    ViewBag.ContentHeaderAsideTitle = "Inspect the grouping before adjusting related divisions, products, or reporting links.";
+    ViewBag.ContentHeaderAsideBody = "This view keeps the shared family context visible so the division-to-project structure remains understandable.";
+    ViewBag.IsActiveTemplatesProductGroups = "menu-open";
+    ViewBag.IsActiveTemplatesProductGroupsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="mb-3">
+                    Product Group Details
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Read-only information for the selected product group</small>
+                </h5>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Product Group Code</label>
+                        <div id="productGroupCode" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Status</label>
+                        <div id="productGroupStatus" class="form-control bg-light d-flex align-items-center">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Product Group Name</label>
+                        <div id="productGroupName" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Description</label>
+                        <div id="productGroupDescription" class="form-control bg-light">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="m-0 float-end">
+                    <a href="@Url.Action("Index", "ProductGroups", new { area = "Templates" })" class="btn btn-default">Back to list</a>
+                    <a href="@Url.Action("Edit", "ProductGroups", new { area = "Templates", code = ViewBag.Id })" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/productgroups/display.js"></script>
+}

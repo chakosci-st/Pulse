@@ -1,0 +1,33 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout-blank.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Unauthorized</title>
+</head>
+<body>
+    <div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
+        <div class="card shadow-lg border-0" style="max-width: 400px;">
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <i class="bi bi-person-x-fill text-warning" style="font-size: 3rem;"></i>
+                </div>
+                <h2 class="  mb-3">401 - Unauthorized</h2>
+                <p class="card-text text-muted mb-4">
+                    You must be logged in to view this page. Please sign in and try again. If you are already logged in, your account is not authorized to use this application.<br />
+
+                </p>
+                <a href="@Url.Action("Login", "Auth")" class="btn btn-primary btn-lg w-100">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                </a>
+                or Click <b><a target='_blank' href='https://st.service-now.com/hub?id=sc_cat_item&sys_id=5fe55b463b735a10ecda582a85e45aba' class='to_register'>here</a></b> to submit an access request.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

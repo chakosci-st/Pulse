@@ -1,0 +1,143 @@
+<h5 class="fw-semibold mb-3">Single Field Designer</h5>
+<div class="row g-4" id="singleFieldDesigner">
+    <div class="col-lg-5 col-md-12">
+        <div class="card shadow-sm rounded-3">
+            <div class="card-header bg-primary text-white rounded-top-3">
+                <i class="bi bi-sliders2-vertical me-2"></i>Field Configuration
+            </div>
+            <div class="card-body" id="fieldDesignerConfig">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="fieldTitle" placeholder="Field Label" required>
+                    <label for="fieldTitle">Field Label</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="fieldName" placeholder="Field Name">
+                    <label for="fieldName">Field Name (auto if blank)</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <select class="form-select" id="fieldType">
+                        <option value="text">Text</option>
+                        <option value="textarea">Textarea</option>
+                        <option value="richtext">Rich Text/HTML</option>
+                        <option value="number">Number</option>
+                        <option value="date">Date</option>
+                        <option value="email">Email</option>
+                        <option value="password">Password</option>
+                        <option value="selection">Selection</option>
+                        <option value="checkbox">Checkbox (Single)</option>
+                        <option value="checkboxcollection">Checkbox (Collection)</option>
+                        <option value="radio">Radio</option>
+                        <option value="file">File Upload</option>
+                        <option value="url">URL</option>
+                    </select>
+                    <label for="fieldType">Field Type</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="fieldPlaceholder" placeholder="Placeholder">
+                    <label for="fieldPlaceholder">Placeholder</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="fieldTooltip" placeholder="Tooltip">
+                    <label for="fieldTooltip">Tooltip</label>
+                </div>
+                <div class="form-floating mb-3" id="fieldDefaultValueGroup">
+                    <input type="text" class="form-control" id="fieldDefaultValue" placeholder="Default Value">
+                    <label for="fieldDefaultValue">Default Value</label>
+                </div>
+                <div class="form-floating mb-3" id="fieldDefaultClobValueGroup" style="display:none;">
+                    <textarea class="form-control" id="fieldDefaultClobValue" placeholder="Default Value" style="height: 100px"></textarea>
+                    <label for="fieldDefaultClobValue">Default Value</label>
+                </div>
+                <div class="form-floating mb-3" id="minLengthGroup" style="display:none;">
+                    <input type="number" class="form-control" id="fieldMinLength" placeholder="Min Length" min="0" max="4000">
+                    <label for="fieldMinLength">Min Length</label>
+                </div>
+                <div class="form-floating mb-3" id="maxLengthGroup" style="display:none;">
+                    <input type="number" class="form-control" id="fieldMaxLength" placeholder="Max Length" min="0" max="4000">
+                    <label for="fieldMaxLength">Max Length</label>
+                </div>
+                <div class="form-floating mb-3" id="caseOptionGroup" style="display:none;">
+                    <select class="form-select" id="fieldCaseOption">
+                        <option value="">No Case Change</option>
+                        <option value="upper">Always Uppercase</option>
+                        <option value="lower">Always Lowercase</option>
+                    </select>
+                    <label for="fieldCaseOption">Force Case</label>
+                </div>
+                <div class="form-floating mb-3" id="optionsGroup" style="display:none;">
+                    <input type="text" class="form-control" id="fieldOptions" placeholder="Option 1, Option 2">
+                    <label for="fieldOptions">Options (comma separated)</label>
+                </div>
+                <div class="form-floating mb-3" id="datasourceGroup" style="display:none;">
+                    <input type="text" class="form-control" id="fieldDatasource" placeholder="JSON array or URL">
+                    <label for="fieldDatasource">Datasource (JSON array or URL)</label>
+                </div>
+                <div class="form-floating mb-3" id="datasourceParamGroup" style="display:none;">
+                    <input type="text" class="form-control" id="fieldDatasourceParamField" placeholder="Parent field name">
+                    <label for="fieldDatasourceParamField">Datasource Parameter Field (optional)</label>
+                </div>
+                <div class="form-floating mb-3" id="fileTypesGroup" style="display:none;">
+                    <input type="text" class="form-control" id="fieldFileTypes" placeholder=".jpg,.png,.pdf or image/*">
+                    <label for="fieldFileTypes">Allowed File Types</label>
+                </div>
+                <div class="form-floating mb-3" id="fileMaxSizeGroup" style="display:none;">
+                    <input type="number" class="form-control" id="fieldFileMaxSize" placeholder="Max Size (MB)">
+                    <label for="fieldFileMaxSize">Max File Size (MB)</label>
+                </div>
+                <div id="urlParamGroup" class="mb-3" style="display:none;">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="urlIsParam">
+                        <label class="form-check-label" for="urlIsParam">Parameterized URL</label>
+                    </div>
+                    <input type="text" class="form-control" id="urlDefaultPattern" placeholder="https://example.com/user/{key}">
+                </div>
+                <div class="form-floating mb-3" id="validationGroup" style="display:none;">
+                    <input type="text" class="form-control" id="fieldValidation" placeholder="JS expression using value">
+                    <label for="fieldValidation">Custom Validation</label>
+                </div>
+                <div class="mb-3">
+                    <label for="fieldRulesJson" class="form-label">Conditional Rules JSON (optional)</label>
+                    <textarea class="form-control" id="fieldRulesJson" rows="3" placeholder='[{"field":"country","operator":"eq","value":"US","action":"visible"}]'></textarea>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-outline-primary" id="refreshFieldPreviewBtn">
+                        <i class="bi bi-eye me-1"></i>Refresh Preview
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7 col-md-12">
+        <div class="card shadow-sm rounded-3 mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-eye me-2"></i>Field Preview</span>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-lg-6 col-12">
+                        <div class="border rounded-3 p-3 h-100 bg-white">
+                            <div class="small text-uppercase text-muted fw-semibold mb-2">Write Mode</div>
+                            <div id="previewWriteForm"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-12">
+                        <div class="border rounded-3 p-3 h-100 bg-light">
+                            <div class="small text-uppercase text-muted fw-semibold mb-2">Read Mode</div>
+                            <div id="previewReadForm"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow-sm rounded-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-code-slash me-2"></i>Generated Field JSON</span>
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="copyFieldJsonBtn">Copy JSON</button>
+            </div>
+            <div class="card-body">
+                <pre id="fieldStructure" class="bg-light p-3 rounded-2 mb-0" style="max-height: 320px; overflow: auto;"></pre>
+                <input type="hidden" id="FieldJson" name="FieldJson">
+            </div>
+        </div>
+    </div>
+</div>

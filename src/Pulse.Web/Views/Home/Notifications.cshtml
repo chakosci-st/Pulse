@@ -1,0 +1,923 @@
+@using Pulse.Web.Helpers
+@{
+    ViewBag.Title = ViewBag.Title ?? "Notifications";
+    ViewBag.TitleIcon = ViewBag.TitleIcon ?? "bi bi-bell-fill";
+    ViewBag.SubTitle = ViewBag.SubTitle ?? "Active notifications grouped by your allowed contexts.";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+@section Styles {
+    <style>
+        .notifications-shell {
+            display: grid;
+            gap: 1.1rem;
+        }
+
+        .notifications-hero {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.95fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1.45rem 1.55rem;
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            border-radius: 1.45rem;
+            background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 40%, #f8fafc 100%);
+            box-shadow: 0 20px 42px rgba(15, 23, 42, 0.08);
+        }
+
+            .notifications-hero::after {
+                content: "";
+                position: absolute;
+                inset: auto -70px -100px auto;
+                width: 220px;
+                height: 220px;
+                border-radius: 999px;
+                background: radial-gradient(circle, rgba(251, 191, 36, 0.22) 0%, rgba(251, 191, 36, 0) 72%);
+                pointer-events: none;
+            }
+
+        .notifications-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.75);
+            color: #b45309;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .notifications-hero h1 {
+            margin: 0.85rem 0 0.45rem;
+            font-size: clamp(1.95rem, 2.8vw, 2.65rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: #111827;
+        }
+
+        .notifications-hero p {
+            margin: 0;
+            max-width: 700px;
+            color: #475569;
+            line-height: 1.68;
+        }
+
+        .notifications-hero__chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.95rem;
+        }
+
+        .notifications-hero__chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.52rem 0.74rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid rgba(253, 230, 138, 0.9);
+            color: #78350f;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .notifications-hero__stats {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .notifications-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.9rem;
+        }
+
+        .notifications-stat {
+            padding: 1rem 1.1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6f9 100%);
+            box-shadow: 0 16px 34px rgba(15, 23, 42, 0.06);
+        }
+
+        .notifications-stat-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .notifications-stat-value {
+            margin-top: 0.35rem;
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .notifications-section {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .notifications-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .notifications-section-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .notifications-section-header p {
+            margin: 0.15rem 0 0;
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+
+        .notifications-section-count {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.45rem 0.8rem;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .notifications-section-controls {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+        }
+
+        .notifications-filter-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.85rem;
+            border-radius: 999px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .notifications-filter-pill-btn.is-active {
+            background: #ecfeff;
+            border-color: #99f6e4;
+            color: #0f766e;
+        }
+
+        .notifications-filter-pill-btn:hover {
+            border-color: #94a3b8;
+        }
+
+        .notifications-group-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .notifications-page-content.is-row-view .notifications-group-grid {
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+        }
+
+        .notifications-view-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin: 0.3rem 0 0.2rem;
+            padding: 0.35rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 999px;
+            background: #ffffff;
+        }
+
+        .notifications-view-pill {
+            border: 1px solid transparent;
+            border-radius: 999px;
+            background: transparent;
+            color: #475569;
+            padding: 0.3rem 0.75rem;
+            font-size: 0.77rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .notifications-view-pill.is-active {
+            background: #0f172a;
+            color: #f8fafc;
+            border-color: #0f172a;
+        }
+
+        .notifications-view-pill:hover {
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+
+        .notifications-group-card {
+            display: grid;
+            gap: 0.8rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: #ffffff;
+            box-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
+        }
+
+        .notifications-group-card header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .notifications-group-title {
+            font-size: 0.96rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .notifications-group-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 34px;
+            padding: 0.35rem 0.6rem;
+            border-radius: 999px;
+            background: #ecfeff;
+            color: #0f766e;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .notification-list {
+            display: grid;
+            gap: 0.7rem;
+        }
+
+        .notification-item-card {
+            display: grid;
+            align-content: start;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.9rem;
+            padding: 0.9rem;
+            background: #f8fafc;
+        }
+
+        .notification-item-card.is-unread {
+            border-color: #93c5fd;
+            background: #eff6ff;
+        }
+
+        .notification-item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .notification-item-main {
+            flex: 1 1 auto;
+            min-width: 0;
+            display: grid;
+            gap: 0.45rem;
+        }
+
+        .notification-item-title {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .notification-item-message {
+            margin: 0;
+            color: #475569;
+            font-size: 0.86rem;
+        }
+
+        .notification-item-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.65rem;
+        }
+
+        .notification-item-task-meta {
+            margin-top: 0.05rem;
+            display: grid;
+            gap: 0.25rem;
+        }
+
+        .notification-item-task-line {
+            font-size: 0.78rem;
+            color: #475569;
+            display: grid;
+            grid-template-columns: 1rem 3.4rem minmax(0, 1fr);
+            align-items: start;
+            column-gap: 0.35rem;
+            line-height: 1.35;
+        }
+
+        .notification-item-task-line i {
+            margin-top: 0.08rem;
+        }
+
+        .notification-item-task-line strong {
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .notification-item-task-line span {
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .notification-item-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.6rem;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #475569;
+            font-size: 0.74rem;
+            font-weight: 600;
+            border: 1px solid #dbe4ea;
+        }
+
+        .notification-item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-top: 0.8rem;
+        }
+
+        .notification-empty {
+            padding: 1.4rem 1.2rem;
+            border: 1px dashed #cbd5e1;
+            border-radius: 1rem;
+            background: #f8fafc;
+            text-align: center;
+            color: #64748b;
+        }
+
+        @@media (max-width: 767.98px) {
+            .notification-item-top,
+            .notifications-section-header,
+            .notification-item-actions,
+            .notifications-group-card header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @@media (max-width: 991px) {
+            .notifications-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+}
+
+<div class="notifications-shell">
+    <section class="notifications-hero">
+        <div>
+            <span class="notifications-hero__eyebrow"><i class="bi bi-broadcast-pin"></i> Attention center</span>
+            <h1>Notifications are grouped, readable, and easier to act on.</h1>
+            <p>Review active notices by context, keep unread items visible, and manage system-wide announcements without a second title block competing with the page.</p>
+            <div class="notifications-hero__chips">
+                <span class="notifications-hero__chip"><i class="bi bi-collection"></i> Context-based grouping</span>
+                <span class="notifications-hero__chip"><i class="bi bi-envelope-open"></i> Unread tracking</span>
+                <span class="notifications-hero__chip"><i class="bi bi-sliders"></i> Admin maintenance</span>
+            </div>
+        </div>
+        <div class="notifications-hero__stats notifications-overview">
+            <div class="notifications-stat">
+                <div class="notifications-stat-label">Active Notifications</div>
+                <div id="notificationsTotalCount" class="notifications-stat-value">--</div>
+            </div>
+            <div class="notifications-stat">
+                <div class="notifications-stat-label">Unread Notifications</div>
+                <div id="notificationsUnreadTotal" class="notifications-stat-value">--</div>
+            </div>
+            <div class="notifications-stat">
+                <div class="notifications-stat-label">Archived Notifications</div>
+                <div id="notificationsArchivedTotal" class="notifications-stat-value">--</div>
+            </div>
+        </div>
+    </section>
+
+    <div id="loading-data" class="text-muted d-none" style="font-size:0.8rem;">
+        <svg class="svg-inline--fa fa-spinner fa-spin me-2" data-prefix="fas" data-icon="spinner" role="img" viewBox="0 0 512 512" aria-hidden="true" data-fa-i2svg=""><path fill="currentColor" d="M208 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm0 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM48 208a48 48 0 1 1 0 96 48 48 0 1 1 0-96zm368 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM75 369.1A48 48 0 1 1 142.9 437 48 48 0 1 1 75 369.1zM75 75A48 48 0 1 1 142.9 142.9 48 48 0 1 1 75 75zM437 369.1A48 48 0 1 1 369.1 437 48 48 0 1 1 437 369.1z"></path></svg>Retrieving Data...
+    </div>
+
+    <section class="notifications-section">
+        <div class="notifications-section-header">
+            <div>
+                <h3>System Notifications</h3>
+                <p>Create and maintain system-wide notices shown across Pulse.</p>
+            </div>
+            <div class="notifications-section-controls">
+                <button id="showArchivedNotificationsPill" type="button" class="notifications-filter-pill-btn" aria-pressed="false" title="Toggle archived notifications mode">
+                    <i class="bi bi-archive"></i>
+                    <span>Archived hidden</span>
+                </button>
+                <button id="showReadNotificationsPill" type="button" class="notifications-filter-pill-btn is-active" aria-pressed="true" title="Show or hide notifications already marked as read">
+                    <i class="bi bi-eye"></i>
+                    <span>Read visible</span>
+                </button>
+                @if (AuthorizationHelper.IsInGroupsOrModules("", "NOTIFADD"))
+                {
+                    <button id="systemNotificationAddButton" type="button" class="btn btn-primary btn-sm">Add system notification</button>
+                }
+            </div>
+        </div>
+        <div id="systemNotificationManagerEmpty" class="notification-empty">Loading system notifications...</div>
+        <div id="systemNotificationManagerList"></div>
+    </section>
+
+    <div class="notifications-view-switch" role="group" aria-label="Notifications layout switcher">
+        <button id="notificationsViewGridBtn" type="button" class="notifications-view-pill is-active" aria-pressed="true">Card view</button>
+        <button id="notificationsViewRowsBtn" type="button" class="notifications-view-pill" aria-pressed="false">Row view</button>
+    </div>
+
+    <div id="notificationsPageContent" class="notifications-page-content notification-empty">Loading active notifications...</div>
+</div>
+
+@Html.Partial("~/Views/Shared/_NotificationEditorModal.cshtml")
+
+@section scripts {
+    <script src="~/Scripts/locals/notification-manager.js"></script>
+    <script>
+        (function () {
+            var activeLoadCount = 0;
+            var notificationsPayload = null;
+            var showReadNotifications = true;
+            var showArchivedOnly = false;
+            var notificationsViewMode = 'grid';
+
+            function toggleInlineLoading(isVisible) {
+                var loader = document.getElementById('loading-data');
+                if (!loader) {
+                    return;
+                }
+
+                loader.classList.toggle('d-none', !isVisible);
+            }
+
+            function beginInlineLoad() {
+                activeLoadCount += 1;
+                toggleInlineLoading(true);
+            }
+
+            function endInlineLoad() {
+                activeLoadCount = Math.max(0, activeLoadCount - 1);
+                toggleInlineLoading(activeLoadCount > 0);
+            }
+
+            function applyViewMode() {
+                var container = document.getElementById('notificationsPageContent');
+                var gridBtn = document.getElementById('notificationsViewGridBtn');
+                var rowsBtn = document.getElementById('notificationsViewRowsBtn');
+                var isRowView = notificationsViewMode === 'rows';
+
+                if (container) {
+                    container.classList.toggle('is-row-view', isRowView);
+                }
+
+                if (gridBtn) {
+                    gridBtn.classList.toggle('is-active', !isRowView);
+                    gridBtn.setAttribute('aria-pressed', isRowView ? 'false' : 'true');
+                }
+
+                if (rowsBtn) {
+                    rowsBtn.classList.toggle('is-active', isRowView);
+                    rowsBtn.setAttribute('aria-pressed', isRowView ? 'true' : 'false');
+                }
+            }
+
+            function updateReadPillUi() {
+                var pill = document.getElementById('showReadNotificationsPill');
+                if (!pill) {
+                    return;
+                }
+
+                var text = pill.querySelector('span');
+                var icon = pill.querySelector('i');
+                pill.classList.toggle('is-active', showReadNotifications);
+                pill.setAttribute('aria-pressed', showReadNotifications ? 'true' : 'false');
+
+                if (text) {
+                    text.textContent = showReadNotifications ? 'Read visible' : 'Read hidden';
+                }
+
+                if (icon) {
+                    icon.className = showReadNotifications ? 'bi bi-eye' : 'bi bi-eye-slash';
+                }
+            }
+
+            function updateArchivedPillUi() {
+                var pill = document.getElementById('showArchivedNotificationsPill');
+                if (!pill) {
+                    return;
+                }
+
+                var text = pill.querySelector('span');
+                var icon = pill.querySelector('i');
+                pill.classList.toggle('is-active', showArchivedOnly);
+                pill.setAttribute('aria-pressed', showArchivedOnly ? 'true' : 'false');
+
+                if (text) {
+                    text.textContent = showArchivedOnly ? 'Archived only' : 'Archived hidden';
+                }
+
+                if (icon) {
+                    icon.className = showArchivedOnly ? 'bi bi-archive-fill' : 'bi bi-archive';
+                }
+            }
+
+            function escapeHtml(value) {
+                if (value == null) {
+                    return '';
+                }
+
+                return String(value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function isLikelySysId(value) {
+                if (!value) {
+                    return false;
+                }
+
+                var normalized = String(value).trim();
+                return /^[a-f0-9]{32}$/i.test(normalized)
+                    || /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(normalized)
+                    || /^SYS[a-z0-9_-]+$/i.test(normalized);
+            }
+
+            function friendlyEntityLabel(entityType) {
+                var type = String(entityType || '').trim().toUpperCase();
+                switch (type) {
+                    case 'SYSTEM': return 'Pulse';
+                    case 'PLANT': return 'Plant';
+                    case 'PROJECT': return 'Project';
+                    case 'MILESTONE': return 'Milestone';
+                    case 'TASK': return 'Task';
+                    default: return 'General';
+                }
+            }
+
+            function safeContextLabel(rawLabel, entityType, entitySysId) {
+                var label = String(rawLabel || '').trim();
+                var normalizedEntityId = String(entitySysId || '').trim();
+
+                if (!label) {
+                    return friendlyEntityLabel(entityType);
+                }
+
+                if ((normalizedEntityId && label.toUpperCase() === normalizedEntityId.toUpperCase()) || isLikelySysId(label)) {
+                    return friendlyEntityLabel(entityType);
+                }
+
+                return label;
+            }
+
+            function updateUnreadTotal(delta) {
+                const total = document.getElementById('notificationsUnreadTotal');
+                if (!total) {
+                    return;
+                }
+
+                const next = Math.max(0, Number(total.textContent || '0') + delta);
+                total.textContent = next;
+            }
+
+            function renderNotificationItem(item) {
+                const itemTargetUrl = window.PulseNotifications.buildTargetUrl(item);
+                const itemDate = window.PulseNotifications.formatDateValue(item.notificationDate || item.createdDate);
+                const itemBadgeClass = item.isRead ? 'text-bg-light' : 'text-bg-primary';
+                const itemContextLabel = safeContextLabel(item.contextLabel, item.entityType, item.entitySysId);
+                const isTask = String(item.entityType || '').toUpperCase() === 'TASK';
+                const taskProjectLabel = item.projectName && item.projectNo
+                    ? item.projectName + ' (' + item.projectNo + ')'
+                    : (item.projectName || item.projectNo || '');
+                const taskContextMarkup = isTask && (taskProjectLabel || item.parentNodeName)
+                    ? [
+                        '<div class="notification-item-task-meta">',
+                        taskProjectLabel ? '<div class="notification-item-task-line"><i class="bi bi-folder2-open"></i><strong>Project:</strong> <span>' + escapeHtml(taskProjectLabel) + '</span></div>' : '',
+                        item.parentNodeName ? '<div class="notification-item-task-line"><i class="bi bi-diagram-3"></i><strong>Parent:</strong> <span>' + escapeHtml(item.parentNodeName) + '</span></div>' : '',
+                        '</div>'
+                    ].join('')
+                    : '';
+                const readButton = item.isRead
+                    ? ''
+                    : '<button type="button" class="btn btn-link btn-sm js-notification-page-read" data-notification-id="' + escapeHtml(item.notificationSysId) + '">Mark as read</button>';
+
+                return [
+                    '<div id="notification-', escapeHtml(item.notificationSysId), '" class="notification-item-card', item.isRead ? '' : ' is-unread', '" data-notification-card="', escapeHtml(item.notificationSysId), '">',
+                    '<div class="notification-item-top">',
+                    '<div class="notification-item-main">',
+                    '<h4 class="notification-item-title">', escapeHtml(item.title || 'Notification'), '</h4>',
+                    '<p class="notification-item-message">', escapeHtml(item.message || ''), '</p>',
+                    taskContextMarkup,
+                    '</div>',
+                    '<span class="badge ', itemBadgeClass, '">', item.isRead ? 'Read' : 'Unread', '</span>',
+                    '</div>',
+                    '<div class="notification-item-meta">',
+                    '<span class="notification-item-chip"><i class="bi bi-pin-angle-fill"></i>', escapeHtml(itemContextLabel), '</span>',
+                    '<span class="notification-item-chip"><i class="bi bi-clock"></i>', escapeHtml(itemDate), '</span>',
+                    '<span class="notification-item-chip"><i class="bi bi-person"></i>', escapeHtml(item.createdByDisplayName || ''), '</span>',
+                    '</div>',
+                    '<div class="notification-item-actions">',
+                    '<a class="btn btn-outline-primary btn-sm" href="', escapeHtml(itemTargetUrl), '">Open</a>',
+                    readButton,
+                    '</div>',
+                    '</div>'
+                ].join('');
+            }
+
+            function renderContextGroup(group) {
+                const items = group.filteredItems || group.items || [];
+                const firstItem = items[0] || (group.items || [])[0] || {};
+                const groupLabel = safeContextLabel(group.contextLabel, firstItem.entityType, firstItem.entitySysId);
+                const itemsMarkup = items.map(renderNotificationItem).join('');
+                return [
+                    '<article class="notifications-group-card">',
+                    '<header>',
+                    '<div class="notifications-group-title">', escapeHtml(groupLabel), '</div>',
+                    '<span class="notifications-group-count">', escapeHtml(group.filteredCount != null ? group.filteredCount : group.count), '</span>',
+                    '</header>',
+                    '<div class="notification-list">', itemsMarkup, '</div>',
+                    '</article>'
+                ].join('');
+            }
+
+            function renderSection(section) {
+                const groupsMarkup = (section.groups || []).map(renderContextGroup).join('');
+                return [
+                    '<section class="notifications-section">',
+                    '<div class="notifications-section-header">',
+                    '<div>',
+                    '<h3>', escapeHtml(section.title || 'Notifications'), '</h3>',
+                    '<p>', escapeHtml(section.description || ''), '</p>',
+                    '</div>',
+                    '<span class="notifications-section-count">', escapeHtml(section.filteredCount != null ? section.filteredCount : section.count), ' active</span>',
+                    '</div>',
+                    '<div class="notifications-group-grid">', groupsMarkup, '</div>',
+                    '</section>'
+                ].join('');
+            }
+
+            function buildFilteredPageData(data) {
+                if (!data) {
+                    return { totalCount: 0, unreadCount: 0, archivedCount: 0, sections: [] };
+                }
+
+                const sections = (data.sections || []).map(function (section) {
+                    const filteredGroups = (section.groups || []).map(function (group) {
+                        const allItems = group.items || [];
+                        const archiveFilteredItems = showArchivedOnly
+                            ? allItems.filter(function (item) { return !!item.isArchived; })
+                            : allItems.filter(function (item) { return !item.isArchived; });
+                        const filteredItems = showReadNotifications
+                            ? archiveFilteredItems
+                            : archiveFilteredItems.filter(function (item) { return !item.isRead; });
+
+                        return Object.assign({}, group, {
+                            filteredItems: filteredItems,
+                            filteredCount: filteredItems.length
+                        });
+                    }).filter(function (group) {
+                        return group.filteredCount > 0;
+                    });
+
+                    const sectionFilteredCount = filteredGroups.reduce(function (sum, group) {
+                        return sum + (group.filteredCount || 0);
+                    }, 0);
+
+                    return Object.assign({}, section, {
+                        groups: filteredGroups,
+                        filteredCount: sectionFilteredCount
+                    });
+                }).filter(function (section) {
+                    return section.filteredCount > 0;
+                });
+
+                const totalCount = sections.reduce(function (sum, section) {
+                    return sum + (section.filteredCount || 0);
+                }, 0);
+
+                return {
+                    totalCount: totalCount,
+                    unreadCount: Number(data.unreadCount || 0),
+                    archivedCount: Number(data.archivedCount || 0),
+                    sections: sections
+                };
+            }
+
+            function renderPage(data) {
+                const container = document.getElementById('notificationsPageContent');
+                const totalCount = document.getElementById('notificationsTotalCount');
+                const unreadCount = document.getElementById('notificationsUnreadTotal');
+                const archivedCount = document.getElementById('notificationsArchivedTotal');
+
+                if (totalCount) {
+                    totalCount.textContent = Number(data.totalCount || 0).toLocaleString('en-US');
+                }
+                if (unreadCount) {
+                    unreadCount.textContent = Number(data.unreadCount || 0).toLocaleString('en-US');
+                }
+                if (archivedCount) {
+                    archivedCount.textContent = Number(data.archivedCount || 0).toLocaleString('en-US');
+                }
+
+                if (!container) {
+                    return;
+                }
+
+                container.classList.add('notifications-page-content');
+
+                if (!data.sections || data.sections.length === 0) {
+                    container.classList.add('notification-empty');
+                    container.innerHTML = 'No active notifications are available for your current plants, projects, milestones, or tasks.';
+                    applyViewMode();
+                    return;
+                }
+
+                container.classList.remove('notification-empty');
+                container.innerHTML = data.sections.map(renderSection).join('');
+                applyViewMode();
+            }
+
+            function renderCurrentPage() {
+                renderPage(buildFilteredPageData(notificationsPayload));
+            }
+
+            function loadNotificationsPage() {
+                beginInlineLoad();
+
+                $.ajax({
+                    url: getApiRootPath() + '/api/notifications/active/grouped',
+                    type: 'GET',
+                    dataType: 'json'
+                }).done(function (response) {
+                    notificationsPayload = response || {};
+                    renderCurrentPage();
+                }).fail(function () {
+                    const container = document.getElementById('notificationsPageContent');
+                    if (container) {
+                        container.className = 'notification-empty';
+                        container.innerHTML = 'Unable to load notifications right now.';
+                    }
+                }).always(function () {
+                    endInlineLoad();
+                });
+            }
+
+            document.addEventListener('click', function (event) {
+                const button = event.target.closest('.js-notification-page-read');
+                if (!button || !window.PulseNotifications || typeof window.PulseNotifications.markRead !== 'function') {
+                    return;
+                }
+
+                const notificationId = button.getAttribute('data-notification-id');
+                if (!notificationId) {
+                    return;
+                }
+
+                button.disabled = true;
+                window.PulseNotifications.markRead(notificationId)
+                    .done(function () {
+                        if (notificationsPayload && Array.isArray(notificationsPayload.sections)) {
+                            notificationsPayload.sections.forEach(function (section) {
+                                (section.groups || []).forEach(function (group) {
+                                    (group.items || []).forEach(function (item) {
+                                        if (item.notificationSysId === notificationId) {
+                                            item.isRead = true;
+                                        }
+                                    });
+                                });
+                            });
+                        }
+
+                        const card = document.querySelector('[data-notification-card="' + notificationId + '"]');
+                        if (card) {
+                            card.classList.remove('is-unread');
+                            const badge = card.querySelector('.badge');
+                            if (badge) {
+                                badge.className = 'badge text-bg-light';
+                                badge.textContent = 'Read';
+                            }
+                        }
+
+                        updateUnreadTotal(-1);
+
+                        const navbarBadge = document.getElementById('unreadNotificationCount');
+                        if (navbarBadge) {
+                            const nextBadgeCount = Math.max(0, Number(navbarBadge.textContent || '0') - 1);
+                            window.PulseNotifications.updateBadge(nextBadgeCount);
+                        }
+
+                        button.remove();
+                        renderCurrentPage();
+                        window.PulseNotifications.ensureEmptyState();
+                    })
+                    .fail(function () {
+                        button.disabled = false;
+                        alert('Failed to mark notification as read.');
+                    });
+            });
+
+            document.addEventListener('click', function (event) {
+                var pill = event.target.closest('#showReadNotificationsPill');
+                if (!pill) {
+                    return;
+                }
+
+                showReadNotifications = !showReadNotifications;
+                updateReadPillUi();
+                renderCurrentPage();
+            });
+
+            document.addEventListener('click', function (event) {
+                var pill = event.target.closest('#showArchivedNotificationsPill');
+                if (!pill) {
+                    return;
+                }
+
+                showArchivedOnly = !showArchivedOnly;
+                updateArchivedPillUi();
+                renderCurrentPage();
+            });
+
+            document.addEventListener('click', function (event) {
+                var gridBtn = event.target.closest('#notificationsViewGridBtn');
+                var rowsBtn = event.target.closest('#notificationsViewRowsBtn');
+
+                if (!gridBtn && !rowsBtn) {
+                    return;
+                }
+
+                notificationsViewMode = rowsBtn ? 'rows' : 'grid';
+                applyViewMode();
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                window.PulseNotificationManager.init({
+                    entityType: 'SYSTEM',
+                    entitySysId: 'SYSTEM',
+                    contextLabel: 'Pulse',
+                    listSelector: '#systemNotificationManagerList',
+                    emptySelector: '#systemNotificationManagerEmpty',
+                    addButtonSelector: '#systemNotificationAddButton',
+                    modalSelector: '#notificationEditorModal',
+                    formSelector: '#notificationEditorForm',
+                    canAdd: @(AuthorizationHelper.IsInGroupsOrModules("", "NOTIFADD").ToString().ToLowerInvariant()),
+                    canEdit: @(AuthorizationHelper.IsInGroupsOrModules("", "NOTIFEDIT,NOTIFADD").ToString().ToLowerInvariant()),
+                    canDelete: @(AuthorizationHelper.IsInGroupsOrModules("", "NOTIFDEL,NOTIFADD").ToString().ToLowerInvariant()),
+                    loadingText: 'Loading system notifications...',
+                    emptyText: 'No system notifications scheduled.',
+                    createTitle: 'Add system notification',
+                    editTitle: 'Edit system notification',
+                    onLoadStart: beginInlineLoad,
+                    onLoadEnd: endInlineLoad
+                });
+                updateReadPillUi();
+                updateArchivedPillUi();
+                applyViewMode();
+                loadNotificationsPage();
+            });
+        })();
+    </script>
+}

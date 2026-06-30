@@ -1,0 +1,213 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "User Reports";
+    ViewBag.TitleIcon = "bi bi-bar-chart-line-fill";
+    ViewBag.SubTitle = "Analyze user workload and participation with per-user ownership and pending task insights.";
+    ViewBag.ContentHeaderChips = new[] { "Ownership insights", "Team participation", "Pending workload" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Track user delivery load at a glance.";
+    ViewBag.ContentHeaderAsideBody = "Each card surfaces ownership, membership, and pending tasks so leaders can quickly identify distribution and bottlenecks.";
+    ViewBag.IsActiveAdminUsers = "menu-open";
+    ViewBag.IsActiveAdminUsersReports = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+@section Styles {
+    <style>
+        .users-report-shell {
+            border: 1px solid #d8e2ec;
+            border-radius: 1.25rem;
+            background: linear-gradient(135deg, #f8fbff 0%, #eef7ff 48%, #f7fafc 100%);
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+            padding: 1rem;
+        }
+
+        .users-report-toolbar {
+            display: grid;
+            grid-template-columns: minmax(180px, max-content) minmax(220px, 1fr) minmax(180px, 220px);
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .users-report-toolbar .form-control,
+        .users-report-toolbar .form-select,
+        .users-report-toolbar .btn {
+            min-height: 46px;
+            border-radius: 0.9rem;
+        }
+
+        .users-report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .user-report-card {
+            border: 1px solid #d9e3ef;
+            border-radius: 1rem;
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+
+        .user-report-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.14);
+        }
+
+        .user-report-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1rem 0.6rem;
+        }
+
+        .user-report-profile {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .user-avatar,
+        .user-avatar__initials {
+            width: 52px;
+            height: 52px;
+            border-radius: 999px;
+            border: 2px solid #e2e8f0;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #e2e8f0;
+        }
+
+        .user-avatar__initials {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+            color: #f8fafc;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .user-meta {
+            min-width: 0;
+        }
+
+        .user-meta__name {
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-meta__sub {
+            color: #64748b;
+            font-size: 0.84rem;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-status-pill {
+            border-radius: 999px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .user-status-pill--active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .user-status-pill--inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .user-report-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.65rem;
+            padding: 0.9rem 1rem 0.95rem;
+        }
+
+        .user-stat {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.8rem;
+            padding: 0.7rem 0.5rem;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+        .user-stat__value {
+            display: block;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        .user-stat__label {
+            display: block;
+            font-size: 0.72rem;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-top: 0.2rem;
+        }
+
+        .users-report-empty {
+            display: none;
+            text-align: center;
+            border: 1px dashed #cbd5e1;
+            border-radius: 1rem;
+            padding: 2rem 1rem;
+            color: #64748b;
+            background: #fff;
+        }
+
+        @@media (max-width: 900px) {
+            .users-report-toolbar {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+    </style>
+}
+
+<div class="users-report-shell">
+    <div class="users-report-toolbar">
+        <button id="btnAdd" type="button" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add New User
+        </button>
+        <input id="userCardSearch" type="search" class="form-control" placeholder="Search by name, user name, user id, or email" />
+        <select id="userCardStatusFilter" class="form-select">
+            <option value="">All status</option>
+            <option value="active">Active only</option>
+            <option value="inactive">Inactive only</option>
+        </select>
+    </div>
+
+    <div id="usersReportGrid" class="users-report-grid"></div>
+    <div id="usersReportEmpty" class="users-report-empty">
+        No users matched your filters.
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Admin/Scripts/users/reports.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#btnAdd').on('click', function () {
+                window.location.href = '@Url.Action("New", "Users", new { area = "Admin" })';
+            });
+        });
+    </script>
+}

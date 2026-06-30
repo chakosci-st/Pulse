@@ -1,0 +1,67 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Display Module";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review the selected access right and the metadata used when assigning it to users.";
+    ViewBag.ContentHeaderChips = new[] { "Access rights", "Read-only review", "Assignment metadata" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Inspect this permission before it is reused.";
+    ViewBag.ContentHeaderAsideBody = "Use the read-only view to verify what the access right represents and whether it is still suitable for assignment.";
+    ViewBag.IsActiveAdminModules = "menu-open";
+    ViewBag.IsActiveAdminModulesAll = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="mb-3">
+                    Module Details
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Read-only information for the selected module</small>
+                </h5>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Module Code</label>
+                        <div id="moduleCode" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Status</label>
+                        <div id="moduleStatus" class="form-control bg-light d-flex align-items-center">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Module Name</label>
+                        <div id="moduleName" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Description</label>
+                        <div id="moduleDescription" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Created Date</label>
+                        <div id="moduleCreatedDate" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Modified Date</label>
+                        <div id="moduleModifiedDate" class="form-control bg-light">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="m-0 float-end">
+                    <a href="@Url.Action("Index", "Modules", new { area = "Admin" })" class="btn btn-default">Back to list</a>
+                    <a href="@Url.Action("Edit", "Modules", new { area = "Admin", code = ViewBag.Id })" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Admin/Scripts/modules/display.js"></script>
+}

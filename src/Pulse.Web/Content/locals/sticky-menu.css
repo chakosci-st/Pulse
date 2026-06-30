@@ -1,0 +1,28 @@
+﻿.configurable--sticky {
+    position: fixed;
+    top: var(--sticky-top, calc(260px + 2rem));
+    left: var(--sticky-left, auto);
+    width: var(--sticky-width, auto);
+    max-width: 100%;
+    z-index: var(--sticky-z-index, 1020);
+}
+
+@media (min-width: 992px) { /* lg and up */
+    .configurable--sticky {
+        position: fixed;
+        top: var(--sticky-top, calc(260px + 2rem));
+        left: var(--sticky-left, auto);
+        width: var(--sticky-width, auto);
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 991.98px) { /* below lg */
+    .configurable--sticky {
+        position: static;
+        top: auto;
+        width: auto;
+        max-width: none;
+        left: auto;
+    }
+}

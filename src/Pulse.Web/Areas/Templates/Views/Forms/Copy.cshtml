@@ -1,0 +1,83 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New Form";
+    ViewBag.TitleIcon = "bi bi-plus-circle";
+    ViewBag.SubTitle = "Create a reusable copy of an existing form for another task data collection scenario.";
+    ViewBag.ContentHeaderChips = new[] { "Task-linked forms", "Data collection design", "Reusable field templates" };
+    ViewBag.ContentHeaderAsideLabel = "Form copy";
+    ViewBag.ContentHeaderAsideTitle = "Start from a proven form structure instead of rebuilding the template from scratch.";
+    ViewBag.ContentHeaderAsideBody = "Copies are useful when the same task workflow needs a related data-collection form with only a few targeted changes.";
+    ViewBag.IsActiveTemplatesForms = "menu-open";
+    ViewBag.IsActiveTemplatesFormsNew = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+@section styles{
+    <link href="~/node_modules/dropzone/dist/dropzone.css" rel="stylesheet" />
+    <link href="~/Content/locals/dynamic-fields.css" rel="stylesheet" />
+    <!-- Summernote -->
+
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+}
+
+
+<!--begin::Row-->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body p-4">
+                <h5 class=" mb-3">
+                    New Form
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Create a new form for your application</small>
+                </h5>
+                <input type="hidden" id="FormSysId" value="@ViewBag.Id" />
+                <hr class="mb-4" />
+                @Html.Partial("_DetailsNew")
+                <hr class="my-4" />
+                @Html.Partial("_Builder")
+            </div>
+            <!-- Card Footer -->
+            <div class="card-footer bg-white border-top-0 rounded-bottom-4 d-flex justify-content-end gap-2">
+                <a href="@Url.Action("Index", "Forms", new { area = "Templates" })" class="btn btn-outline-secondary">Cancel</a>
+                <button id="buttonClear" class="btn btn-outline-secondary">Clear</button>
+                <button onclick="$('#formForm').submit();" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!--end::Row-->
+
+
+
+
+
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <!-- Summernote -->
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <!-- Dependencies -->
+    <script src="~/node_modules/sortablejs/Sortable.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+
+    <!-- Your modular dynamic field control and helpers -->
+    <script src="~/scripts/locals/utils.js"></script>
+    <script src="~/scripts/locals/rules-builder.js"></script>
+    <script src="~/scripts/locals/dynamic-fields.js"></script>
+    <script src="~/scripts/locals/designer-main.js"></script>
+    <script src="~/Areas/Templates/Scripts/forms/fetchPageInfo.js"></script>
+    <script src="~/Areas/Templates/Scripts/forms/common.js"></script>
+    <script src="~/Areas/Templates/Scripts/forms/new.js"></script>
+}

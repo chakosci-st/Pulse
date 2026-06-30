@@ -1,0 +1,34 @@
+= Web UI and Notifications =
+
+== Web Application Role ==
+'''Pulse.Web''' is the main user-facing ASP.NET MVC 5 application.
+
+Primary responsibilities:
+* render pages and server-side views
+* enforce UI-level authorization visibility
+* orchestrate authenticated API calls
+* host SignalR-based UX interactions where applicable
+
+== Notification UX ==
+Pulse has two user notification entry points:
+
+=== Navbar Dropdown ===
+* fetches unread, active notifications from API unread endpoint
+* optimized for quick awareness and short interaction loops
+
+=== Dedicated Notifications Page ===
+* page route renders grouped active notifications
+* intended for broader review and triage workflows
+
+=== Mark-As-Read ===
+* individual read transactions call API mark-as-read endpoint
+
+== Navigation Surfaces ==
+Notifications are reachable from shared navigation components (navbar and sidebar).
+
+== Authorization in UI ==
+UI cards/menus/actions should be filtered by module claims to avoid exposing unauthorized navigation paths.
+
+== Related Pages ==
+* [[API Overview]]
+* [[Authentication and Authorization]]

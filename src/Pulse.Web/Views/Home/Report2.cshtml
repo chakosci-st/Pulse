@@ -1,0 +1,505 @@
+@{
+    ViewBag.Title = "Monitoring Matrix";
+    ViewBag.TitleIcon = "bi bi-bar-chart-line-fill";
+    ViewBag.SubTitle = "Project monitoring matrix with milestone and task DMS tracking.";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+@section Styles {
+    <style>
+        .report2-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .report2-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.85fr);
+            gap: 1rem;
+            padding: 1.25rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1.25rem;
+            background:
+                radial-gradient(circle at top left, rgba(14, 165, 233, 0.16), transparent 36%),
+                linear-gradient(135deg, #f8fbfd 0%, #eef7f5 52%, #f7fbff 100%);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+        }
+
+        .report2-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-bottom: 0.75rem;
+            color: #0f766e;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .report2-hero__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: clamp(1.75rem, 2.3vw, 2.35rem);
+            font-weight: 800;
+            line-height: 1.08;
+        }
+
+        .report2-hero__copy {
+            max-width: 60ch;
+            margin: 0.9rem 0 0;
+            color: #475569;
+            font-size: 0.98rem;
+            line-height: 1.65;
+        }
+
+        .report2-hero__chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.95rem;
+        }
+
+        .report2-hero__chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.42rem;
+            padding: 0.5rem 0.72rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid rgba(148, 163, 184, 0.26);
+            color: #0f172a;
+            font-size: 0.79rem;
+            font-weight: 700;
+        }
+
+        .report2-hero__panel {
+            display: grid;
+            gap: 0.85rem;
+            align-content: start;
+            padding: 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+        }
+
+        .report2-hero__panel-label {
+            color: #64748b;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .report2-hero__panel-title {
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .report2-hero__panel-copy {
+            color: #475569;
+            font-size: 0.86rem;
+            line-height: 1.6;
+        }
+
+        .report2-hero__meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.8rem;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #075985;
+            font-size: 0.82rem;
+            font-weight: 700;
+            white-space: nowrap;
+            justify-self: start;
+        }
+
+        .report2-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            padding: 0.85rem 0.8rem;
+            background: #0f172a;
+            color: #f8fafc;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .report2-toolbar {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) auto auto;
+            gap: 0.85rem;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6f9 100%);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+        }
+
+        .report2-toolbar .form-control,
+        .report2-toolbar .btn,
+        .report2-toolbar .btn-outline-secondary {
+            min-height: 46px;
+            border-radius: 0.8rem;
+        }
+
+        .report2-toolbar .btn {
+            min-width: 170px;
+            font-weight: 700;
+        }
+
+        .report2-freeze-picker {
+            position: relative;
+        }
+
+        .report2-freeze-toggle {
+            min-width: 240px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            font-weight: 700;
+            border-color: #cbd5e1;
+            background: #ffffff;
+        }
+
+        .report2-freeze-menu {
+            min-width: 280px;
+            padding: 0.75rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            box-shadow: 0 18px 32px rgba(15, 23, 42, 0.12);
+        }
+
+        .report2-freeze-menu__title {
+            margin-bottom: 0.25rem;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .report2-freeze-menu__copy {
+            margin-bottom: 0.7rem;
+            font-size: 0.73rem;
+            color: #64748b;
+        }
+
+        .report2-freeze-option {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.38rem 0.15rem;
+            font-size: 0.82rem;
+            color: #0f172a;
+        }
+
+        .report2-freeze-option input {
+            margin-top: 0;
+        }
+
+        .report2-freeze-current {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            padding: 0;
+        }
+
+        .report2-freeze-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.38rem 0.65rem;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #075985;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .report2-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 0.25rem;
+        }
+
+        .report2-summary-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .report2-summary-copy {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .report2-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            background: #ecfeff;
+            color: #155e75;
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .report2-table-card {
+            overflow: hidden;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: #ffffff;
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+        }
+
+        .report2-table-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.95rem 1.05rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(180deg, #f8fbfd 0%, #eef6f9 100%);
+        }
+
+        .report2-table-card__title {
+            margin: 0;
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .report2-table-card__copy {
+            margin: 0.2rem 0 0;
+            font-size: 0.82rem;
+            color: #64748b;
+        }
+
+        .report2-table-card__meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+            background: #e2e8f0;
+            color: #334155;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .report2-table-scroll {
+            overflow: auto;
+            max-height: calc(100vh - 280px);
+        }
+
+        .report2-table {
+            width: max-content;
+            min-width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .report2-table th,
+        .report2-table td {
+            border-right: 1px solid #cbd5e1;
+            border-bottom: 1px solid #cbd5e1;
+            padding: 0.45rem 0.55rem;
+            font-size: 0.76rem;
+            line-height: 1.25;
+            vertical-align: middle;
+            white-space: normal;
+            word-break: break-word;
+            background: #ffffff;
+        }
+
+        .report2-table thead th {
+            position: sticky;
+            z-index: 4;
+            top: 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: inset 0 -1px 0 rgba(255,255,255,0.12);
+        }
+
+        .report2-table th:first-child,
+        .report2-table td:first-child {
+            border-left: 1px solid #cbd5e1;
+        }
+
+        .report2-header-fixed {
+            background: #0f172a;
+            color: #f8fafc;
+            min-width: 120px;
+        }
+
+        .report2-header-milestone {
+            background: linear-gradient(180deg, #0f766e 0%, #115e59 100%);
+            color: #f8fafc;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .report2-header-task {
+            background: linear-gradient(180deg, #1d4ed8 0%, #1e3a8a 100%);
+            color: #eff6ff;
+            text-align: center;
+            min-width: 130px;
+        }
+
+        .report2-header-prereq {
+            background: linear-gradient(180deg, #475569 0%, #334155 100%);
+            color: #f8fafc;
+            text-transform: none;
+            letter-spacing: normal;
+            font-size: 0.7rem;
+            min-width: 130px;
+            white-space: normal;
+            font-weight: 600;
+        }
+
+        .report2-table tbody tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        .report2-project-name {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .report2-project-meta {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        .report2-value-cell {
+            text-align: center;
+            min-width: 130px;
+        }
+
+        .report2-fixed-col {
+            background: inherit;
+        }
+
+        .report2-frozen-cell {
+            position: sticky;
+            z-index: 3;
+            box-shadow: 1px 0 0 #cbd5e1, 12px 0 18px -18px rgba(15, 23, 42, 0.35);
+        }
+
+        .report2-fixed-col.report2-col-1 { min-width: 120px; width: 120px; }
+        .report2-fixed-col.report2-col-2 { min-width: 220px; width: 220px; }
+        .report2-fixed-col.report2-col-3 { min-width: 160px; width: 160px; }
+        .report2-fixed-col.report2-col-4 { min-width: 120px; width: 120px; }
+        .report2-fixed-col.report2-col-5 { min-width: 95px; width: 95px; }
+        .report2-fixed-col.report2-col-6 { min-width: 110px; width: 110px; }
+        .report2-fixed-col.report2-col-7 { min-width: 180px; width: 180px; }
+
+        .report2-table thead .report2-frozen-cell {
+            z-index: 6;
+        }
+
+        .report2-empty {
+            padding: 2.5rem 1rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        @@media (max-width: 991.98px) {
+            .report2-hero,
+            .report2-toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .report2-summary {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .report2-table-card__header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+}
+
+<div class="report2-shell">
+    <div class="report2-hero">
+        <div>
+            <div class="report2-hero__eyebrow"><i class="bi bi-layout-text-window-reverse"></i> Monitoring workspace</div>
+            <h2 class="report2-hero__title">Project Monitoring Matrix</h2>
+            <p class="report2-hero__copy">Track project-level milestone and task readiness in a single matrix, then freeze the fields your team needs to keep visible while reviewing the timeline.</p>
+            <div class="report2-hero__chips">
+                <span class="report2-hero__chip"><i class="bi bi-pin-angle"></i> Sticky project fields</span>
+                <span class="report2-hero__chip"><i class="bi bi-diagram-3"></i> Milestone-task matrix</span>
+                <span class="report2-hero__chip"><i class="bi bi-search"></i> Fast cross-project review</span>
+            </div>
+        </div>
+        <aside class="report2-hero__panel">
+            <div class="report2-hero__panel-label">Review controls</div>
+            <div class="report2-hero__panel-title">Keep the important project fields pinned while you scan milestone tasks.</div>
+            <div class="report2-hero__panel-copy">Freeze the columns your team relies on most, then use the matrix below to review readiness without losing project context.</div>
+            <div id="report2FreezeMeta" class="report2-hero__meta">
+                <i class="bi bi-pin-angle-fill"></i>
+                <span>7 frozen fields</span>
+            </div>
+            <div id="report2FreezeCurrent" class="report2-freeze-current"><span class="report2-freeze-pill">Loading frozen field options...</span></div>
+        </aside>
+    </div>
+
+    <div class="report2-toolbar">
+        <input id="report2Search" type="search" class="form-control" placeholder="Search by project number, project name, owner, plant, category, or products" />
+        <div class="report2-freeze-picker dropdown">
+            <button id="report2FreezeToggle" class="btn btn-outline-secondary dropdown-toggle report2-freeze-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span><i class="bi bi-pin-angle me-2"></i>Freeze fields</span>
+            </button>
+            <div id="report2FreezeMenu" class="dropdown-menu dropdown-menu-end report2-freeze-menu"></div>
+        </div>
+        <button id="report2Export" type="button" class="btn btn-success">
+            <i class="bi bi-file-earmark-excel me-2"></i>Export Excel
+        </button>
+    </div>
+
+    <div class="report2-summary">
+        <div>
+            <div class="report2-summary-title">Project Monitoring Report</div>
+            <div id="report2Summary" class="report2-summary-copy">Loading monitoring matrix...</div>
+        </div>
+        <div id="report2Count" class="report2-count">
+            <i class="bi bi-grid-3x3"></i>
+            <span>0 rows</span>
+        </div>
+    </div>
+
+    <div class="report2-table-card">
+        <div class="report2-table-card__header">
+            <div>
+                <h3 class="report2-table-card__title">Monitoring Workspace</h3>
+                <p class="report2-table-card__copy">Use search and freeze controls to focus on the columns that matter most during project reviews.</p>
+            </div>
+            <div id="report2TableMeta" class="report2-table-card__meta">
+                <i class="bi bi-layout-text-window-reverse"></i>
+                <span>Sticky project fields enabled</span>
+            </div>
+        </div>
+        <div id="report2TableWrap" class="report2-table-scroll">
+            <div class="report2-empty">Loading monitoring matrix...</div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/home/report2.js"></script>
+}

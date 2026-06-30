@@ -1,0 +1,26 @@
+﻿<!-- Icon Picker Modal -->
+<div id="iconModalBackdrop" class="modal-backdrop-custom">
+    <div class="modal-appearance">
+        <div class="modal-appearance-header">
+            <div class="modal-appearance-title">
+                <i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>
+                Choose a Bootstrap icon
+            </div>
+            <button class="modal-appearance-close" id="iconModalClose">&times;</button>
+        </div>
+        <div class="modal-appearance-body">
+            <div class="icon-search-row mb-1">
+                <input id="iconSearchInput"
+                       class="icon-search-input"
+                       type="text"
+                       placeholder="Search icons by name (e.g. rocket, bell, star)..." />
+                <span class="icon-search-hint" id="iconCountLabel"></span>
+            </div>
+            <div id="iconGrid" class="icon-grid"></div>
+        </div>
+        <div class="modal-appearance-footer">
+            <button class="btn-appearance" id="iconModalCancel">Cancel</button>
+            <button class="btn-appearance btn-appearance-primary" id="iconModalApply">Apply</button>
+        </div>
+    </div>
+</div>

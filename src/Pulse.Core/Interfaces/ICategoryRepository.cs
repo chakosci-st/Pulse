@@ -1,0 +1,22 @@
+﻿using Pulse.Core.Entities; 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+/// <summary>
+/// Interface for managing category data in the repository.
+/// </summary>
+namespace Pulse.Core.Interfaces
+{
+    public interface ICategoryRepository : IBaseRepository<Category, string>
+    {
+        Task<PagedResult<CategoryWithStats>> GetPagedListAsync(string searchValue, string sortBy, string sortDirection, bool? isActive, int pageNumber, int pageSize);
+
+        /// <summary>
+        /// Gets an entity by its ID.
+        /// </summary>
+        /// <returns>Entity.</returns>
+        Category Get(string id);
+    }
+}

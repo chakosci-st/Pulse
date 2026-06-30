@@ -1,0 +1,60 @@
+﻿<style>
+    .end > .direct-chat-text {
+        color: #fff;
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        margin-right: 60px;
+        margin-left: 0;
+    }
+        .end > .direct-chat-text::after, .end > .direct-chat-text::before {
+            border-left-color: #0d6efd;
+        }
+
+ 
+    .direct-chat-text {
+        border-radius: 0.5rem;
+        position: relative;
+        padding: 5px 10px;
+        margin: 5px 0 0 50px;
+        color: #000;
+        background-color: #e9ecef;
+        border: 1px solid #e9ecef;
+    }
+
+    .chatcontainer {
+        background: linear-gradient(135deg, #eff6ff, #f9fafb) !important;
+    }
+    .direct-chat-msg, .direct-chat-text {
+        display: block;
+    }
+
+    .chat-avatar-msg {
+        width: 40px !important;
+        height: 40px !important; 
+    }
+
+</style>
+<div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-chat-dots me-2"></i>Chat
+                    <small class="text-muted ms-2" id="chatContextLabel"></small>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0 d-flex flex-column chatcontainer" style="height: 400px;">
+                <div id="chatMessages" class="flex-grow-1 p-3 overflow-auto chatcontainer direct-chat-msg"></div>
+                <form id="chatForm" class="border-top p-2 bg-body">
+                    <div class="input-group">
+                        <input type="text" id="chatInput" class="form-control" placeholder="Type a message..." autocomplete="off" required>
+                        <button class="btn btn-primary" id="chatSubmit" type="button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2B3957B5-5C17-43E0-A25E-CDC88226AB37}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Pulse.Services</RootNamespace>
+    <AssemblyName>Pulse.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=8.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Implementations\ActivityService.cs" />
+    <Compile Include="Implementations\NotificationService.cs" />
+    <Compile Include="Implementations\ProjectOwnerService.cs" />
+    <Compile Include="Implementations\ActiveDirectoryService.cs" />
+    <Compile Include="Implementations\ApplicationService.cs" />
+    <Compile Include="Implementations\BaseEmailSender.cs" />
+    <Compile Include="Implementations\PlantMemberRegisteredSubscriber.cs" />
+    <Compile Include="Implementations\ProjectMemberService.cs" />
+    <Compile Include="Implementations\ProjectChatService.cs" />
+    <Compile Include="Implementations\ProjectCommentService.cs" />
+    <Compile Include="Implementations\ProjectEventSubscribersService.cs" />
+    <Compile Include="Implementations\ProjectFormService.cs" />
+    <Compile Include="Implementations\ProjectAttachmentService.cs" />
+    <Compile Include="Implementations\ProjectTaskService.cs" />
+    <Compile Include="Implementations\ProjectMilestoneService.cs" />
+    <Compile Include="Implementations\RoadmapService.cs" />
+    <Compile Include="Implementations\FormService.cs" />
+    <Compile Include="Implementations\FieldService.cs" />
+    <Compile Include="Implementations\PlantEventSubscribersService.cs" />
+    <Compile Include="Implementations\TaskEventSubscribersService.cs" />
+    <Compile Include="Implementations\EmailNotificationService.cs" />
+    <Compile Include="Implementations\PlantFieldService.cs" />
+    <Compile Include="Implementations\ProjectService.cs" />
+    <Compile Include="Implementations\SmtpEmailSenderService.cs" />
+    <Compile Include="Implementations\UserEventSubscriberService.cs" />
+    <Compile Include="Implementations\ProductService.cs" />
+    <Compile Include="Implementations\UserGroupMemberService.cs" />
+    <Compile Include="Implementations\PlantCategoryMilestoneService.cs" />
+    <Compile Include="Implementations\PlantCategoryService.cs" />
+    <Compile Include="Implementations\ProductionCalendarService.cs" />
+    <Compile Include="Implementations\UserGroupAccessRightService.cs" />
+    <Compile Include="Implementations\PlantUserGroupMemberService.cs" />
+    <Compile Include="Implementations\ProductDivisionService.cs" />
+    <Compile Include="Implementations\UserService.cs" />
+    <Compile Include="Implementations\UserGroupService.cs" />
+    <Compile Include="Implementations\ProductGroupService.cs" />
+    <Compile Include="Implementations\PlantService.cs" />
+    <Compile Include="Implementations\ModuleService.cs" />
+    <Compile Include="Implementations\MaturityLevelService.cs" />
+    <Compile Include="Implementations\CategoryService.cs" />
+    <Compile Include="Implementations\AnnotationTypeService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pulse.Core\Pulse.Core.csproj">
+      <Project>{609b14c0-2624-4ed5-bcec-b27ebeddcc2c}</Project>
+      <Name>Pulse.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pulse.DataTransformationObjects\Pulse.DataTransformationObjects.csproj">
+      <Project>{BC2E351B-29F4-4E7D-9FE6-D68BB55834A5}</Project>
+      <Name>Pulse.DataTransformationObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pulse.Infrastructure\Pulse.Infrastructure.csproj">
+      <Project>{4975BE0C-552E-4498-A144-F9B69F027EA6}</Project>
+      <Name>Pulse.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pulse.SharedUtilities\Pulse.SharedUtilities.csproj">
+      <Project>{ebb7a8d6-24e5-4f1b-b82b-7815055ed1ce}</Project>
+      <Name>Pulse.SharedUtilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

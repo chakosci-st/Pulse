@@ -1,0 +1,73 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Edit Module";
+    ViewBag.TitleIcon = "bi bi-pencil-square";
+    ViewBag.SubTitle = "Refine the selected access right before it is assigned to users.";
+    ViewBag.ContentHeaderChips = new[] { "Access rights", "Permission maintenance", "Security catalog" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Keep permission definitions accurate.";
+    ViewBag.ContentHeaderAsideBody = "Update the right here when naming, scope, or access expectations change so downstream assignments remain trustworthy.";
+    ViewBag.IsActiveAdminModules = "menu-open";
+    ViewBag.IsActiveAdminModulesAll = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+<form id="moduleForm" class="needs-validation" novalidate=""> 
+    @Html.Hidden("TransactionKey")
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        Update Module
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Update existing module</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="Code" class="form-label">Module Code<span class="required-indicator sr-only"></span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Code" name="Code" required="" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">Module Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Enter Module Name" required="">
+                            <div class="invalid-feedback">Please provide a module name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">Module Description</label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Description" name="Description" placeholder="Enter Module Description">
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <div id="isActive"></div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "Modules", new { area = "Admin" })" class="btn btn-default">Cancel</a> <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/Scripts/locals/switch-button.js"></script>
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Admin/Scripts/modules/edit.js"></script>
+}

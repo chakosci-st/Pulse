@@ -1,0 +1,908 @@
+@{
+    ViewBag.Title = ViewBag.Title ?? "Pulse FAQ";
+    ViewBag.TitleIcon = "bi bi-question-circle-fill";
+    ViewBag.SubTitle = ViewBag.SubTitle ?? "Quick answers for common Pulse questions, with links to the full user guide.";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+@section Styles {
+    <style>
+        .help-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.9fr);
+            gap: 1rem;
+            padding: 1.35rem 1.4rem;
+            border: 1px solid rgba(191, 219, 254, 0.9);
+            border-radius: 1.25rem;
+            background:
+                radial-gradient(circle at top right, rgba(59, 130, 246, 0.16), transparent 34%),
+                linear-gradient(135deg, #f8fbff 0%, #eef6ff 52%, #f8fafc 100%);
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08);
+        }
+
+        .help-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.32rem 0.72rem;
+            border-radius: 999px;
+            font-size: 0.73rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1d4ed8;
+            background: rgba(219, 234, 254, 0.95);
+            border: 1px solid rgba(147, 197, 253, 0.9);
+            margin-bottom: 0.85rem;
+        }
+
+        .help-hero__title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0;
+            color: #0f172a;
+            font-size: clamp(1.35rem, 2vw, 1.95rem);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        .help-hero__title-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #1d4ed8;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.55);
+            flex: 0 0 auto;
+        }
+
+        .help-hero__copy {
+            max-width: 64ch;
+            margin: 0.8rem 0 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .help-hero__links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+        }
+
+        .help-chip-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.08);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #0f172a;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .help-chip-link:hover {
+            color: #0f172a;
+            border-color: rgba(96, 165, 250, 0.45);
+            background: rgba(219, 234, 254, 0.92);
+            transform: translateY(-1px);
+        }
+
+        .help-hero__panel {
+            display: grid;
+            gap: 0.8rem;
+            align-content: start;
+        }
+
+        .help-hero__stat {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            box-shadow: 0 12px 28px rgba(148, 163, 184, 0.16);
+        }
+
+        .help-hero__stat-label {
+            display: block;
+            margin-bottom: 0.28rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .help-hero__stat strong {
+            display: block;
+            font-size: 0.96rem;
+            color: #0f172a;
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 2.1fr);
+            gap: 1.25rem;
+            margin-top: 1.25rem;
+        }
+
+        .help-sidebar-card,
+        .help-section-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            background: #fff;
+            box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.05);
+        }
+
+        .help-sidebar-card {
+            position: sticky;
+            top: 1rem;
+        }
+
+        .help-sidebar-card .card-body,
+        .help-section-card .card-body {
+            padding: 1.25rem;
+        }
+
+        .help-sidebar-title,
+        .help-section-title {
+            font-size: 0.86rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 0.95rem;
+        }
+
+        .help-nav {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .help-nav a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.8rem 0.9rem;
+            border-radius: 0.8rem;
+            text-decoration: none;
+            color: #0f172a;
+            background: #f8fafc;
+            border: 1px solid transparent;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .help-nav a:hover {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .help-mini-note {
+            margin-top: 1rem;
+            padding: 0.9rem;
+            border-radius: 0.85rem;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 0.84rem;
+        }
+
+        .help-content {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .help-section-card h2 {
+            margin-bottom: 0.4rem;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .help-section-card > .card-body > p {
+            color: #64748b;
+            font-size: 0.94rem;
+            margin-bottom: 1rem;
+        }
+
+        .help-callout-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .help-callout {
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.9rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .help-callout i {
+            font-size: 1.2rem;
+            color: #0f766e;
+        }
+
+        .help-callout h3 {
+            margin-top: 0.7rem;
+            margin-bottom: 0.45rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .help-callout p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+
+        .help-module-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .help-module {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1rem;
+            background: #fff;
+        }
+
+        .help-module-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .help-module-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 1.1rem;
+            flex: 0 0 auto;
+        }
+
+        .help-module h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .help-module p {
+            margin: 0.2rem 0 0;
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+
+        .help-list {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .help-list-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            color: #334155;
+            font-size: 0.88rem;
+        }
+
+        .help-list-item i {
+            color: #0ea5e9;
+            margin-top: 0.18rem;
+            font-size: 0.7rem;
+        }
+
+        .help-workflow {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .help-workflow + .help-workflow {
+            margin-top: 0.9rem;
+        }
+
+        .help-workflow-head {
+            padding: 0.95rem 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .help-workflow-head h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .help-workflow-head p {
+            margin: 0.3rem 0 0;
+            font-size: 0.84rem;
+            color: #64748b;
+        }
+
+        .help-steps {
+            display: grid;
+            gap: 0.9rem;
+            padding: 1rem;
+        }
+
+        .help-step {
+            display: grid;
+            grid-template-columns: 2rem 1fr;
+            gap: 0.8rem;
+        }
+
+        .help-step-number {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .help-step h4 {
+            margin: 0 0 0.2rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .help-step p {
+            margin: 0;
+            font-size: 0.87rem;
+            color: #64748b;
+        }
+
+        .help-accordion .accordion-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.95rem;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .help-accordion .accordion-button {
+            font-weight: 700;
+            color: #0f172a;
+            background: #f8fafc;
+        }
+
+        .help-accordion .accordion-button:not(.collapsed) {
+            background: #eff6ff;
+            color: #1d4ed8;
+            box-shadow: none;
+        }
+
+        .help-accordion .accordion-body {
+            font-size: 0.9rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .help-cta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .help-cta {
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid #dbe4f0;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .help-cta h3 {
+            margin-bottom: 0.4rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .help-cta p {
+            margin-bottom: 0.75rem;
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+
+        .help-cta a {
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        @@media (max-width: 1199.98px) {
+            .help-hero,
+            .help-grid,
+            .help-callout-grid,
+            .help-module-grid,
+            .help-cta-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .help-sidebar-card {
+                position: static;
+            }
+        }
+    </style>
+}
+
+<div class="page-shell">
+    <div class="container-fluid">
+        <section class="help-hero">
+            <div>
+                <span class="help-hero__eyebrow">
+                    <i class="bi bi-life-preserver"></i>
+                    Pulse FAQ
+                </span>
+                <h1 class="help-hero__title">
+                    <span class="help-hero__title-icon">
+                        <i class="bi bi-question-circle"></i>
+                    </span>
+                    <span>Quick Answers For Common Pulse Questions</span>
+                </h1>
+                <p class="help-hero__copy">
+                    Use this page when you need a fast answer about project creation, task work, permissions, statuses, notifications, or where a feature belongs.
+                    For the complete feature walkthrough, onboarding path, and role-based ways of working, open the full user guide.
+                </p>
+                <div class="help-hero__links">
+                    <a class="help-chip-link" href="#faq"><i class="bi bi-patch-question"></i>Browse FAQ</a>
+                    <a class="help-chip-link" href="#quick-links"><i class="bi bi-box-arrow-up-right"></i>Quick Links</a>
+                    <a class="help-chip-link" href="@(Url.Action("UserGuide", "Home") + "#training-path")"><i class="bi bi-journal-bookmark"></i>Training Path</a>
+                    <a class="help-chip-link" href="@(Url.Action("UserGuide", "Home") + "#role-quick-start")"><i class="bi bi-people"></i>Role Quick Start</a>
+                    <a class="help-chip-link" href="@Url.Action("RecentChanges", "Home")"><i class="bi bi-clock-history"></i>Recent Changes</a>
+                </div>
+            </div>
+            <div class="help-hero__panel">
+                <div class="help-hero__stat">
+                    <span class="help-hero__stat-label">Best For</span>
+                    <strong>Fast answers during day-to-day work</strong>
+                </div>
+                <div class="help-hero__stat">
+                    <span class="help-hero__stat-label">Topics</span>
+                    <strong>Navigation, roles, statuses, collaboration, and access</strong>
+                </div>
+                <div class="help-hero__stat">
+                    <span class="help-hero__stat-label">Need More Detail?</span>
+                    <strong>Open the User Guide for feature-by-feature instructions and working standards</strong>
+                </div>
+            </div>
+        </section>
+
+        <div class="help-grid">
+            <aside class="card help-sidebar-card">
+                <div class="card-body">
+                    <div class="help-sidebar-title">On This Page</div>
+                    <nav class="help-nav">
+                        <a href="#faq">Frequently Asked Questions <i class="bi bi-arrow-right"></i></a>
+                        <a href="#start-here">Start Here <i class="bi bi-arrow-right"></i></a>
+                        <a href="#quick-links">Quick Links <i class="bi bi-arrow-right"></i></a>
+                        <a href="@(Url.Action("UserGuide", "Home") + "#training-path")">Training Path <i class="bi bi-arrow-right"></i></a>
+                        <a href="@(Url.Action("UserGuide", "Home") + "#role-quick-start")">Role Quick Start <i class="bi bi-arrow-right"></i></a>
+                        <a href="@Url.Action("UserGuide", "Home")">Full User Guide <i class="bi bi-arrow-right"></i></a>
+                    </nav>
+                    <div class="help-mini-note">
+                        Keep this page for quick reference. Use the User Guide for onboarding, training, and process alignment.
+                    </div>
+                </div>
+            </aside>
+
+            <div class="help-content">
+                <section class="card help-section-card" id="faq">
+                    <div class="card-body">
+                        <div class="help-section-title">FAQ</div>
+                        <h2>Frequently Asked Questions</h2>
+                        <p>
+                            These answers match the current Pulse navigation and the current role-based workflow inside the application.
+                        </p>
+
+                        <div class="accordion help-accordion" id="faqAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseOne" aria-expanded="true" aria-controls="faqCollapseOne">
+                                        Where do I go to create a new project?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseOne" class="accordion-collapse collapse show" aria-labelledby="faqOne" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Start in <strong>Register</strong>. That workflow is the proper entry point for project creation because it captures project context,
+                                        ownership, members, products, and the roadmap-derived execution structure in one process.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseTwo" aria-expanded="false" aria-controls="faqCollapseTwo">
+                                        What is the difference between Dashboard, Projects, Tasks, and View?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseTwo" class="accordion-collapse collapse" aria-labelledby="faqTwo" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Dashboard</strong> is for monitoring. <strong>Projects</strong> is the main workspace for finding and managing project records.
+                                        <strong>Tasks</strong> is the focused list for execution items assigned to users. <strong>View</strong> is a supporting read-oriented workspace used in some environments for alternate project browsing.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseThree" aria-expanded="false" aria-controls="faqCollapseThree">
+                                        What is the difference between Details, Review, and Overview inside a project?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseThree" class="accordion-collapse collapse" aria-labelledby="faqThree" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Use <strong>Details</strong> for read-heavy project context, <strong>Review</strong> for milestone and activity execution, and <strong>Overview</strong> for broader project maintenance,
+                                        updates, and supporting collaboration content.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqThreeB">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseThreeB" aria-expanded="false" aria-controls="faqCollapseThreeB">
+                                        What should a new user read or practice first?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseThreeB" class="accordion-collapse collapse" aria-labelledby="faqThreeB" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Start with the <strong>Training Path</strong> in the full user guide, then use the <strong>Role Quick Start</strong> section that matches your responsibilities.
+                                        That sequence teaches navigation first, then day-to-day actions, then the role-specific parts of Pulse.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqFour">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseFour" aria-expanded="false" aria-controls="faqCollapseFour">
+                                        Why is a project, milestone, or task showing At Risk or Not Started?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseFour" class="accordion-collapse collapse" aria-labelledby="faqFour" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <strong>At Risk</strong> is used when an item is still ongoing but its target date has already passed. Blank or null status values are treated as <strong>Not Started</strong>
+                                        so the system displays a consistent state instead of leaving status undefined.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqFive">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseFive" aria-expanded="false" aria-controls="faqCollapseFive">
+                                        Why can I not see some menus or actions that other users have?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseFive" class="accordion-collapse collapse" aria-labelledby="faqFive" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Pulse visibility is controlled by user groups and module access. Menus, list pages, and edit actions are shown only when your account has the required module permissions
+                                        for that feature and, for project workspaces, the right plant or project membership.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqSix">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseSix" aria-expanded="false" aria-controls="faqCollapseSix">
+                                        Who should use Templates, Operations, and Admin?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseSix" class="accordion-collapse collapse" aria-labelledby="faqSix" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        These areas are normally for power users. <strong>Templates</strong> maintains reusable project structure and master data. <strong>Operations</strong> handles plant and calendar setup.
+                                        <strong>Admin</strong> controls modules, user groups, and broader governance.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqSeven">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseSeven" aria-expanded="false" aria-controls="faqCollapseSeven">
+                                        Where should I communicate or follow up on work?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseSeven" class="accordion-collapse collapse" aria-labelledby="faqSeven" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Use project comments, attachments, and chats while you are inside the relevant project or task context. Use <strong>Notifications</strong> to review system-generated reminders and unread items,
+                                        then act on the linked project or task rather than tracking updates outside Pulse.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqEight">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseEight" aria-expanded="false" aria-controls="faqCollapseEight">
+                                        When should I use reports instead of editing inside a module?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseEight" class="accordion-collapse collapse" aria-labelledby="faqEight" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Use reports when you need exported or cross-cutting views of data. Use the core modules for operational updates. Reports are for reviewing and sharing information,
+                                        not for replacing the normal project, task, template, or admin workflows.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqNine">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseNine" aria-expanded="false" aria-controls="faqCollapseNine">
+                                        Why do some links or screens look different across environments?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseNine" class="accordion-collapse collapse" aria-labelledby="faqNine" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Some navigation paths are still being expanded, and some features are only available when a given environment has the required permissions or supporting data configured.
+                                        If a page feels partial, check your access first, then use the user guide to confirm the intended workflow.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqTen">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseTen" aria-expanded="false" aria-controls="faqCollapseTen">
+                                        What does the Dashboard personal/all-user toggle do?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseTen" class="accordion-collapse collapse" aria-labelledby="faqTen" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        The toggle changes the scope of the dashboard data. Use the personal view for work connected to your account, such as ownership, membership, or assigned tasks.
+                                        Use the all-user view for broader portfolio review when your permissions allow it. Pulse remembers your last selection as a user preference.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqEleven">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseEleven" aria-expanded="false" aria-controls="faqCollapseEleven">
+                                        Why do my dashboard numbers differ from another user's numbers?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseEleven" class="accordion-collapse collapse" aria-labelledby="faqEleven" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        First compare dashboard scope: one user may be viewing personal work while another is viewing all users. Then compare permissions, plant access, project membership,
+                                        and ownership. Pulse intentionally filters data based on scope and access, so different users may see different counts.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqTwelve">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseTwelve" aria-expanded="false" aria-controls="faqCollapseTwelve">
+                                        What is shown in Settings/Profile under workload and account summary?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseTwelve" class="accordion-collapse collapse" aria-labelledby="faqTwelve" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Settings/Profile summarizes the logged-in user's account context. It shows task counts, active notifications, access groups, projects owned, and distinct projects
+                                        where the user is a member. Use it to confirm workload and access context without opening each project individually.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqThirteen">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseThirteen" aria-expanded="false" aria-controls="faqCollapseThirteen">
+                                        What is the difference between projects owned and projects as member?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseThirteen" class="accordion-collapse collapse" aria-labelledby="faqThirteen" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Projects owned</strong> counts projects where the user is recorded as the project owner. <strong>Projects as member</strong> counts distinct projects where the user
+                                        appears in the project membership list. A user can participate in projects they do not own.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqFourteen">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseFourteen" aria-expanded="false" aria-controls="faqCollapseFourteen">
+                                        Where do administrators maintain users?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseFourteen" class="accordion-collapse collapse" aria-labelledby="faqFourteen" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Administrators use <strong>Admin &gt; Users</strong> for user maintenance. The area includes the user list, new user form, edit/display pages, configure page,
+                                        and user reports. It follows the same general maintenance pattern as User Groups.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqFifteen">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseFifteen" aria-expanded="false" aria-controls="faqCollapseFifteen">
+                                        How should I configure a user's groups and plant access?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseFifteen" class="accordion-collapse collapse" aria-labelledby="faqFifteen" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Open the user's Configure page. Use the User Groups table to allow or restrict group membership, then use the Plants table to allow or restrict plant membership.
+                                        If the user needs plant-specific roles, open the plant setup action and assign the correct plant user groups for that plant.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqSixteen">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseSixteen" aria-expanded="false" aria-controls="faqCollapseSixteen">
+                                        What is the difference between a user group and a plant user group?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseSixteen" class="accordion-collapse collapse" aria-labelledby="faqSixteen" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        A user group grants broader module or role access. A plant user group applies role membership within a specific plant context. Use both together when a person needs
+                                        general system permissions plus plant-specific responsibilities.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqSeventeen">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseSeventeen" aria-expanded="false" aria-controls="faqCollapseSeventeen">
+                                        What can I use the Admin Users report cards for?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseSeventeen" class="accordion-collapse collapse" aria-labelledby="faqSeventeen" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        User report cards show profile photo or initials, user status, projects owned, projects as member, and pending tasks. Use them for workload review, access audits,
+                                        onboarding checks, and spotting users who may need profile or assignment cleanup.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqEighteen">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseEighteen" aria-expanded="false" aria-controls="faqCollapseEighteen">
+                                        If a user cannot see a plant, project, or action, what should be checked first?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseEighteen" class="accordion-collapse collapse" aria-labelledby="faqEighteen" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Check the user's account status, module permissions, user groups, plant membership, plant user groups, and project membership or ownership. For project workspaces,
+                                        access can depend on more than one layer, so avoid changing only one setting without confirming the rest.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqNineteen">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseNineteen" aria-expanded="false" aria-controls="faqCollapseNineteen">
+                                        When should I use Admin Users instead of User Groups?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseNineteen" class="accordion-collapse collapse" aria-labelledby="faqNineteen" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Use <strong>User Groups</strong> when maintaining the group definition itself and its module permissions. Use <strong>Admin Users</strong> when maintaining one person:
+                                        their profile, assigned groups, plant access, plant-specific group memberships, and workload report card.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="faqTwenty">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseTwenty" aria-expanded="false" aria-controls="faqCollapseTwenty">
+                                        Where should users go for a full onboarding walkthrough?
+                                    </button>
+                                </h2>
+                                <div id="faqCollapseTwenty" class="accordion-collapse collapse" aria-labelledby="faqTwenty" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Open the full <strong>User Guide</strong>. It includes the training path, audience views, role quick starts, feature playbook, dashboard scope guidance,
+                                        profile/account summary, Admin Users maintenance, operating principles, workflows, status definitions, screenshots, and direct links.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="start-here">
+                    <div class="card-body">
+                        <div class="help-section-title">Start Here</div>
+                        <h2>Which Page Should You Open First?</h2>
+                        <p>
+                            If you only need direction and not the full guide, start with the page that matches the job you are trying to do.
+                        </p>
+                        <div class="help-callout-grid">
+                            <div class="help-callout">
+                                <i class="bi bi-journal-plus"></i>
+                                <h3>Create Work</h3>
+                                <p>Open Register to create a new project and let Pulse apply the roadmap and master data structure correctly.</p>
+                            </div>
+                            <div class="help-callout">
+                                <i class="bi bi-columns-gap"></i>
+                                <h3>Manage Work</h3>
+                                <p>Open Projects when you need the full project workspace, including Details, Review, Overview, comments, and attachments.</p>
+                            </div>
+                            <div class="help-callout">
+                                <i class="bi bi-ui-checks"></i>
+                                <h3>Execute Work</h3>
+                                <p>Open Tasks when you need a personal or assignment-focused queue for due dates, edits, and status updates.</p>
+                            </div>
+                            <div class="help-callout">
+                                <i class="bi bi-people"></i>
+                                <h3>Learn Your Role</h3>
+                                <p>Open the User Guide training path and role quick start if you are onboarding or taking on new responsibilities.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card help-section-card" id="quick-links">
+                    <div class="card-body">
+                        <div class="help-section-title">Quick Links</div>
+                        <h2>Jump Directly Into The Most Used Areas</h2>
+                        <p>
+                            These links point to current screens that are already exposed in the application.
+                        </p>
+                        <div class="help-cta-grid">
+                            <div class="help-cta">
+                                <h3>Dashboard</h3>
+                                <p>Open the landing page for project, milestone, and task monitoring.</p>
+                                <a href="@Url.Action("Index", "Home", new { area = "" })">Go to Dashboard</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Register Project</h3>
+                                <p>Start a new project using the standard Pulse registration flow.</p>
+                                <a href="@Url.Action("Create", "Projects", new { area = "Projects" })">Open Register</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Projects</h3>
+                                <p>Browse and manage existing project records.</p>
+                                <a href="@Url.Action("Index", "Projects", new { area = "Projects" })">Open Projects</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Tasks</h3>
+                                <p>Work through assigned tasks, due dates, and execution updates.</p>
+                                <a href="@Url.Action("Index", "ProjectTasks", new { area = "Projects" })">Open Tasks</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Notifications</h3>
+                                <p>Review unread and active notifications, then open the linked work item.</p>
+                                <a href="@Url.Action("Notifications", "Home", new { area = "" })">Open Notifications</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Full User Guide</h3>
+                                <p>Read the complete feature walkthrough, onboarding path, and role-based ways of working in Pulse.</p>
+                                <a href="@Url.Action("UserGuide", "Home")">Open User Guide</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Profile</h3>
+                                <p>Review account details, access groups, task counts, notification counts, and project involvement.</p>
+                                <a href="@Url.Action("Index", "Profile", new { area = "Settings" })">Open Profile</a>
+                            </div>
+                            <div class="help-cta">
+                                <h3>Admin Users</h3>
+                                <p>Maintain user records, groups, plant access, and user report cards when you have admin permissions.</p>
+                                <a href="@Url.Action("Index", "Users", new { area = "Admin" })">Open Admin Users</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

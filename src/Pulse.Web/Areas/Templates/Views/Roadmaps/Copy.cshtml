@@ -1,0 +1,92 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New Roadmap";
+    ViewBag.TitleIcon = "bi bi-plus-circle";
+    ViewBag.SubTitle = "Start from an existing roadmap to create a reusable variant for another project type or delivery model.";
+    ViewBag.ContentHeaderChips = new[] { "Reusable project templates", "Task sequence planning", "Project assignment ready" };
+    ViewBag.ContentHeaderAsideLabel = "Roadmap copy";
+    ViewBag.ContentHeaderAsideTitle = "Use a proven template as the base for a new reusable project structure.";
+    ViewBag.ContentHeaderAsideBody = "Copies let teams preserve what already works while tailoring the roadmap for a different product or execution pattern.";
+    ViewBag.IsActiveTemplatesRoadmaps = "menu-open";
+    ViewBag.IsActiveTemplatesRoadmapsNew = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+@section styles{
+    <!-- Dropzone -->
+    <link href="~/node_modules/dropzone/dist/dropzone.css" rel="stylesheet" />
+    <!-- Select2 -->
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Summernote -->
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+    <!-- Local Styles - Dynamic Fields -->
+    <link href="~/Content/locals/dynamic-fields.css" rel="stylesheet" />
+
+}
+
+
+<!--begin::Row-->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body p-4">
+                <h5 class=" mb-3">
+                    New Roadmap
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Create a new roadmap for your application</small>
+                </h5>
+                <input type="hidden" id="IsRoadmapCopyMode" value="1" />
+                <input type="hidden" id="RoadmapSysId" value="@ViewBag.Id" />
+                <hr class="mb-4" />
+                <form id="formRoadmap" class="needs-validation" novalidate>
+                    @Html.Partial("_DetailsNew")
+                </form>
+                <hr class="my-4" />
+                @Html.Partial("_Builder")
+            </div>
+            <!-- Card Footer -->
+            <div class="card-footer bg-white border-top-0 rounded-bottom-4 d-flex justify-content-end gap-2">
+                <a href="@Url.Action("Index", "Roadmaps", new { area = "Templates" })" class="btn btn-outline-secondary">Cancel</a>
+                <button id="buttonClear" class="btn btn-outline-secondary">Clear</button>
+                <button onclick="$('#formRoadmap').submit();" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!--end::Row-->
+
+
+
+
+
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <!-- Dependencies -->
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <script src="~/node_modules/sortablejs/Sortable.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+    <script src="~/node_modules/select2/dist/js/select2.full.min.js"></script>
+
+    <!-- Your modular dynamic field control and helpers -->
+    <script src="~/Scripts/locals/commonUtils.js"></script>
+    <script src="~/scripts/locals/utils.js"></script>
+    <script src="~/scripts/locals/rules-builder.js"></script>
+    <script src="~/scripts/locals/dynamic-fields.js"></script>
+    <script src="~/scripts/locals/designer-main.js"></script>
+
+    <script src="~/Areas/Templates/Scripts/roadmaps/common.js"></script>
+    <script src="~/Areas/Templates/Scripts/roadmaps/new.js"></script>
+    <script src="~/Areas/Templates/Scripts/roadmaps/fetchPageInfo.js"></script>
+}

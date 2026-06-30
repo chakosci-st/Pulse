@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{609B14C0-2624-4ED5-BCEC-B27EBEDDCC2C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Pulse.Core</RootNamespace>
+    <AssemblyName>Pulse.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Converters\FieldOptionListConverter.cs" />
+    <Compile Include="Converters\IntBoolJsonConverter.cs" />
+    <Compile Include="Converters\FormFieldOptionListConverter.cs" />
+    <Compile Include="Entities\ActiveDirectoryGroupMember.cs" />
+    <Compile Include="Entities\ActiveDirectoryGroup.cs" />
+    <Compile Include="Entities\ActiveDirectoryUser.cs" />
+    <Compile Include="Entities\Activity.cs" />
+    <Compile Include="Entities\Annotation.cs" />
+    <Compile Include="Entities\AnnotationType.cs" />
+    <Compile Include="Entities\ApplicationParameter.cs" />
+    <Compile Include="Entities\BaseEntity.cs" />
+    <Compile Include="Entities\Breadcrumb.cs" />
+    <Compile Include="Entities\Category.cs" />
+    <Compile Include="Entities\ChatMessage.cs" />
+    <Compile Include="Entities\FieldWithStats.cs" />
+    <Compile Include="Entities\Form.cs" />
+    <Compile Include="Entities\FormEntityLink.cs" />
+    <Compile Include="Entities\FormExtended.cs" />
+    <Compile Include="Entities\FormField.cs" />
+    <Compile Include="Entities\FieldOption.cs" />
+    <Compile Include="Entities\FormFieldOption.cs" />
+    <Compile Include="Entities\FieldRule.cs" />
+    <Compile Include="Entities\FormFieldRule.cs" />
+    <Compile Include="Entities\KeyMap.cs" />
+    <Compile Include="Entities\NodeFormRow.cs" />
+    <Compile Include="Entities\NodeRow.cs" />
+    <Compile Include="Entities\Notification.cs" />
+    <Compile Include="Entities\NotificationViewed.cs" />
+    <Compile Include="Entities\PlantMember.cs" />
+    <Compile Include="Entities\PlantRoadmapLink.cs" />
+    <Compile Include="Entities\PlantRoadmapLinkExtended.cs" />
+    <Compile Include="Entities\PrereqRow.cs" />
+    <Compile Include="Entities\ProductionCalendarWithStats.cs" />
+    <Compile Include="Entities\ProductGroupWithStats.cs" />
+    <Compile Include="Entities\ProductDivisionWithStats.cs" />
+    <Compile Include="Entities\CategoryWithStats.cs" />
+    <Compile Include="Entities\MaturityLevelWithStats.cs" />
+    <Compile Include="Entities\ProjectAttachment.cs" />
+    <Compile Include="Entities\ProjectChat.cs" />
+    <Compile Include="Entities\ProjectComment.cs" />
+    <Compile Include="Entities\ProjectDashboard.cs" />
+    <Compile Include="Entities\ProjectExtend.cs" />
+    <Compile Include="Entities\ProjectFormSubmission.cs" />
+    <Compile Include="Entities\ProjectFormSubmissionExtended.cs" />
+    <Compile Include="Entities\ProjectFormSubmissionValue.cs" />
+    <Compile Include="Entities\ProjectMonitoringDmsValue.cs" />
+    <Compile Include="Entities\ProjectMonitoringReport.cs" />
+    <Compile Include="Entities\ProjectNotification.cs" />
+    <Compile Include="Entities\ProjectOwner.cs" />
+    <Compile Include="Entities\ProjectProduct.cs" />
+    <Compile Include="Entities\ProjectRoadmapRefresh.cs" />
+    <Compile Include="Entities\ProjectTargetRevision.cs" />
+    <Compile Include="Entities\ProjectTask.cs" />
+    <Compile Include="Entities\ProjectTaskItem.cs" />
+    <Compile Include="Entities\Roadmap.cs" />
+    <Compile Include="Entities\RoadmapActivity.cs" />
+    <Compile Include="Entities\RoadmapActivityPrerequisite.cs" />
+    <Compile Include="Entities\RoadmapExtended.cs" />
+    <Compile Include="Entities\RoadmapMilestone.cs" />
+    <Compile Include="Entities\RoadmapWithStats.cs" />
+    <Compile Include="Entities\RootFormRow.cs" />
+    <Compile Include="Entities\Field.cs" />
+    <Compile Include="Entities\MaturityLevel.cs" />
+    <Compile Include="Entities\PagedResult.cs" />
+    <Compile Include="Entities\PlantCounter.cs" />
+    <Compile Include="Entities\PlantField.cs" />
+    <Compile Include="Entities\PlantWithStats.cs" />
+    <Compile Include="Entities\ProjectField.cs" />
+    <Compile Include="Entities\UserGroupMember.cs" />
+    <Compile Include="Entities\UserGroupModule.cs" />
+    <Compile Include="Entities\Module.cs" />
+    <Compile Include="Entities\Plant.cs" />
+    <Compile Include="Entities\PlantCategory.cs" />
+    <Compile Include="Entities\PlantCategoryMilestone.cs" />
+    <Compile Include="Entities\ProductDivision.cs" />
+    <Compile Include="Entities\ProductGroup.cs" />
+    <Compile Include="Entities\ProductionCalendar.cs" />
+    <Compile Include="Entities\Project.cs" />
+    <Compile Include="Entities\ProjectAuditTrail.cs" />
+    <Compile Include="Entities\ProjectMember.cs" />
+    <Compile Include="Entities\ProjectMilestone.cs" />
+    <Compile Include="Entities\TargetRevision.cs" />
+    <Compile Include="Entities\StatusChange.cs" />
+    <Compile Include="Entities\Product.cs" />
+    <Compile Include="Entities\ProjectStatusChange.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="Entities\UserGroup.cs" />
+    <Compile Include="Entities\PlantUserGroupMember.cs" />
+    <Compile Include="Entities\UserGroupAccessRight.cs" />
+    <Compile Include="Entities\WorkWeekCalendar.cs" />
+    <Compile Include="Enums\ActiveDirectoryKeyTypes.cs" />
+    <Compile Include="Enums\Entities.cs" />
+    <Compile Include="Enums\LDAPParameters.cs" />
+    <Compile Include="Enums\Status.cs" />
+    <Compile Include="Enums\WorkflowStatus.cs" />
+    <Compile Include="EventArgs\PlantMemberRegisteredEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectTaskCanceledEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectMilestoneCanceledEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectTaskCompletedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectMilestoneCompletedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectTaskHoldEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectMilestoneHoldEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectTaskNotStartedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectMilestoneNotStartedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectTaskResumedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectTaskStartedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectPromotedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectDeletedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectFieldCreatedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectFieldDeletedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectMilestoneResumedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectMilestoneStartedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectUpdatedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectNotStartedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectResumedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectFieldUpdatedEventArgs.cs" />
+    <Compile Include="EventArgs\TaskUpdatedEventArgs.cs" />
+    <Compile Include="EventArgs\TaskContinuedEventArgs.cs" />
+    <Compile Include="EventArgs\TaskHoldEventArgs.cs" />
+    <Compile Include="EventArgs\TaskFailedEventArgs.cs" />
+    <Compile Include="EventArgs\TaskCreatedEventArgs.cs" />
+    <Compile Include="EventArgs\TaskCompletedEventArgs.cs" />
+    <Compile Include="EventArgs\TaskCanceledEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectFailedEventArgs.cs" />
+    <Compile Include="EventArgs\TaskStartedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectStartedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectHoldEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectCanceledEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectCompletedEventArgs.cs" />
+    <Compile Include="EventArgs\TaskActorsNotifiedEventArgs.cs" />
+    <Compile Include="EventArgs\ProjectCreatedEventArgs.cs" />
+    <Compile Include="EventArgs\TaskStatusChangeEventArgs.cs" />
+    <Compile Include="EventArgs\UserUpdatedEventArgs.cs" />
+    <Compile Include="EventArgs\UserCreatedEventArgs.cs" />
+    <Compile Include="Interfaces\IActiveDirectoryService.cs" />
+    <Compile Include="Interfaces\IActiveDirectoryGroupRepository.cs" />
+    <Compile Include="Interfaces\IApplicationService.cs" />
+    <Compile Include="Interfaces\IBaseChangeStatusService.cs" />
+    <Compile Include="Interfaces\IFieldService.cs" />
+    <Compile Include="Interfaces\IFilteredListProvider.cs" />
+    <Compile Include="Interfaces\IActivityRepository.cs" />
+    <Compile Include="Interfaces\IActivityService.cs" />
+    <Compile Include="Interfaces\IFieldOptionRepository.cs" />
+    <Compile Include="Interfaces\IFieldRepository.cs" />
+    <Compile Include="Interfaces\IFieldRuleRepository.cs" />
+    <Compile Include="Interfaces\IProjectCommentService.cs" />
+    <Compile Include="Interfaces\IProjectChatService.cs" />
+    <Compile Include="Interfaces\IProjectChatRepository.cs" />
+    <Compile Include="Interfaces\IProjectAttachmentService.cs" />
+    <Compile Include="Interfaces\INotificationRepository.cs" />
+    <Compile Include="Interfaces\IProjectCommentRepository.cs" />
+    <Compile Include="Interfaces\IProjectAttachmentRepository.cs" />
+    <Compile Include="Interfaces\INotificationService.cs" />
+    <Compile Include="Interfaces\IProjectNotificationRepository.cs" />
+    <Compile Include="Interfaces\IProjectNotificationService.cs" />
+    <Compile Include="Interfaces\IProjectOwnerService.cs" />
+    <Compile Include="Interfaces\IProjectTargetRevisionRepository.cs" />
+    <Compile Include="Interfaces\IProjectFormService.cs" />
+    <Compile Include="Interfaces\IProjectFormSubmissionValueRepository.cs" />
+    <Compile Include="Interfaces\IProjectFormSubmissionRepository.cs" />
+    <Compile Include="Interfaces\IPlantRoadmapLinkRepository.cs" />
+    <Compile Include="Interfaces\IProjectTaskService.cs" />
+    <Compile Include="Interfaces\IProjectStatusChangeRepository.cs" />
+    <Compile Include="Interfaces\IProjectTaskRepository.cs" />
+    <Compile Include="Interfaces\IProjectOwnerRepository.cs" />
+    <Compile Include="Interfaces\IProjectProductRepository.cs" />
+    <Compile Include="Interfaces\IProductService.cs" />
+    <Compile Include="Interfaces\IRoadmapMilestoneRepository.cs" />
+    <Compile Include="Interfaces\IRoadmapActivityPrerequisiteRepository.cs" />
+    <Compile Include="Interfaces\IRoadmapActivityRepository.cs" />
+    <Compile Include="Interfaces\IFormFieldRuleRepository.cs" />
+    <Compile Include="Interfaces\IFormFieldOptionRepository.cs" />
+    <Compile Include="Interfaces\IFormFieldRepository.cs" />
+    <Compile Include="Interfaces\IFormEntityLinkRepository.cs" />
+    <Compile Include="Interfaces\IFormRepository.cs" />
+    <Compile Include="Interfaces\IRoadmapService.cs" />
+    <Compile Include="Interfaces\IFormService.cs" />
+    <Compile Include="Interfaces\IPlantMemberRepository.cs" />
+    <Compile Include="Interfaces\IPlantMemberService.cs" />
+    <Compile Include="Interfaces\IRoadmapRepository.cs" />
+    <Compile Include="Interfaces\IProjectFieldService.cs" />
+    <Compile Include="Interfaces\IProjectMilestoneService.cs" />
+    <Compile Include="Interfaces\IPlantNotificationService.cs" />
+    <Compile Include="Interfaces\ITargetRevisionRepository.cs" />
+    <Compile Include="Interfaces\IStatusChangeRepository.cs" />
+    <Compile Include="Interfaces\IEmailSender.cs" />
+    <Compile Include="Interfaces\IUserGroupMemberRepository.cs" />
+    <Compile Include="Interfaces\IUserGroupMemberService.cs" />
+    <Compile Include="Interfaces\IPlantFieldRepository.cs" />
+    <Compile Include="Interfaces\IPlantFieldService.cs" />
+    <Compile Include="Interfaces\IProjectFieldRepository.cs" />
+    <Compile Include="Interfaces\IProjectMilestoneRepository.cs" />
+    <Compile Include="Interfaces\IProductRepository.cs" />
+    <Compile Include="Interfaces\IProjectMemberRepository.cs" />
+    <Compile Include="Interfaces\IProjectRepository.cs" />
+    <Compile Include="Interfaces\IProjectMemberService.cs" />
+    <Compile Include="Interfaces\IProjectService.cs" />
+    <Compile Include="Interfaces\IPlantCategoryMilestoneRepository.cs" />
+    <Compile Include="Interfaces\IPlantCategoryRepository.cs" />
+    <Compile Include="Interfaces\IPlantCategoryMilestoneService.cs" />
+    <Compile Include="Interfaces\IPlantCategoryService.cs" />
+    <Compile Include="Interfaces\IProductionCalendarRepository.cs" />
+    <Compile Include="Interfaces\IProductionCalendarService.cs" />
+    <Compile Include="Interfaces\IUserGroupAccessRightRepository.cs" />
+    <Compile Include="Interfaces\IUserGroupAccessRightService.cs" />
+    <Compile Include="Interfaces\IPlantUserGroupMemberService.cs" />
+    <Compile Include="Interfaces\IPlantUserGroupMemberRepository.cs" />
+    <Compile Include="Interfaces\IBaseRepository.cs" />
+    <Compile Include="Interfaces\ITransactionRepositoryBase.cs" />
+    <Compile Include="Interfaces\IUserGroupRepository.cs" />
+    <Compile Include="Interfaces\IProductGroupRepository.cs" />
+    <Compile Include="Interfaces\IProductDivisionRepository.cs" />
+    <Compile Include="Interfaces\IModuleRepository.cs" />
+    <Compile Include="Interfaces\IUserGroupService.cs" />
+    <Compile Include="Interfaces\IProductGroupService.cs" />
+    <Compile Include="Interfaces\IProductDivisionService.cs" />
+    <Compile Include="Interfaces\IModuleService.cs" />
+    <Compile Include="Interfaces\IMaturityLevelRepository.cs" />
+    <Compile Include="Interfaces\IMaturityLevelService.cs" />
+    <Compile Include="Interfaces\IClaimsProvider.cs" />
+    <Compile Include="Interfaces\IEmailService.cs" />
+    <Compile Include="Interfaces\IEventPublisher.cs" />
+    <Compile Include="Interfaces\IEventSubscriber.cs" />
+    <Compile Include="Interfaces\IAnnotationTypeRepository.cs" />
+    <Compile Include="Interfaces\ICategoryRepository.cs" />
+    <Compile Include="Interfaces\ICategoryService.cs" />
+    <Compile Include="Interfaces\IUserRepository.cs" />
+    <Compile Include="Interfaces\IPlantRepository.cs" />
+    <Compile Include="Interfaces\IAnnotationTypeService.cs" />
+    <Compile Include="Interfaces\IUserService.cs" />
+    <Compile Include="Interfaces\IPlantService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\CustomClaims.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pulse.DataTransformationObjects\Pulse.DataTransformationObjects.csproj">
+      <Project>{BC2E351B-29F4-4E7D-9FE6-D68BB55834A5}</Project>
+      <Name>Pulse.DataTransformationObjects</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

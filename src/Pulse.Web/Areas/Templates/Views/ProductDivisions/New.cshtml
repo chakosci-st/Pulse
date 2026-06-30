@@ -1,0 +1,107 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New Product Division";
+    ViewBag.TitleIcon = "bi bi-plus-circle";
+    ViewBag.SubTitle = "Create a product division for a major technology or market area within the portfolio.";
+    ViewBag.ContentHeaderChips = new[] { "Top-level portfolio structure", "Technology or market area", "Division governance" };
+    ViewBag.ContentHeaderAsideLabel = "New division";
+    ViewBag.ContentHeaderAsideTitle = "Define the highest-level grouping that related product groups and projects will roll up to.";
+    ViewBag.ContentHeaderAsideBody = "A clear division structure gives the portfolio a stable parent layer for governance, ownership, and reporting.";
+    ViewBag.IsActiveTemplatesProductDivisions = "menu-open";
+    ViewBag.IsActiveTemplatesProductDivisionsNew = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+
+<form id="productdivisionForm" class="needs-validation" novalidate="">
+    <!--begin::Row-->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class="mb-3">
+                        New Product Division
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Create new maturity level</small>
+                    </h5>
+                    <div class="row g-3 ">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-floating">
+                                <input class="form-control" id="Code" name="Code" placeholder="Enter Product Division Code" required>
+                                <label for="Code">Product Division Code <span class="text-danger">*</span></label>
+                                <div class="invalid-feedback">Please provide a Product Division Code.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-floating">
+                                <input class="form-control" id="Name" name="Name" placeholder="Enter Product Division Name" required>
+                                <label for="Code">Product Division Name <span class="text-danger">*</span></label>
+                                <div class="invalid-feedback">Please provide a Product Division Name.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-floating">
+                                <textarea class="form-control" id="Description" name="Description" placeholder="Enter Product Division Description"></textarea>
+                                <label for="Description">Product Division Description</label>
+                                <div class="invalid-feedback">Please provide a Product Division Description.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "ProductDivisions", new { area = "Templates" })" class="btn btn-default">Cancel</a> <button class="btn btn-success">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+
+
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="~/Areas/Templates/Scripts/productdivisions/new.js"></script>
+    <script>
+                        // Example starter JavaScript for disabling form submissions if there are invalid fields
+                        ////(() => {
+                        ////    'use strict';
+
+                        ////    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                        ////    const forms = document.querySelectorAll('.needs-validation');
+
+                        ////    // Loop over them and prevent submission
+                        ////    Array.from(forms).forEach((form) => {
+                        ////        form.addEventListener(
+                        ////            'submit',
+                        ////            (event) => {
+                        ////                if (!form.checkValidity()) {
+                        ////                    event.preventDefault();
+                        ////                    event.stopPropagation();
+                        ////                }
+
+                        ////                form.classList.add('was-validated');
+                        ////            },
+                        ////            false,
+                        ////        );
+                        ////    });
+                        ////})();
+    </script>
+}

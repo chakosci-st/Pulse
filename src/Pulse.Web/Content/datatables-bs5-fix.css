@@ -1,0 +1,17 @@
+﻿table.dataTable thead th div.DataTables_sort_wrapper span {
+    right: 0px !important;
+}
+
+table.dataTable th.dt-type-numeric div.dt-column-header, table.dataTable th.dt-type-numeric div.dt-column-footer, table.dataTable th.dt-type-date div.dt-column-header, table.dataTable th.dt-type-date div.dt-column-footer, table.dataTable td.dt-type-numeric div.dt-column-header, table.dataTable td.dt-type-numeric div.dt-column-footer, table.dataTable td.dt-type-date div.dt-column-header, table.dataTable td.dt-type-date div.dt-column-footer {
+    flex-direction: unset !important;
+}
+
+table.dataTable th.dt-type-numeric, table.dataTable th.dt-type-date, table.dataTable td.dt-type-numeric, table.dataTable td.dt-type-date {
+    text-align: center !important;
+}
+
+
+table.dataTable thead th, table.dataTable thead td { 
+    border-bottom: 1px solid #1111111f !important;
+}
+ 

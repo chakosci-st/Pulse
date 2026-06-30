@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Reports";
+    ViewBag.TitleIcon = "bi bi-bar-chart-line-fill";
+    ViewBag.SubTitle = "Analyze form usage, task linkage, and data collection coverage across the template catalog.";
+    ViewBag.ContentHeaderChips = new[] { "Task-linked forms", "Data collection design", "Reusable field templates" };
+    ViewBag.ContentHeaderAsideLabel = "Form insight";
+    ViewBag.ContentHeaderAsideTitle = "Understand which reusable forms are supporting task-level data capture.";
+    ViewBag.ContentHeaderAsideBody = "Form reporting helps show where collection templates are active, duplicated, or missing from key task flows.";
+    ViewBag.IsActiveTemplatesForms = "menu-open";
+    ViewBag.IsActiveTemplatesFormsReports = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+
+
+<div id="productdivisionList" class="row">
+
+
+
+    <!--begin::Col-->
+    <div id="containerAdd" class="col-lg-4 col-md-6 col-12">
+        <button id="btnAdd" type="button"
+                class="btn btn-default w-100"
+                style="height: 100%;">
+            <h1><i class="bi bi-plus-circle-fill" style="font-size:80pt"></i></h1>
+            <h5>Add new product division</h5>
+        </button>
+    </div>
+    <!--end::Col-->
+</div>
+
+
+@section scripts{
+
+    <script src="~/Areas/Templates/Scripts/productdivisions/reports.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#btnAdd').on('click', function (e) {
+                window.location.href = "@Url.Action("New", "ProductDivisions", new { area = "Templates" })";
+            });
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,412 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Edit Field";
+    ViewBag.TitleIcon = "bi bi-pencil-square";
+    ViewBag.SubTitle = "Update this reusable field template and keep downstream form inputs consistent.";
+    ViewBag.ContentHeaderChips = new[] { "Reusable field templates", "Single-field designer", "Consistent form inputs" };
+    ViewBag.ContentHeaderAsideLabel = "Field maintenance";
+    ViewBag.ContentHeaderAsideTitle = "Refine one field definition without redesigning an entire form.";
+    ViewBag.ContentHeaderAsideBody = "Adjust behavior, validation, and access rules while preserving a single source of truth for this field.";
+    ViewBag.IsActiveTemplatesFields = "menu-open";
+    ViewBag.IsActiveTemplatesFieldsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+@section styles{
+    <style>
+        .help-sidebar-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            background: #fff;
+            box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.05);
+        }
+
+            .help-sidebar-card .card-body {
+                padding: 1.25rem;
+            }
+
+        .help-sidebar-title {
+            font-size: 0.86rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 0.95rem;
+        }
+
+        .help-nav {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .help-nav-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .help-nav a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.8rem 0.9rem;
+            border-radius: 0.8rem;
+            text-decoration: none;
+            color: #0f172a;
+            background: #f8fafc;
+            border: 1px solid transparent;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+            .help-nav a:hover {
+                border-color: #bfdbfe;
+                background: #eff6ff;
+                color: #1d4ed8;
+            }
+
+        .help-mini-note {
+            margin-top: 1rem;
+            padding: 0.9rem;
+            border-radius: 0.9rem;
+            background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+            color: #475569;
+            font-size: 0.84rem;
+            line-height: 1.6;
+            border: 1px solid rgba(191, 219, 254, 0.9);
+        }
+
+        .form-edit-shell {
+            align-items: start;
+        }
+
+        .form-main-column {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .form-hero-card {
+            border: 1px solid rgba(191, 219, 254, 0.9);
+            border-radius: 1.35rem;
+            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.18), transparent 32%), linear-gradient(135deg, #f8fbff 0%, #eef6ff 52%, #f8fafc 100%);
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+        }
+
+            .form-hero-card .card-body {
+                padding: 1.5rem 1.6rem;
+            }
+
+        .form-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(240px, 0.95fr);
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .form-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.32rem 0.72rem;
+            border-radius: 999px;
+            font-size: 0.73rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1d4ed8;
+            background: rgba(219, 234, 254, 0.95);
+            border: 1px solid rgba(147, 197, 253, 0.9);
+            margin-bottom: 0.9rem;
+        }
+
+        .form-hero__title {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .form-hero__icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #1d4ed8;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.55);
+            flex: 0 0 auto;
+        }
+
+        .form-hero__heading {
+            font-size: clamp(1.4rem, 2vw, 2rem);
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .form-hero__subcopy {
+            margin: 0.8rem 0 0;
+            max-width: 62ch;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .form-hero__panel {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .form-hero__stat {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            box-shadow: 0 12px 28px rgba(148, 163, 184, 0.16);
+        }
+
+        .form-hero__stat-label {
+            display: block;
+            margin-bottom: 0.28rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .form-hero__stat strong {
+            display: block;
+            font-size: 0.96rem;
+            color: #0f172a;
+        }
+
+        .editor-surface {
+            border: 1px solid #e2e8f0;
+            border-radius: 1.25rem;
+            background: #fff;
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.05);
+            overflow: hidden;
+        }
+
+            .editor-surface .card-body {
+                padding: 1.35rem 1.45rem;
+            }
+
+        .editor-section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .editor-section-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.28rem 0.68rem;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.65rem;
+        }
+
+        .editor-section-head h5 {
+            margin-bottom: 0.2rem;
+            color: #0f172a;
+        }
+
+        .editor-section-copy {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .editor-action-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.1rem;
+        }
+
+        .editor-btn {
+            border-radius: 999px;
+            padding-inline: 1rem;
+            font-weight: 700;
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
+        }
+
+        .danger-surface {
+            border-color: rgba(248, 113, 113, 0.25);
+            box-shadow: 0 18px 36px rgba(127, 29, 29, 0.08);
+        }
+
+            .danger-surface .editor-section-kicker {
+                background: #fef2f2;
+                color: #b91c1c;
+            }
+
+        #designer .row.g-4 {
+            --bs-gutter-x: 1rem;
+            --bs-gutter-y: 1rem;
+        }
+
+        #designer .card.shadow-sm,
+        #designer .card.rounded-3 {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem !important;
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.05) !important;
+        }
+
+        #designer .card-header {
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 700;
+        }
+
+            #designer .card-header.bg-primary {
+                background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
+            }
+
+        #designer pre {
+            max-height: 320px;
+            overflow: auto;
+        }
+
+        @@media (max-width: 1199.98px) {
+            .form-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link href="~/node_modules/dropzone/dist/dropzone.css" rel="stylesheet" />
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Summernote -->
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+
+    <link href="~/Content/locals/dynamic-fields.css" rel="stylesheet" />
+    <!-- local-floating menu -->
+    <link href="~/Content/locals/sticky-menu.css" rel="stylesheet" />
+}
+
+
+
+
+
+
+<div class="row mb-5 form-edit-shell">
+    <div class="col-lg-3">
+        <div class="configurable--sticky" style="--sticky-top: calc(343px + 2rem);">
+            <div class="card help-sidebar-card" style="width:100%">
+                <div class="menu--content">
+                    <div class="card-body">
+                        <div class="help-sidebar-title">Configuration Navigator</div>
+                        <nav class="help-nav">
+                            <a href="#profile"><span class="help-nav-label"><i class="bi bi-code-square"></i><span>Profile</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a href="#designer"><span class="help-nav-label"><i class="bi bi-magic"></i><span>Field Designer</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a href="#delete"><span class="help-nav-label"><i class="bi bi-trash"></i><span>Delete Field</span></span><i class="bi bi-arrow-right"></i></a>
+                        </nav>
+                        <div class="help-mini-note">
+                            Move quickly between form details, structure updates, and lifecycle actions from one floating navigation panel.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 mt-lg-0 mt-4 form-main-column">
+        <!-- Card Basic Info -->
+        <div class="card editor-surface" id="basic-info">
+            <div class="card-body p-4">
+                <h5 class="mb-3">
+                    Details
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Maintain one reusable field template</small>
+                </h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="FieldSysId" class="form-label">Field Code</label>
+                        <input type="text" class="form-control" id="FieldSysId" name="FieldSysId" readonly disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="DesignerSummary" class="form-label">Designer Status</label>
+                        <input type="text" class="form-control" id="DesignerSummary" value="Loading field details..." readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Card Designer -->
+        <div class="card editor-surface" id="designer">
+            <div class="card-body p-4">
+                <form id="fieldForm" class="needs-validation" novalidate="">
+                    @Html.Hidden("TransactionKey")
+
+                    @Html.Partial("_SingleFieldDesigner")
+
+                    <div class="editor-action-row">
+                        <a href="@Url.Action("Index", "Fields", new { area = "Templates" })" class="btn btn-default">Cancel</a>
+                        <button class="btn btn-outline-dark editor-btn m-0" type="submit">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Card Delete Form -->
+        <div class="card editor-surface danger-surface" id="delete">
+            <div class="card-body">
+                <div class="editor-section-head mb-4">
+                    <div>
+                        <div class="editor-section-kicker"><i class="bi bi-exclamation-triangle"></i> Destructive Action</div>
+                        <h5>Delete Field</h5>
+                        <p class="editor-section-copy">Deactivate when the field should stay archived, or permanently remove it only when you are certain it is no longer needed.</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-sm-0 mb-4">
+                    <div class="w-50">
+                        <h5 class="mb-1">Delete Field</h5>
+                        <p class="text-sm mb-0">Once you delete this field, there is no going back. Please be certain.</p>
+                    </div>
+                    <div class="w-50 text-end">
+
+                        <form id="deleteForm" class="needs-validation float-end" novalidate>
+                            <button id="buttonDeleteField" onclick="$('#deleteForm').submit();" class="btn bg-gradient-danger editor-btn mb-0 ms-2" type="button">Delete Field</button>
+                        </form>
+                        <form id="changestatusForm" class="needs-validation float-end" novalidate>
+                            <button id="buttonIsActive" onclick="$('#changestatusForm').submit();" data-action="deactivate" class="btn btn-outline-secondary editor-btn mb-3 mb-md-0 ms-auto" type="button">Deactivate</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+    <script src="~/node_modules/select2/dist/js/select2.min.js"></script>
+
+    <script src="~/Scripts/locals/utils.js"></script>
+    <script src="~/Scripts/locals/dynamic-fields.js"></script>
+    <script src="~/Scripts/locals/sticky-menu.js"></script>
+
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/fields/common.js"></script>
+    <script src="~/Areas/Templates/Scripts/fields/edit.js"></script>
+}

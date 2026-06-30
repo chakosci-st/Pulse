@@ -1,0 +1,43 @@
+= Architecture =
+
+== High-Level View ==
+Pulse uses a classic layered architecture on .NET Framework 4.7.2.
+
+=== Entry Points ===
+* '''Pulse.Web'''
+** ASP.NET MVC 5 UI layer
+** OWIN cookie/forms-auth integration
+** SignalR UI integrations
+* '''Pulse.Api'''
+** ASP.NET Web API 2
+** OWIN JWT bearer auth
+** service-first API endpoint layer
+
+=== Core Layers ===
+* '''Pulse.Core''': entities, contracts, interfaces
+* '''Pulse.Infrastructure''': Oracle data access layer, repositories, event bus plumbing
+* '''Pulse.Services''': domain services and business orchestration
+* '''Pulse.ViewModels''' / '''Pulse.DataTransformationObjects''': transport models
+
+== Dependency Injection ==
+Autofac is used across web and API applications.
+* API registration is broader and generally includes complete repository/service wiring.
+* Web registration wires a narrower subset and integrates UI concerns (SignalR, page endpoints, auth flows).
+
+== Data Access Pattern ==
+* Oracle database access through Oracle Managed Data Access
+* Query style via Dapper and Dapper.Oracle
+* Repositories expose domain-centric reads/writes for services
+
+== Application Domain Topology ==
+The domain centers on roadmap-to-project execution:
+* template catalogs: plants, categories, product hierarchy, roadmap templates, forms
+* project instantiation: template snapshots copied into project-scoped structures
+* execution: milestones, activities, tasks, forms, comments, attachments, notifications
+* governance: access rights, module claims, user groups, AD integration
+
+== Key Related Pages ==
+* [[Projects and Roadmaps]]
+* [[Data Model]]
+* [[Authentication and Authorization]]
+* [[API Overview]]

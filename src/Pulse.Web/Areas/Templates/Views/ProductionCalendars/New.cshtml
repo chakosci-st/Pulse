@@ -1,0 +1,98 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New Production Calendar";
+    ViewBag.TitleIcon = "bi bi-plus-circle";
+    ViewBag.SubTitle = "";
+    ViewBag.IsActiveTemplatesProductionCalendars = "menu-open";
+    ViewBag.IsActiveTemplatesProductionCalendarsNew = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+@section Styles {
+
+    <link href="~/node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
+}
+<form id="productioncalendarForm" class="needs-validation" novalidate="">
+    
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        New Production Calendar
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Create new production calendar</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="CalendarYear" class="form-label">Production Calendar Year<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="number" class="form-control" id="CalendarYear" name="CalendarYear" placeholder="Enter Valid Production Calendar Year" required="" min="1999" max="2100" maxlength="4">
+                            <div class="invalid-feedback">Please provide a valid production calendar year.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Week1End" class="form-label">Last day of Work Week 1 (Saturdays in January only)<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" data-field="date" id="Week1End" name="Week1End" placeholder="Enter week 1 end date" required="" readonly>
+                            <div class="invalid-feedback">Please select week 1 end date.</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "ProductionCalendars", new { area = "Templates" })" class="btn btn-default">Cancel</a> <button class="btn btn-success">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+
+
+
+
+@section scripts{
+
+
+    <script src="~/node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+
+
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="~/Areas/Templates/Scripts/productioncalendars/new.js"></script>
+    <script>
+                                                                                // Example starter JavaScript for disabling form submissions if there are invalid fields
+                                                                                ////(() => {
+                                                                                ////    'use strict';
+
+                                                                                ////    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                                                                                ////    const forms = document.querySelectorAll('.needs-validation');
+
+                                                                                ////    // Loop over them and prevent submission
+                                                                                ////    Array.from(forms).forEach((form) => {
+                                                                                ////        form.addEventListener(
+                                                                                ////            'submit',
+                                                                                ////            (event) => {
+                                                                                ////                if (!form.checkValidity()) {
+                                                                                ////                    event.preventDefault();
+                                                                                ////                    event.stopPropagation();
+                                                                                ////                }
+
+                                                                                ////                form.classList.add('was-validated');
+                                                                                ////            },
+                                                                                ////            false,
+                                                                                ////        );
+                                                                                ////    });
+                                                                                ////})();
+    </script>
+}

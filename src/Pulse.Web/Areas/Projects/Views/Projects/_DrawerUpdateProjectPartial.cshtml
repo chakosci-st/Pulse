@@ -1,0 +1,117 @@
+﻿<!-- Side Drawer -->
+<aside class="drawer" id="drawerRegisterProject" aria-hidden="true">
+    <div class="drawer-header">
+        <h2 class="drawer-title">Project: <span id="projectNo"></span></h2>
+        <button class="drawer-close" type="button" aria-label="Close" id="btnCloseDrawer">&times;</button>
+    </div>
+    <div class="drawer-body">
+        <small class="text-muted d-block mb-3">
+            Configure existing project.
+        </small>
+
+        <form id="projectForm">
+            <input type="hidden" id="projectNo" />
+            <input type="hidden" id="transactionKey" />
+            <div class="mb-4">
+                <div class="section-title">
+                    <i class="fas fa-folder-tree text-primary"></i>
+                    Project info & team
+                </div>
+                <div class="section-subtitle">
+                    Set the project name, owner, timeline and define the team members who can own tasks/milestones.
+                </div>
+                <div class="form-floating mb-2">
+                    <input type="text" class="form-control" id="projectTitle" name="projectTitle" required placeholder="e.g. New Product Launch">
+                    <label class="form-label" for="projectTitle">Project title <span class="text-danger">*</span> (e.g. New Product Launch)</label>
+                    <div class="invalid-feedback">Please project name.</div>
+                </div>
+                <div class="form-floating mb-2">
+                    <textarea class="form-control" id="projectDescription" rows="5"
+                              placeholder="Short description, main objectives, scope..."></textarea>
+                    <label class="form-label ms-2">Project description (Short description, main objectives, scope...)</label>
+                </div>
+                <div class="form-floating mb-2">
+                    <select class="form-select" id="productgroupSelect" name="productgroupSelect">
+                        <option></option>
+                    </select>
+                    <label for="productgroupSelect">Product Group <span class="text-danger">*</span></label>
+                    <div class="invalid-feedback">Please select a product group.</div>
+                </div>
+                <div class="form-floating mb-2">
+                    <select class="form-select" id="productdivisionSelect" name="productdivisionSelect">
+                        <option></option>
+                    </select>
+                    <label for="productdivisionSelect">Product Division <span class="text-danger">*</span></label>
+                    <div class="invalid-feedback">Please select a product division.</div>
+                </div>
+
+                <hr>
+                <div class="section-subtitle mb-1">
+                    Defined product(s) that is referenced for this project.
+                </div>
+                <div class="row g-2 align-items-end">
+                    <div id="productcodes"></div>
+                </div>
+
+                <hr>
+                <div class="section-subtitle mb-1">
+                    Defined project member(s) that can be assigned to milestones/tasks.
+                </div>
+                <div class="row g-2 align-items-end">
+                    <div id="projectmembers-avatar-group-container"></div>
+                </div>
+                <hr>
+                <div class="section-title">
+                    <i class="bi bi-palette2 text-danger"></i>
+                    Project appearance
+                </div>
+                <div class="section-subtitle">
+                    Choose an icon and highlight color used in dashboards and notifications.
+                </div>
+                <div>
+                    <label class="form-label">Project icon</label>
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="hidden" id="icon" />
+                        <input type="hidden" id="iconcolor" />
+                        <button type="button" class="appearance-pill" id="btnOpenIconPicker">
+                            <span class="border rounded-circle d-inline-flex align-items-center justify-content-center"
+                                  style="width:28px;height:28px;">
+                                <i id="projectIconPreview" class="bi bi-rocket-fill"></i>
+                            </span>
+                            <span id="projectIconLabel" class="text-muted small">
+                                bi bi-rocket-fill
+                            </span>
+                        </button>
+                        <small class="text-muted d-none d-md-inline">
+                            Bootstrap Icons · search in picker
+                        </small>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Primary color</label>
+                    <div class="d-flex align-items-center gap-2"> 
+                        <button type="button" class="appearance-pill" id="btnColorPicker">
+                            <span id="projectColorDot"
+                                  class="color-dot"
+                                  style="background:#3b82f6;"></span>
+                            <span id="projectColorLabel" class="text-muted small">
+                                #3b82f6
+                            </span>
+                        </button>
+                        <small class="text-muted d-none d-md-inline">
+                            Color picker (Pickr)
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="drawer-footer">
+        <button type="button" class="btn btn-outline-secondary btn-sm mr-2" id="btnCancelDrawer">
+            Cancel
+        </button>
+        <button type="submit" form="projectForm" class="btn btn-primary btn-sm">
+            Update Project
+        </button>
+    </div>
+</aside>

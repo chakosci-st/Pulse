@@ -1,0 +1,875 @@
+﻿
+@using Pulse.Web.Helpers
+@{
+    ViewBag.Title = "Overview project";
+    ViewBag.SubTitle = "View project details.";
+    ViewBag.TitleIcon = "bi bi-journal-plus";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.IsActiveProjects = "active";
+}
+
+
+@section styles
+{
+    <!-- Datatables -->
+    <link href="~/node_modules/datatables/media/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/Content/datatables-bs5-fix.css" rel="stylesheet" />
+    <!-- Select2 -->
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/locals/dynamic-fields.css" rel="stylesheet" />
+    <link href="~/node_modules/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
+    <!-- YearPicker -->
+    <link href="~/Content/YearPicker/yearpicker.css" rel="stylesheet" />
+
+    <!-- Icon Picker -->
+    <link href="@Url.Content("~/node_modules/@simonwep/pickr/dist/themes/nano.min.css")" rel="stylesheet" />
+
+    <!-- Local -->
+    <link href="~/Content/Icon-Picker.css" rel="stylesheet" />
+
+
+    <!-- Summernote -->
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+
+    <link href="~/Content/locals/stacked-userprofiles.css" rel="stylesheet" />
+
+    <link href="~/node_modules/dropzone/dist/min/dropzone.min.css" rel="stylesheet" />
+
+
+
+    <link href="~/Content/locals/floating-button-menu.css" rel="stylesheet" />
+    <link href="~/Content/locals/sticky-menu.css" rel="stylesheet" />
+
+    <style>
+        .help-sidebar-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            background: #fff;
+            box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.05);
+        }
+
+            .help-sidebar-card .card-body {
+                padding: 1.25rem;
+            }
+
+        .help-sidebar-title {
+            font-size: 0.86rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 0.95rem;
+        }
+
+        .help-nav {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .help-nav-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .help-nav a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.8rem 0.9rem;
+            border-radius: 0.8rem;
+            text-decoration: none;
+            color: #0f172a;
+            background: #f8fafc;
+            border: 1px solid transparent;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+            .help-nav a:hover {
+                border-color: #bfdbfe;
+                background: #eff6ff;
+                color: #1d4ed8;
+            }
+
+        .help-mini-note {
+            margin-top: 1rem;
+            padding: 0.9rem;
+            border-radius: 0.9rem;
+            background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+            color: #475569;
+            font-size: 0.84rem;
+            line-height: 1.6;
+            border: 1px solid rgba(191, 219, 254, 0.9);
+        }
+
+        .project-configure-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.85fr);
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1.25rem;
+            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.14), transparent 30%), radial-gradient(circle at 85% 18%, rgba(15, 118, 110, 0.14), transparent 26%), linear-gradient(135deg, #f8fbfd 0%, #eef6f9 52%, #f8fafc 100%);
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08);
+        }
+
+        .project-configure-hero__main,
+        .project-configure-hero__side {
+            padding: 1.2rem 1.25rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            background: rgba(255, 255, 255, 0.84);
+        }
+
+        .project-configure-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.78rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1d4ed8;
+            background: rgba(219, 234, 254, 0.95);
+            border: 1px solid rgba(147, 197, 253, 0.9);
+        }
+
+        .project-configure-hero__title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 0.9rem 0 0;
+            color: #0f172a;
+            font-size: clamp(1.5rem, 2.4vw, 2.35rem);
+            line-height: 1;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .project-configure-hero__title-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            color: #1d4ed8;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.45);
+            flex: 0 0 auto;
+        }
+
+        .project-configure-hero__copy {
+            margin: 0.8rem 0 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            max-width: 62ch;
+        }
+
+        .project-configure-hero__chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .project-configure-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 42px;
+            padding: 0 0.85rem;
+            border-radius: 999px;
+            background: #ffffff;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            color: #334155;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .project-configure-hero__side {
+            display: grid;
+            gap: 0.85rem;
+            align-content: start;
+        }
+
+        .project-configure-hero__stat {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fbff 0%, #f8fafc 100%);
+            border: 1px solid rgba(219, 234, 254, 0.9);
+        }
+
+        .project-configure-hero__stat-label {
+            display: block;
+            margin-bottom: 0.28rem;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .project-configure-hero__stat strong {
+            display: block;
+            color: #0f172a;
+            font-size: 0.96rem;
+        }
+
+        .configurable--sticky .card,
+        .col-lg-9 > .card {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.05);
+        }
+
+        @@media (max-width: 991.98px) {
+            .project-configure-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+
+}
+
+@section scripts{
+
+    <script src="~/Scripts/locals/sticky-menu.js"></script>
+
+    <!-- Dependencies -->
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <script src="~/node_modules/sortablejs/Sortable.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/node_modules/flatpickr/dist/flatpickr.min.js"></script>
+    <script src="~/node_modules/select2/dist/js/select2.min.js"></script>
+
+    <!-- datatables -->
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+
+    <!-- yearpicker -->
+    <script src="~/Content/YearPicker/yearpicker.js"></script>
+
+    <script src="@Url.Content("~/node_modules/@simonwep/pickr/dist/pickr.min.js")"></script>
+
+    <!-- locals -->
+    <script src="~/Scripts/locals/commonUtils.js"></script>
+
+
+    <!-- local-dynamic-fields -->
+    <script src="~/Scripts/locals/utils.js"></script>
+    <script src="~/Scripts/locals/dynamic-fields.js"></script>
+
+
+    <script src="~/node_modules/dropzone/dist/min/dropzone.min.js"></script>
+
+    <!-- local-helpers -->
+    <script src="~/Areas/Projects/Scripts/helpers/projectdata.js"></script>
+
+
+    <script src="~/Scripts/locals/stacked-userprofiles.js"></script>
+    <script src="~/Scripts/locals/notification-manager.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/common.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/common-functions.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/projectmember.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/configure.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            window.projectOverviewPermissions = {
+                canManageOwners: @((ViewBag.IsProjectOwnerMember ?? false).ToString().ToLowerInvariant()),
+                canDeleteProject: @((ViewBag.IsProjectOwnerMember ?? false).ToString().ToLowerInvariant()),
+                canTakeOver: @((ViewBag.IsProjectOwnerMember ?? false).ToString().ToLowerInvariant()),
+                isPrimaryProjectOwner: @((ViewBag.IsPrimaryProjectOwner ?? false).ToString().ToLowerInvariant())
+            };
+
+            window.PulseNotificationManager.init({
+                entityType: 'PROJECT',
+                entitySysId: document.getElementById('projectNo').value,
+                contextLabel: 'Project',
+                listSelector: '#projectOverviewNotificationsList',
+                emptySelector: '#projectOverviewNotificationsEmpty',
+                addButtonSelector: '#projectOverviewNotificationAddButton',
+                modalSelector: '#notificationEditorModal',
+                formSelector: '#notificationEditorForm',
+                canAdd: @((ViewBag.CanManageProjectNotifications ?? false).ToString().ToLowerInvariant()),
+                canEdit: @((ViewBag.CanManageProjectNotifications ?? false).ToString().ToLowerInvariant()),
+                canDelete: @((ViewBag.CanManageProjectNotifications ?? false).ToString().ToLowerInvariant()),
+                projectNo: document.getElementById('projectNo').value,
+                loadingText: 'Loading project notifications...',
+                emptyText: 'No project notifications found.',
+                createTitle: 'Add project notification',
+                editTitle: 'Edit project notification'
+            });
+        });
+    </script>
+
+}
+
+
+
+<input type="hidden" id="projectNo" value="@ViewBag.ProjectNo" />
+<input type="hidden" id="transactionKey" />
+<input id="projectName" type="hidden" />
+<input id="projectIcon" type="hidden" />
+<input id="projectColor" type="hidden" />
+<input id="plantCode" type="hidden" />
+
+
+<div class="row mb-5">
+    <div class="col-lg-3">
+        <div class="configurable--sticky" style="--sticky-top: calc(145px + 2rem);">
+            <div class="card help-sidebar-card" style="width:100%">
+                <div class="menu--content">
+                    <div class="card-body">
+                        <div class="help-sidebar-title">Configuration Navigator</div>
+                        <nav class="help-nav">
+                            <a data-scroll="" href="#profile"><span class="help-nav-label"><i class="bi bi-building"></i><span>Profile</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a data-scroll="" href="#basic-info"><span class="help-nav-label"><i class="bi bi-receipt"></i><span>Basic Info</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a data-scroll="" href="#product-codes"><span class="help-nav-label"><i class="bi bi-motherboard"></i><span>Product Codes</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a data-scroll="" href="#members"><span class="help-nav-label"><i class="bi bi-person-vcard"></i><span>Members</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a data-scroll="" href="#project-notification-manager"><span class="help-nav-label"><i class="bi bi-bell-fill"></i><span>Notifications</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a data-scroll="" href="#delete"><span class="help-nav-label"><i class="bi bi-trash"></i><span>Delete Project</span></span><i class="bi bi-arrow-right"></i></a>
+                        </nav>
+                        <div class="help-mini-note">
+                            Jump between project profile, members, notifications, and lifecycle actions from one floating navigation panel.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 mt-lg-0 mt-4">
+        <section class="project-configure-hero" id="profile">
+            <div class="project-configure-hero__main">
+                <span class="project-configure-hero__eyebrow"><i class="bi bi-sliders"></i>Project Configuration</span>
+                <h1 class="project-configure-hero__title">
+                    <span class="project-configure-hero__title-icon"><i id="iProjectIcon"></i></span>
+                    <span id="labelProjectName">Project Name</span>
+                </h1>
+                <p class="project-configure-hero__copy" id="labelProjectDescription">Project Description</p>
+                <div class="project-configure-hero__chips">
+                    <span class="project-configure-chip"><i class="bi bi-pencil-square"></i>Basic info and appearance</span>
+                    <span class="project-configure-chip"><i class="bi bi-people"></i>Member and owner controls</span>
+                    <span class="project-configure-chip"><i class="bi bi-bell"></i>Project notifications and maintenance</span>
+                </div>
+            </div>
+            <aside class="project-configure-hero__side">
+                <div class="project-configure-hero__stat">
+                    <span class="project-configure-hero__stat-label">Flow</span>
+                    <strong>Profile, members, notifications, and project clean-up in one workspace</strong>
+                </div>
+                <div class="project-configure-hero__stat">
+                    <span class="project-configure-hero__stat-label">Roadmap Refresh</span>
+                    <div class="d-flex flex-column gap-2 mt-1">
+                        <button id="btnRetrieveLatestRoadmap" class="btn btn-outline-primary" type="button">
+                            <i class="bi bi-arrow-repeat me-2"></i>Retrieve latest roadmap structure
+                        </button>
+                        <button id="btnInsertRoadmapMilestone" class="btn btn-outline-secondary" type="button">
+                            <i class="bi bi-signpost-2 me-2"></i>Insert project milestone
+                        </button>
+                        <button id="btnManageAdditionalMilestones" class="btn btn-outline-secondary" type="button">
+                            <i class="bi bi-arrow-down-up me-2"></i>Arrange milestones
+                        </button>
+                    </div>
+                    <div class="text-muted text-sm mt-2">Preview template updates, inject project-only milestones, rearrange milestone sequences, or remove newly inserted milestones.</div>
+                </div>
+            </aside>
+        </section>
+        <!-- Card Basic Info -->
+        <div class="card mt-4" id="basic-info">
+
+            <div class="card-body pt-0">
+                <div class="py-2">
+                    <h5>Basic Info</h5>
+                    <p class="section-subtitle">Set the project details and appearance.</p>
+                </div>
+                <form id="projectForm" class="needs-validation" method="put" novalidate="">
+
+                    <div class="mb-4">
+
+                        <div class="section-subtitle">
+                            Set the project name, owner, timeline and define the team members who can own tasks/milestones.
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="projectTitle" name="projectTitle" required placeholder="e.g. New Product Launch">
+                            <label class="form-label" for="projectTitle">Project title <span class="text-danger">*</span> (e.g. New Product Launch)</label>
+                            <div class="invalid-feedback">Please project name.</div>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <textarea class="form-control" id="projectDescription" rows="5"
+                                      placeholder="Short description, main objectives, scope..."></textarea>
+                            <label class="form-label ms-2">Project description (Short description, main objectives, scope...)</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <select class="form-select" id="productgroupSelect" name="productgroupSelect">
+                                <option></option>
+                            </select>
+                            <label for="productgroupSelect">Product Group <span class="text-danger">*</span></label>
+                            <div class="invalid-feedback">Please select a product group.</div>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <select class="form-select" id="productdivisionSelect" name="productdivisionSelect">
+                                <option></option>
+                            </select>
+                            <label for="productdivisionSelect">Product Division <span class="text-danger">*</span></label>
+                            <div class="invalid-feedback">Please select a product division.</div>
+                        </div>
+
+
+                        <hr>
+                        <div class="section-title">
+                            <i class="bi bi-palette2 text-danger"></i>
+                            Project appearance
+                        </div>
+                        <div class="section-subtitle">
+                            Choose an icon and highlight color used in dashboards and notifications.
+                        </div>
+                        <div>
+                            <label class="form-label">Project icon</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="hidden" id="icon" />
+                                <input type="hidden" id="iconcolor" />
+                                <button type="button" class="appearance-pill" id="btnOpenIconPicker">
+                                    <span class="border rounded-circle d-inline-flex align-items-center justify-content-center"
+                                          style="width:28px;height:28px;">
+                                        <i id="projectIconPreview" class="bi bi-rocket-fill"></i>
+                                    </span>
+                                    <span id="projectIconLabel" class="text-muted small">
+                                        bi bi-rocket-fill
+                                    </span>
+                                </button>
+                                <small class="text-muted d-none d-md-inline">
+                                    Bootstrap Icons · search in picker
+                                </small>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Primary color</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="appearance-pill" id="btnColorPicker">
+                                    <span id="projectColorDot"
+                                          class="color-dot"
+                                          style="background:#3b82f6;"></span>
+                                    <span id="projectColorLabel" class="text-muted small">
+                                        #3b82f6
+                                    </span>
+                                </button>
+                                <small class="text-muted d-none d-md-inline">
+                                    Color picker (Pickr)
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button class="btn btn-outline-dark m-0 float-end" type="submit">Update basic info</button>
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <!-- Card Product Codes -->
+        <div class="card mt-4" id="product-codes">
+
+
+            <div class="card-body">
+
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Linked Product Code(s)</h5>
+                        <p class="text-sm mb-0">Defined product(s) that is referenced for this project.</p>
+                    </div>
+                    <div class="col-6">
+                        <div class="input-group">
+                            <input type="text" id="textProductCode" class="form-control" placeholder="Type a product code..." autocomplete="off" required>
+                            <button class="btn btn-outline-dark btn-flat" id="btnAddProductCode" type="button">
+                                <i class="bi bi-bag-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="horizontal dark">
+                <div class="pb-2">
+                    <table id="productcodesList" class="display table small " style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Product Code</th>
+                                <th>Plant Type</th>
+                                <th>Product Family</th>
+                                <th>Macro Package</th>
+                                <th>Package</th>
+                                <th>PLine</th>
+                                <th>Maturity</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Change Password -->
+        <div class="card mt-4" id="members">
+
+            <div class="card-body">
+
+
+                <div class="row">
+                    <div class="col-4">
+                        <h5>Members</h5>
+                    </div>
+                    <div class="col-8">
+                        @if ((ViewBag.IsProjectOwnerMember ?? false) && !(ViewBag.IsPrimaryProjectOwner ?? false))
+                        {
+                            <button id="buttonTakeOverProject" class="btn btn-outline-primary btn-sm float-end mb-2" type="button">Take Over Project</button>
+                        }
+                        <button id="btnManageMyProjectTasks" class="btn btn-outline-dark btn-sm float-end mb-2 me-2" type="button">My Tasks</button>
+                        <form id="projectmemberForm" class="needs-validation" method="post" novalidate="">
+                            <div class="input-group">
+                                <select id="projectmemberSelect" name="projectmemberSelect" required class="form-select" placeholder="Search user to add (First Name, Last Name, Username, Email)"></select>
+                                <button type="submit" id="AddMember" class="btn btn-outline-dark btn-flat"><i class="bi bi-person-fill-add"></i> Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="pb-2">
+                    <table id="tableMembers" class="display table small " style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="col-5">Name</th>
+                                <th class="col-3">Email</th>
+                                <th class="col-2">Owner</th>
+                                <th class="col-1"></th>
+                                <th class="col-1"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="card mt-4" id="project-notification-manager">
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                    <div>
+                        <h5 class="mb-1">Notifications</h5>
+                        <p class="text-sm mb-0">Create and manage project-level notifications for this overview.</p>
+                    </div>
+                    @if (AuthorizationHelper.IsInGroupsOrModules("", "NOTIFADD"))
+                    {
+                        <button id="projectOverviewNotificationAddButton" type="button" class="btn btn-outline-primary btn-sm">Add notification</button>
+                    }
+                </div>
+                <hr class="horizontal dark">
+                <div id="projectOverviewNotificationsEmpty" class="text-muted small">Loading project notifications...</div>
+                <div id="projectOverviewNotificationsList"></div>
+            </div>
+        </div>
+
+        <!-- Card Accounts -->
+        <div class="card mt-4" id="accounts" style="display:none">
+            <div class="card-header">
+                <h5>Accounts</h5>
+                <p class="text-sm">Here you can setup and manage your integration settings.</p>
+            </div>
+            <div class="card-body pt-0">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-slack.svg" alt="logo_slack">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Slack</h5>
+                            <a class="text-sm text-body" href="javascript:;">Show less <i class="fas fa-chevron-up text-xs ms-1" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <p class="text-sm text-secondary ms-auto me-3 my-auto">Enabled</p>
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault1">
+                    </div>
+                </div>
+                <div class="ps-5 pt-3 ms-3">
+                    <p class="mb-0 text-sm">You haven't added your Slack yet or you aren't authorized. Please add our Slack Bot to your account by clicking on <a href="javascript">here</a>. When you've added the bot, send your verification code that you have received.</p>
+                    <div class="d-sm-flex bg-gray-100 border-radius-lg p-2 my-4 is-filled">
+                        <p class="text-sm font-weight-bold my-auto ps-sm-2">Verification Code</p>
+                        <input class="form-control form-control-sm ms-sm-auto mt-sm-0 mt-2 w-sm-15 w-40" type="text" value="1172913" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Copy!" data-bs-original-title="Copy!" onfocus="focused(this)" onfocusout="defocused(this)">
+                    </div>
+                    <div class="d-sm-flex bg-gray-100 border-radius-lg p-2 my-4">
+                        <p class="text-sm font-weight-bold my-auto ps-sm-2">Connected account</p>
+                        <h6 class="text-sm ms-auto me-3 my-auto">hello@creative-tim.com</h6>
+                        <button class="btn btn-sm bg-gradient-dark my-sm-auto mt-2 mb-0" type="button" name="button">Delete</button>
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-spotify.svg" alt="logo_spotify">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Spotify</h5>
+                            <p class="mb-0 text-sm">Music</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-secondary ms-auto me-3 my-auto">Enabled</p>
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault2">
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-atlassian.svg" alt="logo_atlassian">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Atlassian</h5>
+                            <p class="mb-0 text-sm">Payment vendor</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-secondary ms-auto me-3 my-auto">Enabled</p>
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault3">
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-asana.svg" alt="logo_asana">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Asana</h5>
+                            <p class="mb-0 text-sm">Organize your team</p>
+                        </div>
+                    </div>
+                    <div class="form-check form-switch ms-auto my-auto">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault4">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Card Notifications -->
+        <div class="card mt-4" id="notifications" style="display:none">
+            <div class="card-header">
+                <h5>Notifications</h5>
+                <p class="text-sm">Choose how you receive notifications. These notification settings apply to the things you’re watching.</p>
+            </div>
+            <div class="card-body pt-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-1" colspan="4">
+                                    <p class="mb-0">Activity</p>
+                                </th>
+                                <th class="text-center">
+                                    <p class="mb-0">Email</p>
+                                </th>
+                                <th class="text-center">
+                                    <p class="mb-0">Push</p>
+                                </th>
+                                <th class="text-center">
+                                    <p class="mb-0">SMS</p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <span class="text-dark d-block text-sm">Mentions</span>
+                                        <span class="text-xs font-weight-normal">Notify when another user mentions you in a comment</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault11">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault12">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault13">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <span class="text-dark d-block text-sm">Comments</span>
+                                        <span class="text-xs font-weight-normal">Notify when another user comments your item.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault14">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault15">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault16">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <span class="text-dark d-block text-sm">Follows</span>
+                                        <span class="text-xs font-weight-normal">Notify when another user follows you.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault17">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault18">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault19">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <p class="text-sm mb-0">Log in from a new device</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault20">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault21">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault22">
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Card Sessions -->
+        <div class="card mt-4" id="sessions" style="display:none">
+            <div class="card-header pb-3">
+                <h5>Sessions</h5>
+                <p class="text-sm">This is a list of devices that have logged into your account. Remove those that you do not recognize.</p>
+            </div>
+            <div class="card-body pt-0">
+                <div class="d-flex align-items-center">
+                    <div class="text-center w-5">
+                        <i class="fas fa-desktop text-lg opacity-6"></i>
+                    </div>
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <p class="text-sm mb-1">
+                                Bucharest 68.133.163.201
+                            </p>
+                            <p class="mb-0 text-xs">
+                                Your current session
+                            </p>
+                        </div>
+                    </div>
+                    <span class="badge badge-success badge-sm my-auto ms-auto me-3">Active</span>
+                    <p class="text-secondary text-sm my-auto me-3">EU</p>
+                    <a href="javascript:;" class="text-primary text-sm icon-move-right my-auto">
+                        See more
+                        <i class="fas fa-arrow-right text-xs ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex align-items-center">
+                    <div class="text-center w-5">
+                        <i class="fas fa-desktop text-lg opacity-6"></i>
+                    </div>
+                    <p class="my-auto ms-3">Chrome on macOS</p>
+                    <p class="text-secondary text-sm ms-auto my-auto me-3">US</p>
+                    <a href="javascript:;" class="text-primary text-sm icon-move-right my-auto">
+                        See more
+                        <i class="fas fa-arrow-right text-xs ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex align-items-center">
+                    <div class="text-center w-5">
+                        <i class="fas fa-mobile text-lg opacity-6"></i>
+                    </div>
+                    <p class="my-auto ms-3">Safari on iPhone</p>
+                    <p class="text-secondary text-sm ms-auto my-auto me-3">US</p>
+                    <a href="javascript:;" class="text-primary text-sm icon-move-right my-auto">
+                        See more
+                        <i class="fas fa-arrow-right text-xs ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Card Delete Project -->
+        <div class="card mt-4" id="delete">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-sm-0 mb-4">
+                    <div class="w-50">
+                        <h5>Delete Project</h5>
+                        <p class="text-sm mb-0">Once you delete this project, there is no going back. Please be certain.</p>
+                    </div>
+                    <div class="w-50 text-end">
+                        <form id="formDeleteProject" class="needs-validation float-end" novalidate>
+                            <button id="buttonDelete" onclick="$('#formDeleteProject').submit();" class="btn bg-gradient-danger mb-0 ms-2" type="button" @if (!(ViewBag.IsProjectOwnerMember ?? false)) { <text> disabled</text> }>Delete Project</button>
+                        </form>
+                        <form id="formChangeStatusProject" class="needs-validation float-end" novalidate>
+                            <button id="buttonIsActive" onclick="$('#formChangeStatusProject').submit();" data-action="deactivate" class="btn btn-outline-secondary mb-3 mb-md-0 ms-auto" type="button">Deactivate</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.Partial("~/Views/Shared/_NotificationEditorModal.cshtml")
+    </div>
+
+</div>
+
+<div id="hdn-avatar-group-container" style="display:none"></div>
+
+<div id="container-render" style="display:none"></div>
+
+<!-- Icon Picker Modal -->
+@Html.Partial("_IconPickerPartial")

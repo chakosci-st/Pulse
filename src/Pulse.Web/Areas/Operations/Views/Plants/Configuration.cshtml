@@ -1,0 +1,1148 @@
+﻿
+@using Pulse.Web.Helpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Plant Overview";
+    ViewBag.TitleIcon = "bi bi-speedometer2";
+    ViewBag.SubTitle = "Manage the roadmap and supporting template configuration tied to this manufacturing site.";
+    ViewBag.ContentHeaderChips = new[] { "Manufacturing sites", "Plant ownership", "Site-level template alignment" };
+    ViewBag.ContentHeaderAsideLabel = "Plant configuration";
+    ViewBag.ContentHeaderAsideTitle = "Configure the site-level setup that downstream project planning will inherit.";
+    ViewBag.ContentHeaderAsideBody = "Plant configuration keeps local roadmap structure, memberships, and operational context aligned to the right manufacturing site.";
+    ViewBag.IsActiveOperationsPlants = "menu-open";
+    ViewBag.IsActiveOperationsPlantsAll = "active";
+    ViewBag.SelectedMenu = "Operations";
+    ViewBag.IsActiveOperations = "active";
+}
+@section Styles {
+    <!-- Datatables -->
+    <link href="~/node_modules/datatables/media/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/Content/datatables-bs5-fix.css" rel="stylesheet" />
+    <!-- Select2 -->
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- local-floating menu -->
+    <link href="~/Content/locals/sticky-menu.css" rel="stylesheet" />
+
+    <style>
+        .select2-container .select2-selection--single {
+            padding: .375rem .75rem !important;
+            font-size: 1rem !important;
+            font-weight: 400 !important;
+            line-height: 1.5 !important;
+            height: 38px !important;
+            color: var(--bs-body-color) !important;
+            background-color: var(--bs-body-bg) !important;
+            background-clip: padding-box !important;
+            border: var(--bs-border-width) solid var(--bs-border-color) !important;
+            border-radius: var(--bs-border-radius) !important;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out !important;
+        }
+
+
+        .status-switch .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+        }
+
+            .status-switch .form-check-input:checked {
+                background-color: #22c55e;
+                border-color: #22c55e;
+            }
+
+        .status-pill {
+            border-radius: 50rem;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+        }
+
+        .status-pill-on {
+            background-color: rgba(34, 197, 94, 0.12);
+            color: #16a34a;
+        }
+
+        .status-pill-off {
+            background-color: rgba(148, 163, 184, 0.16);
+            color: #64748b;
+        }
+
+        .table thead th {
+            border: 0;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .item-desc {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.12rem 0.45rem;
+            border-radius: 999px;
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+
+        .help-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.9fr);
+            gap: 1rem;
+            padding: 1.35rem 1.4rem;
+            border: 1px solid rgba(191, 219, 254, 0.9);
+            border-radius: 1.25rem;
+            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.16), transparent 34%), linear-gradient(135deg, #f8fbff 0%, #eef6ff 52%, #f8fafc 100%);
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08);
+        }
+
+        .help-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.32rem 0.72rem;
+            border-radius: 999px;
+            font-size: 0.73rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1d4ed8;
+            background: rgba(219, 234, 254, 0.95);
+            border: 1px solid rgba(147, 197, 253, 0.9);
+            margin-bottom: 0.85rem;
+        }
+
+        .help-hero__title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0;
+            color: #0f172a;
+            font-size: clamp(1.35rem, 2vw, 1.95rem);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        .help-hero__title-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #1d4ed8;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.55);
+            flex: 0 0 auto;
+        }
+
+        .help-hero__copy {
+            max-width: 64ch;
+            margin: 0.8rem 0 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .help-hero__links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+        }
+
+        .help-chip-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.08);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #0f172a;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+            .help-chip-link:hover {
+                color: #0f172a;
+                border-color: rgba(96, 165, 250, 0.45);
+                background: rgba(219, 234, 254, 0.92);
+                transform: translateY(-1px);
+            }
+
+        .help-hero__panel {
+            display: grid;
+            gap: 0.8rem;
+            align-content: start;
+        }
+
+        .help-hero__stat {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            box-shadow: 0 12px 28px rgba(148, 163, 184, 0.16);
+        }
+
+        .help-hero__stat-label {
+            display: block;
+            margin-bottom: 0.28rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .help-hero__stat strong {
+            display: block;
+            font-size: 0.96rem;
+            color: #0f172a;
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 2.1fr);
+            gap: 1.25rem;
+            margin-top: .25rem;
+            align-items: start;
+        }
+
+        .help-sidebar-column {
+            min-width: 0;
+        }
+
+        .help-sidebar-sticky {
+            --sticky-top: calc(262px + 2rem);
+            --sticky-width: auto;
+        }
+
+        .help-sidebar-card,
+        .help-section-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            background: #fff;
+            box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.05);
+        }
+
+        .help-sidebar-card {
+            position: static;
+        }
+
+            .help-sidebar-card .card-body,
+            .help-section-card .card-body {
+                padding: 1.25rem;
+            }
+
+        .help-sidebar-title,
+        .help-section-title {
+            font-size: 0.86rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 0.95rem;
+        }
+
+        .help-nav {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .help-nav-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+            .help-nav a {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.75rem;
+                padding: 0.8rem 0.9rem;
+                border-radius: 0.8rem;
+                text-decoration: none;
+                color: #0f172a;
+                background: #f8fafc;
+                border: 1px solid transparent;
+                font-weight: 600;
+                font-size: 0.9rem;
+            }
+
+                .help-nav a:hover {
+                    border-color: #bfdbfe;
+                    background: #eff6ff;
+                    color: #1d4ed8;
+                }
+
+        .help-mini-note {
+            margin-top: 1rem;
+            padding: 0.9rem;
+            border-radius: 0.85rem;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 0.84rem;
+        }
+
+        .help-content {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .help-section-card h2 {
+            margin-bottom: 0.4rem;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .help-section-card > .card-body > p {
+            color: #64748b;
+            font-size: 0.94rem;
+            margin-bottom: 1rem;
+        }
+
+        .help-callout-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .help-callout {
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.9rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+            .help-callout i {
+                font-size: 1.2rem;
+                color: #0f766e;
+            }
+
+            .help-callout h3 {
+                margin-top: 0.7rem;
+                margin-bottom: 0.45rem;
+                font-size: 1rem;
+                font-weight: 700;
+                color: #0f172a;
+            }
+
+            .help-callout p {
+                margin: 0;
+                color: #64748b;
+                font-size: 0.86rem;
+            }
+
+        .help-module-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .help-module {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1rem;
+            background: #fff;
+        }
+
+        .help-module-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .help-module-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 1.1rem;
+            flex: 0 0 auto;
+        }
+
+        .help-module h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .help-module p {
+            margin: 0.2rem 0 0;
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+
+        .help-list {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .help-list-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            color: #334155;
+            font-size: 0.88rem;
+        }
+
+            .help-list-item i {
+                color: #0ea5e9;
+                margin-top: 0.18rem;
+                font-size: 0.7rem;
+            }
+
+        .help-workflow {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #fff;
+        }
+
+            .help-workflow + .help-workflow {
+                margin-top: 0.9rem;
+            }
+
+        .help-workflow-head {
+            padding: 0.95rem 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+            .help-workflow-head h3 {
+                margin: 0;
+                font-size: 1rem;
+                font-weight: 700;
+                color: #0f172a;
+            }
+
+            .help-workflow-head p {
+                margin: 0.3rem 0 0;
+                font-size: 0.84rem;
+                color: #64748b;
+            }
+
+        .help-steps {
+            display: grid;
+            gap: 0.9rem;
+            padding: 1rem;
+        }
+
+        .help-step {
+            display: grid;
+            grid-template-columns: 2rem 1fr;
+            gap: 0.8rem;
+        }
+
+        .help-step-number {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .help-step h4 {
+            margin: 0 0 0.2rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .help-step p {
+            margin: 0;
+            font-size: 0.87rem;
+            color: #64748b;
+        }
+
+        .help-accordion .accordion-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.95rem;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .help-accordion .accordion-button {
+            font-weight: 700;
+            color: #0f172a;
+            background: #f8fafc;
+        }
+
+            .help-accordion .accordion-button:not(.collapsed) {
+                background: #eff6ff;
+                color: #1d4ed8;
+                box-shadow: none;
+            }
+
+        .help-accordion .accordion-body {
+            font-size: 0.9rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .help-cta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .help-cta {
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid #dbe4f0;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+            .help-cta h3 {
+                margin-bottom: 0.4rem;
+                font-size: 1rem;
+                font-weight: 700;
+                color: #0f172a;
+            }
+
+            .help-cta p {
+                margin-bottom: 0.75rem;
+                color: #64748b;
+                font-size: 0.86rem;
+            }
+
+            .help-cta a {
+                text-decoration: none;
+                font-weight: 700;
+            }
+
+        @@media (max-width: 1199.98px) {
+            .help-hero,
+            .help-grid,
+            .help-callout-grid,
+            .help-module-grid,
+            .help-cta-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .help-sidebar-card {
+                position: static;
+            }
+        }
+    </style>
+}
+
+
+@Html.Hidden("PlantCode", (string)ViewBag.Id)
+@Html.Hidden("PlantName")
+
+
+<div class="help-grid">
+    <aside class="help-sidebar-column">
+        <div class="configurable--sticky" style="--sticky-top: calc(365px + 2rem);">
+            <div class="card help-sidebar-card">
+                <div class="menu--content">
+                    <div class="card-body">
+                        <div class="help-sidebar-title">Configuration Navigator</div>
+                        <nav class="help-nav">
+                            <a href="#profile"><span class="help-nav-label"><i class="bi bi-building"></i><span>Profile</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a href="#basic-info"><span class="help-nav-label"><i class="bi bi-receipt"></i><span>Basic Info</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a href="#members"><span class="help-nav-label"><i class="bi bi-people"></i><span>Members</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a href="#plant-notification-manager"><span class="help-nav-label"><i class="bi bi-bell"></i><span>Notifications</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a href="#roadmap"><span class="help-nav-label"><i class="bi bi-signpost-split"></i><span>Roadmap Configurations</span></span><i class="bi bi-arrow-right"></i></a>
+                            <a href="#delete"><span class="help-nav-label"><i class="bi bi-trash"></i><span>Delete Plant</span></span><i class="bi bi-arrow-right"></i></a>
+                        </nav>
+                        <div class="help-mini-note">
+                            Keep plant details, access, and roadmap templates in one place. Each section works like a help-center article with focused actions.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="help-content">
+        <!-- Card Profile -->
+        <div class="card card-body" id="profile">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-sm-auto col-4">
+                    <div class="user-avatar shadow medium site-md">
+                        <div class="profile-circle">
+                            <img id="imgPlantBanner" src="/content/uploads/plantfiles/Error.jpg" alt="User" class="profile-img" onerror="showInitial(this)">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-auto col-8 my-auto">
+                    <div class="h-100">
+                        <h5 class="mb-1 font-weight-bolder">
+                            <label id="labelPlantName">Plant Name</label>
+                        </h5>
+                        <p class="mb-0 font-weight-normal text-sm">
+                            <label id="labelPlantCode">Plant Code</label>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-auto ms-sm-auto mt-sm-0 mt-3 d-flex">
+                    @*<label class="form-check-label mb-0">
+                            <small id="profileVisibility">
+                                Switch to active
+                            </small>
+                        </label>
+                        <div class="form-check form-switch ms-2 my-auto">
+                            <input class="form-check-input" type="checkbox" id="isActive" checked="">
+                        </div>*@
+                </div>
+            </div>
+        </div>
+        <!-- Card Basic Info -->
+        <div class="card mt-4" id="basic-info">
+
+            <div class="card-body pt-0">
+                <div class="py-2">
+                    <h5>Basic Info</h5>
+                </div>
+
+                <form id="formUpdatePlant" class="needs-validation" method="put" novalidate="">
+                    @Html.Hidden("TransactionKey")
+                    @Html.Hidden("IsActive")
+                    <div class="form-group mb-3">
+                        <label for="Code" class="form-label">Plant Code<span class="required-indicator sr-only"></span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Code" name="Code" disabled readonly>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">Plant Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Enter Plant Name" required="">
+                            <div class="invalid-feedback">Please provide a plant name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="siteImage" class="form-label">Banner Image</label>
+                        <div class="input-group mb-3">
+                            <input type="file" class="form-control" id="siteImage" accept=".jpg,image/jpeg">
+                            <label class="input-group-text" for="siteImage">Upload</label>
+                        </div>
+                    </div>
+                    <img id="profileImage" alt="Profile Image" style="width:150px;cursor:pointer;" onerror="this.style.display='none'; document.getElementById('fileUpload').style.display='block';" />
+
+                    <div class="row">
+                        <div class="col-12">
+                            <button class="btn btn-outline-dark m-0 float-end" type="submit">Update basic info</button>
+
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+        <!-- Card Change Password -->
+        <div class="card mt-4" id="members">
+
+            <div class="card-body">
+
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Members</h5>
+                    </div>
+                    <div class="col-6">
+                        <div class=" float-end">
+                            @*<input type="text" placeholder="Search user to add (First Name, Last Name, Username, Email)" class="form-control rounded-0 me-1">*@
+                            <form id="formAddPlantMember" class="needs-validation" method="post" novalidate="">
+                                <div class="d-flex align-items-stretch gap-1">
+                                    <select id="UserSearch" style="width: 100%;" name="UserSearch" required class="form-control" placeholder="Search user to add (First Name, Last Name, Username, Email)"></select>
+                                    <span class="input-group-append">
+                                        <button type="submit" id="AddMember" class="btn btn-outline-dark btn-flat">Add</button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="pb-2">
+                    <table id="tableMembers" class="display table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="col-10">Name</th>
+                                <th class="col-1"></th>
+                                <th class="col-1"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="modal fade" id="plantMemberAssignmentsModal" tabindex="-1" aria-labelledby="plantMemberAssignmentsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div>
+                            <h5 class="modal-title" id="plantMemberAssignmentsModalLabel">Plant User Group Assignment</h5>
+                            <p class="text-sm text-muted mb-0" id="plantMemberAssignmentsSummary">Choose the user groups that apply to this plant member.</p>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>User Group</th>
+                                        <th>Description</th>
+                                        <th class="text-center">Assigned</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="plantUserGroupAssignmentsTableBody">
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-4">Select a member to configure assignments.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-4" id="plant-notification-manager">
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                    <div>
+                        <h5 class="mb-1">Notifications</h5>
+                        <p class="text-sm mb-0">Create and manage plant-level notifications for this site.</p>
+                    </div>
+                    @if (AuthorizationHelper.IsInGroupsOrModules("", "NOTIFADD"))
+                    {
+                        <button id="plantOverviewNotificationAddButton" type="button" class="btn btn-outline-primary btn-sm">Add notification</button>
+                    }
+                </div>
+                <hr class="horizontal dark">
+                <div id="plantOverviewNotificationsEmpty" class="text-muted small">Loading plant notifications...</div>
+                <div id="plantOverviewNotificationsList"></div>
+            </div>
+        </div>
+        <!-- Card Roadmap Configurations -->
+        <div class="card mt-4" id="roadmap">
+
+
+            <div class="card-body">
+
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Roadmap Configurations</h5>
+                        <p class="text-sm mb-0">Here you can setup and manage availabe roadmaps.</p>
+                    </div>
+                    <div class="col-6">
+
+                        <a id="buttonAddRoadmap" data-action="deactivate" href="@Url.Action("New", "Roadmaps", new { area = "Templates" })" class="btn btn-outline-secondary mb-3 mb-md-0 ms-auto float-end" name="button">Add Roadmap Configuration</a>
+                    </div>
+                </div>
+
+                <hr class="horizontal dark">
+                <div class="pb-2">
+                    <table id="tableRoadmaps" class="display table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="col-3">NAME</th>
+                                <th class="col-7">DESCRIPTION</th>
+                                <th class="col-1"></th>
+                                <th class="col-1"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Card Accounts -->
+        <div class="card mt-4" id="accounts" style="display:none">
+            <div class="card-header">
+                <h5>Accounts</h5>
+                <p class="text-sm">Here you can setup and manage your integration settings.</p>
+            </div>
+            <div class="card-body pt-0">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-slack.svg" alt="logo_slack">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Slack</h5>
+                            <a class="text-sm text-body" href="javascript:;">Show less <i class="fas fa-chevron-up text-xs ms-1" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <p class="text-sm text-secondary ms-auto me-3 my-auto">Enabled</p>
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault1">
+                    </div>
+                </div>
+                <div class="ps-5 pt-3 ms-3">
+                    <p class="mb-0 text-sm">You haven't added your Slack yet or you aren't authorized. Please add our Slack Bot to your account by clicking on <a href="javascript">here</a>. When you've added the bot, send your verification code that you have received.</p>
+                    <div class="d-sm-flex bg-gray-100 border-radius-lg p-2 my-4 is-filled">
+                        <p class="text-sm font-weight-bold my-auto ps-sm-2">Verification Code</p>
+                        <input class="form-control form-control-sm ms-sm-auto mt-sm-0 mt-2 w-sm-15 w-40" type="text" value="1172913" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Copy!" data-bs-original-title="Copy!" onfocus="focused(this)" onfocusout="defocused(this)">
+                    </div>
+                    <div class="d-sm-flex bg-gray-100 border-radius-lg p-2 my-4">
+                        <p class="text-sm font-weight-bold my-auto ps-sm-2">Connected account</p>
+                        <h6 class="text-sm ms-auto me-3 my-auto">hello@creative-tim.com</h6>
+                        <button class="btn btn-sm bg-gradient-dark my-sm-auto mt-2 mb-0" type="button" name="button">Delete</button>
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-spotify.svg" alt="logo_spotify">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Spotify</h5>
+                            <p class="mb-0 text-sm">Music</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-secondary ms-auto me-3 my-auto">Enabled</p>
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault2">
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-atlassian.svg" alt="logo_atlassian">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Atlassian</h5>
+                            <p class="mb-0 text-sm">Payment vendor</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-secondary ms-auto me-3 my-auto">Enabled</p>
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault3">
+                    </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex">
+                    <img class="width-48-px" src="../../assets/img/small-logos/logo-asana.svg" alt="logo_asana">
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <h5 class="mb-0">Asana</h5>
+                            <p class="mb-0 text-sm">Organize your team</p>
+                        </div>
+                    </div>
+                    <div class="form-check form-switch ms-auto my-auto">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault4">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Card Notifications -->
+        <div class="card mt-4" id="notifications" style="display:none">
+            <div class="card-header">
+                <h5>Notifications</h5>
+                <p class="text-sm">Choose how you receive notifications. These notification settings apply to the things you’re watching.</p>
+            </div>
+            <div class="card-body pt-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-1" colspan="4">
+                                    <p class="mb-0">Activity</p>
+                                </th>
+                                <th class="text-center">
+                                    <p class="mb-0">Email</p>
+                                </th>
+                                <th class="text-center">
+                                    <p class="mb-0">Push</p>
+                                </th>
+                                <th class="text-center">
+                                    <p class="mb-0">SMS</p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <span class="text-dark d-block text-sm">Mentions</span>
+                                        <span class="text-xs font-weight-normal">Notify when another user mentions you in a comment</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault11">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault12">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault13">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <span class="text-dark d-block text-sm">Comments</span>
+                                        <span class="text-xs font-weight-normal">Notify when another user comments your item.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault14">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault15">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault16">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <span class="text-dark d-block text-sm">Follows</span>
+                                        <span class="text-xs font-weight-normal">Notify when another user follows you.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault17">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault18">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault19">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-1" colspan="4">
+                                    <div class="my-auto">
+                                        <p class="text-sm mb-0">Log in from a new device</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault20">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault21">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch mb-0 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input" checked="" type="checkbox" id="flexSwitchCheckDefault22">
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Card Sessions -->
+        <div class="card mt-4" id="sessions" style="display:none">
+            <div class="card-header pb-3">
+                <h5>Sessions</h5>
+                <p class="text-sm">This is a list of devices that have logged into your account. Remove those that you do not recognize.</p>
+            </div>
+            <div class="card-body pt-0">
+                <div class="d-flex align-items-center">
+                    <div class="text-center w-5">
+                        <i class="fas fa-desktop text-lg opacity-6"></i>
+                    </div>
+                    <div class="my-auto ms-3">
+                        <div class="h-100">
+                            <p class="text-sm mb-1">
+                                Bucharest 68.133.163.201
+                            </p>
+                            <p class="mb-0 text-xs">
+                                Your current session
+                            </p>
+                        </div>
+                    </div>
+                    <span class="badge badge-success badge-sm my-auto ms-auto me-3">Active</span>
+                    <p class="text-secondary text-sm my-auto me-3">EU</p>
+                    <a href="javascript:;" class="text-primary text-sm icon-move-right my-auto">
+                        See more
+                        <i class="fas fa-arrow-right text-xs ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex align-items-center">
+                    <div class="text-center w-5">
+                        <i class="fas fa-desktop text-lg opacity-6"></i>
+                    </div>
+                    <p class="my-auto ms-3">Chrome on macOS</p>
+                    <p class="text-secondary text-sm ms-auto my-auto me-3">US</p>
+                    <a href="javascript:;" class="text-primary text-sm icon-move-right my-auto">
+                        See more
+                        <i class="fas fa-arrow-right text-xs ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <hr class="horizontal dark">
+                <div class="d-flex align-items-center">
+                    <div class="text-center w-5">
+                        <i class="fas fa-mobile text-lg opacity-6"></i>
+                    </div>
+                    <p class="my-auto ms-3">Safari on iPhone</p>
+                    <p class="text-secondary text-sm ms-auto my-auto me-3">US</p>
+                    <a href="javascript:;" class="text-primary text-sm icon-move-right my-auto">
+                        See more
+                        <i class="fas fa-arrow-right text-xs ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Card Delete Plant -->
+        <div class="card mt-4" id="delete">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-sm-0 mb-4">
+                    <div class="w-50">
+                        <h5>Delete Plant</h5>
+                        <p class="text-sm mb-0">Once you delete this plant, there is no going back. Please be certain.</p>
+                    </div>
+                    <div class="w-50 text-end">
+                        <button id="buttonIsActive" data-action="deactivate" class="btn btn-outline-secondary mb-3 mb-md-0 ms-auto" type="button" name="button">Deactivate</button>
+                        <button id="buttonDeletePlant" class="btn bg-gradient-danger mb-0 ms-2" type="button" name="button">Delete Plant</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.Partial("~/Views/Shared/_NotificationEditorModal.cshtml")
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+@section scripts{
+    <script src="~/Scripts/locals/sticky-menu.js"></script>
+    <!-- datatables -->
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/node_modules/select2/dist/js/select2.min.js"></script>
+    <!-- jquery-validate -->
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/Scripts/locals/switch-button.js"></script>
+    <script>
+        //selected
+        //switchInput.checked = true;
+
+// Initialize on page load
+
+
+        var id = '@ViewBag.Id';
+
+
+
+
+
+
+        @*// Function to load tab content via AJAX
+        function loadTabContent(tabId, url) {
+            var $tabPane = $(tabId);
+            if ($tabPane.data('loaded')) return; // Prevent reloading
+
+            $.get(url, function (data) {
+                $tabPane.html(data);
+                $tabPane.data('loaded', true);
+            });
+        }
+
+        $(document).ready(function () {
+            // Load the first tab by default
+            loadTabContent('#tab1-content', '@Url.Action("Tab1", "Dashboard")');
+
+            // Handle tab shown event
+            $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).data('bs-target');
+                if (target === '#tab1-content') {
+                    loadTabContent('#tab1-content', '@Url.Action("Tab1", "Plants", new { area = "Sites" })');
+                } else if (target === '#tab2-content') {
+                    loadTabContent('#tab2-content', '@Url.Action("Tab2", "Dashboard")');
+                }
+            });
+        });*@
+
+    </script>
+    <script src="~/Areas/Operations/Scripts/plants/Configuration.js"></script>
+    <script src="~/Scripts/locals/notification-manager.js"></script>
+    <script>
+
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            window.PulseNotificationManager.init({
+                entityType: 'PLANT',
+                entitySysId: document.getElementById('PlantCode').value,
+                contextLabel: 'Plant',
+                listSelector: '#plantOverviewNotificationsList',
+                emptySelector: '#plantOverviewNotificationsEmpty',
+                addButtonSelector: '#plantOverviewNotificationAddButton',
+                modalSelector: '#notificationEditorModal',
+                formSelector: '#notificationEditorForm',
+                canAdd: @(AuthorizationHelper.IsInGroupsOrModules("", "NOTIFADD").ToString().ToLowerInvariant()),
+                canEdit: @(AuthorizationHelper.IsInGroupsOrModules("", "NOTIFEDIT,NOTIFADD").ToString().ToLowerInvariant()),
+                canDelete: @(AuthorizationHelper.IsInGroupsOrModules("", "NOTIFDEL,NOTIFADD").ToString().ToLowerInvariant()),
+                loadingText: 'Loading plant notifications...',
+                emptyText: 'No plant notifications found.',
+                createTitle: 'Add plant notification',
+                editTitle: 'Edit plant notification'
+            });
+        });
+    </script>
+}

@@ -1,0 +1,585 @@
+﻿@using Pulse.Web.Helpers
+@{
+    /**/
+
+    ViewBag.Title = "Application Templates";
+    ViewBag.TitleIcon = "bi bi-collection-fill";
+
+    ViewBag.SubTitle = "Configure reusable templates used across your application.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.IsActiveTemplates = "active";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+
+
+<style>
+    :root {
+        --bg: #f4f7fb;
+        --card-bg: #ffffff;
+        --primary: #0052cc;
+        --primary-soft: #e3edff;
+        --accent: #ffb547;
+        --text-main: #1a1f36;
+        --text-muted: #6c7393;
+        --border-soft: #dde3f0;
+        --radius-lg: 18px;
+        --radius-pill: 999px;
+        --shadow-soft: 0 14px 30px rgba(15, 35, 52, 0.08);
+        --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top left, #f7fbff 0, #edf1f9 40%, #e7ecf7 100%);
+        color: var(--text-main);
+        min-height: 100vh;
+    }
+
+
+
+    .template-home-hero {
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.95fr);
+        gap: 1rem;
+        margin-bottom: 18px;
+        padding: 22px 24px;
+        border-radius: 24px;
+        border: 1px solid rgba(177, 193, 224, 0.55);
+        background: linear-gradient(135deg, #0f172a 0%, #144a5d 50%, #f4f7fb 100%);
+        box-shadow: 0 22px 48px rgba(15, 23, 42, 0.14);
+    }
+
+        .template-home-hero::after {
+            content: "";
+            position: absolute;
+            inset: auto -70px -95px auto;
+            width: 230px;
+            height: 230px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.24) 0%, rgba(96, 165, 250, 0) 72%);
+            pointer-events: none;
+        }
+
+    .template-home-hero__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: var(--radius-pill);
+        background: rgba(255, 255, 255, 0.12);
+        color: #bfdbfe;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .template-home-hero h1 {
+        margin-top: 14px;
+        font-size: 2.3rem;
+        letter-spacing: -0.04em;
+        color: #f8fafc;
+    }
+
+    .template-home-hero p {
+        margin-top: 8px;
+        color: rgba(226, 232, 240, 0.84);
+        line-height: 1.7;
+        max-width: 720px;
+    }
+
+    .template-home-hero__chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .template-home-hero__chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: var(--radius-pill);
+        background: rgba(15, 23, 42, 0.26);
+        border: 1px solid rgba(191, 219, 254, 0.18);
+        color: #dbeafe;
+        font-size: 0.82rem;
+        font-weight: 600;
+    }
+
+    .template-home-hero__panel {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 12px;
+        align-content: start;
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        color: var(--text-main);
+    }
+
+    .template-home-hero__panel-label {
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
+
+    .template-home-hero__panel strong {
+        font-size: 1.05rem;
+    }
+
+    .template-home-hero__panel p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 0.84rem;
+        line-height: 1.6;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+        gap: 16px;
+    }
+
+    .title-block h1 {
+        font-size: 2rem;
+        letter-spacing: -0.02em;
+    }
+
+    .title-block p {
+        margin-top: 4px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .content-card {
+        background: rgba(255, 255, 255, 0.97);
+        border-radius: 22px;
+        padding: 18px 20px 24px;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(177, 193, 224, 0.5);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    .section-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    .section-meta {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .admin-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+    }
+
+    .admin-card {
+        background: var(--card-bg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-soft);
+        padding: 16px 16px 14px;
+        box-shadow: 0 8px 18px rgba(6, 32, 83, 0.06);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+        .admin-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at top right, rgba(0, 82, 204, 0.08), transparent 55%);
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .admin-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 32px rgba(6, 25, 56, 0.18);
+            border-color: rgba(0, 82, 204, 0.35);
+            background: #ffffff;
+        }
+
+            .admin-card:hover::before {
+                opacity: 1;
+            }
+
+    .admin-meta {
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        letter-spacing: 0.09em;
+        font-weight: 600;
+    }
+
+    .admin-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+        .admin-title h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+    .admin-tag {
+        font-size: 0.7rem;
+        padding: 3px 9px;
+        border-radius: var(--radius-pill);
+        background: #fff9ec;
+        border: 1px solid #ffe4b3;
+        color: #c27a00;
+    }
+
+    .admin-desc {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+    }
+
+    .admin-actions {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .admin-btn {
+        flex: 1 1 80px;
+        min-width: 80px;
+        text-align: center;
+        border-radius: var(--radius-pill);
+        border: 1px solid rgba(0, 82, 204, 0.1);
+        padding: 7px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--primary);
+        background: var(--primary-soft);
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+    }
+
+        .admin-btn span.icon {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+    .admin-btn--secondary {
+        background: #f4f6fc;
+        color: var(--text-main);
+    }
+
+    .admin-btn--ghost {
+        background: #ffffff;
+        color: var(--text-muted);
+    }
+
+    .admin-btn:hover {
+        background: #ffffff;
+        color: var(--primary);
+        box-shadow: 0 7px 16px rgba(0, 82, 204, 0.25);
+        transform: translateY(-1px);
+        border-color: rgba(0, 82, 204, 0.45);
+    }
+
+    .admin-footer {
+        margin-top: 6px;
+        font-size: 0.76rem;
+        color: var(--text-muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #1ecb6b;
+        margin-right: 4px;
+        display: inline-block;
+    }
+
+    @@media (max-width: 600px) {
+        .template-home-hero {
+            grid-template-columns: 1fr;
+            padding: 18px 16px;
+        }
+
+        .content-card {
+            padding: 14px 12px 18px;
+        }
+
+        .title-block h1 {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+<div class="page">
+    <section class="template-home-hero">
+        <div>
+            <span class="template-home-hero__eyebrow"><i class="bi bi-ui-checks-grid"></i> Template governance</span>
+            <h1>Define the standards every project starts from.</h1>
+            <p>Manage calendars, classifications, lifecycle structures, and reusable planning models so teams work from the same approved foundation across Pulse.</p>
+            <div class="template-home-hero__chips">
+                <span class="template-home-hero__chip"><i class="bi bi-calendar3"></i> Scheduling standards</span>
+                <span class="template-home-hero__chip"><i class="bi bi-boxes"></i> Portfolio structure</span>
+                <span class="template-home-hero__chip"><i class="bi bi-file-earmark-text"></i> Reusable forms</span>
+                <span class="template-home-hero__chip"><i class="bi bi-signpost-split"></i> Roadmap models</span>
+            </div>
+        </div>
+        <aside class="template-home-hero__panel">
+            <div class="template-home-hero__panel-label">What lives here</div>
+            <strong>Configure the shared templates that shape planning, tracking, and reporting.</strong>
+            <p>Update the reusable assets behind projects before execution begins, then move into list, add, or reporting actions below.</p>
+        </aside>
+    </section>
+
+    <main class="content-card">
+
+        <section class="admin-grid" aria-label="Template sections">
+
+
+            <!-- Categories -->
+            <article class="admin-card">
+                <div class="admin-meta">Classification</div>
+                <div class="admin-title">
+                    <h3>Categories</h3>
+                    <span class="admin-tag">Taxonomies</span>
+                </div>
+                <p class="admin-desc">
+                    Define reusable categories for projects to keep data structured and searchable.
+                </p>
+                <div class="admin-actions">
+                    <a href="@Url.Action("Index", "Categories", new { area = "Templates" })" class="admin-btn admin-btn--secondary">
+                        <span class="icon">📋</span> <span>List</span>
+                    </a>
+                    <a href="@Url.Action("New", "Categories", new { area = "Templates" })" class="admin-btn">
+                        <span class="icon">➕</span> <span>Add</span>
+                    </a>
+                    <a href="@Url.Action("Reports", "Categories", new { area = "Templates" })" class="admin-btn admin-btn--ghost">
+                        <span class="icon">📊</span> <span>Report</span>
+                    </a>
+                </div>
+                <div class="admin-footer">
+                    <span><span class="status-dot"></span>Active</span>
+                    <span>Last change: 3h ago</span>
+                </div>
+            </article>
+
+            <!-- Fields -->
+            @if (AuthorizationHelper.IsInGroupsOrModules("", "FIELDVIEW,FIELDADD,FIELDEDIT,FIELDDEL"))
+            {
+                <article class="admin-card">
+                    <div class="admin-meta">Data capture</div>
+                    <div class="admin-title">
+                        <h3>Fields</h3>
+                        <span class="admin-tag">Input templates</span>
+                    </div>
+                    <p class="admin-desc">
+                        Create dynamic fields and reuse them across forms for consistent data capture.
+                    </p>
+                    <div class="admin-actions">
+                        @if (AuthorizationHelper.IsInGroupsOrModules("", "FIELDVIEW,FIELDADD,FIELDEDIT,FIELDDEL"))
+                        {
+                            <a href="@Url.Action("Index", "Fields", new { area = "Templates" })" class="admin-btn admin-btn--secondary">
+                                <span class="icon">📋</span> <span>List</span>
+                            </a>
+                        }
+
+                        @if (AuthorizationHelper.IsInGroupsOrModules("", "FIELDADD"))
+                        {
+                            <a href="@Url.Action("New", "Fields", new { area = "Templates" })" class="admin-btn">
+                                <span class="icon">➕</span> <span>Add</span>
+                            </a>
+                        }
+
+                        @if (AuthorizationHelper.IsInGroupsOrModules("", "FIELDVIEW,FIELDADD,FIELDEDIT,FIELDDEL"))
+                        {
+                            <a href="@Url.Action("Reports", "Fields", new { area = "Templates" })" class="admin-btn admin-btn--ghost">
+                                <span class="icon">📊</span> <span>Report</span>
+                            </a>
+                        }
+                    </div>
+                    <div class="admin-footer">
+                        <span><span class="status-dot"></span>Active</span>
+                        <span>Used in 12 workflows</span>
+                    </div>
+                </article>
+            }
+
+
+            <!-- Forms -->
+            <article class="admin-card">
+                <div class="admin-meta">Data capture</div>
+                <div class="admin-title">
+                    <h3>Forms</h3>
+                    <span class="admin-tag">Input container templates</span>
+                </div>
+                <p class="admin-desc">
+                    Create dynamic forms and reuse them in workflows such as incident, change, and product requests.
+                </p>
+                <div class="admin-actions">
+                    <a href="@Url.Action("Index", "Forms", new { area = "Templates" })" class="admin-btn admin-btn--secondary">
+                        <span class="icon">📋</span> <span>List</span>
+                    </a>
+                    <a href="@Url.Action("New", "Forms", new { area = "Templates" })" class="admin-btn">
+                        <span class="icon">➕</span> <span>Add</span>
+                    </a>
+                    <a href="@Url.Action("Reports", "Forms", new { area = "Templates" })" class="admin-btn admin-btn--ghost">
+                        <span class="icon">📊</span> <span>Report</span>
+                    </a>
+                </div>
+                <div class="admin-footer">
+                    <span><span class="status-dot"></span>Active</span>
+                    <span>Used in 12 workflows</span>
+                </div>
+            </article>
+
+            <!-- Maturities -->
+            <article class="admin-card">
+                <div class="admin-meta">Lifecycle</div>
+                <div class="admin-title">
+                    <h3>Maturities</h3>
+                    <span class="admin-tag">Stages</span>
+                </div>
+                <p class="admin-desc">
+                    Manage lifecycle stages for projects, products, or roadmaps (e.g. Draft, Pilot, Production, EOL).
+                </p>
+                <div class="admin-actions">
+                    <a href="@Url.Action("Index", "MaturityLevels", new { area = "Templates" })" class="admin-btn admin-btn--secondary">
+                        <span class="icon">📋</span> <span>List</span>
+                    </a>
+                    <a href="@Url.Action("New", "MaturityLevels", new { area = "Templates" })" class="admin-btn">
+                        <span class="icon">➕</span> <span>Add</span>
+                    </a>
+                    <a href="@Url.Action("Reports", "MaturityLevels", new { area = "Templates" })" class="admin-btn admin-btn--ghost">
+                        <span class="icon">📊</span> <span>Report</span>
+                    </a>
+                </div>
+                <div class="admin-footer">
+                    <span><span class="status-dot"></span>Active</span>
+                    <span>Standard set v2.0</span>
+                </div>
+            </article>
+
+
+            <!-- Product Divisions -->
+            <article class="admin-card">
+                <div class="admin-meta">Product structure</div>
+                <div class="admin-title">
+                    <h3>Product Divisions</h3>
+                    <span class="admin-tag">Top-level</span>
+                </div>
+                <p class="admin-desc">
+                    Maintain official product divisions and align them with finance and reporting structures.
+                </p>
+                <div class="admin-actions">
+                    <a href="@Url.Action("Index", "ProductDivisions", new { area = "Templates" })" class="admin-btn admin-btn--secondary">
+                        <span class="icon">📋</span> <span>List</span>
+                    </a>
+                    <a href="@Url.Action("New", "ProductDivisions", new { area = "Templates" })" class="admin-btn">
+                        <span class="icon">➕</span> <span>Add</span>
+                    </a>
+                    <a href="@Url.Action("Reports", "ProductDivisions", new { area = "Templates" })" class="admin-btn admin-btn--ghost">
+                        <span class="icon">📊</span> <span>Report</span>
+                    </a>
+                </div>
+                <div class="admin-footer">
+                    <span><span class="status-dot"></span>Active</span>
+                    <span>Aligned with master data</span>
+                </div>
+            </article>
+
+            <!-- Product Groups -->
+            <article class="admin-card">
+                <div class="admin-meta">Product structure</div>
+                <div class="admin-title">
+                    <h3>Product Groups</h3>
+                    <span class="admin-tag">Mid-level</span>
+                </div>
+                <p class="admin-desc">
+                    Define product groups within each division for planning, reporting, and access control.
+                </p>
+                <div class="admin-actions">
+                    <a href="@Url.Action("Index", "ProductGroups", new { area = "Templates" })" class="admin-btn admin-btn--secondary">
+                        <span class="icon">📋</span> <span>List</span>
+                    </a>
+                    <a href="@Url.Action("New", "ProductGroups", new { area = "Templates" })" class="admin-btn">
+                        <span class="icon">➕</span> <span>Add</span>
+                    </a>
+                    <a href="@Url.Action("Reports", "ProductGroups", new { area = "Templates" })" class="admin-btn admin-btn--ghost">
+                        <span class="icon">📊</span> <span>Report</span>
+                    </a>
+                </div>
+                <div class="admin-footer">
+                    <span><span class="status-dot"></span>Active</span>
+                    <span>Linked to 5 divisions</span>
+                </div>
+            </article>
+
+            <!-- Roadmaps -->
+            <article class="admin-card">
+                <div class="admin-meta">Strategy</div>
+                <div class="admin-title">
+                    <h3>Roadmaps</h3>
+                    <span class="admin-tag">Templates</span>
+                </div>
+                <p class="admin-desc">
+                    Standard roadmap templates for technology, products, and capabilities with maturity milestones.
+                </p>
+                <div class="admin-actions">
+                    <a href="@Url.Action("Index", "Roadmaps", new { area = "Templates" })" class="admin-btn admin-btn--secondary">
+                        <span class="icon">📋</span> <span>List</span>
+                    </a>
+                    <a href="@Url.Action("New", "Roadmaps", new { area = "Templates" })" class="admin-btn">
+                        <span class="icon">➕</span> <span>Add</span>
+                    </a>
+                    <a href="@Url.Action("Reports", "Roadmaps", new { area = "Templates" })" class="admin-btn admin-btn--ghost">
+                        <span class="icon">📊</span> <span>Report</span>
+                    </a>
+                </div>
+                <div class="admin-footer">
+                    <span><span class="status-dot"></span>Active</span>
+                    <span>Used by strategy teams</span>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>

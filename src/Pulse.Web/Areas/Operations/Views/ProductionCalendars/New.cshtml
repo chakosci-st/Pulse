@@ -1,0 +1,454 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New Production Calendar";
+    ViewBag.TitleIcon = "bi bi-plus-circle";
+    ViewBag.SubTitle = "Create a production calendar that assigns fiscal dates to the workweek, month, quarter, and year structure used by the company.";
+    ViewBag.ContentHeaderChips = new[] { "Fiscal date mapping", "Workweek alignment", "Quarter and year rollup" };
+    ViewBag.ContentHeaderAsideLabel = "New calendar";
+    ViewBag.ContentHeaderAsideTitle = "Define the fiscal timeline that downstream planning and reporting will rely on.";
+    ViewBag.ContentHeaderAsideBody = "Use this template to group fiscal dates into the production periods manufacturing teams reference every day.";
+    ViewBag.IsActiveOperationsProductionCalendars = "menu-open";
+    ViewBag.IsActiveOperationsProductionCalendarsNew = "active";
+    ViewBag.SelectedMenu = "Operations";
+    ViewBag.IsActiveOperations = "active";
+}
+
+@section Styles {
+    <link href="~/node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
+    <style>
+        .production-calendar-new-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .production-calendar-form-card,
+        .production-calendar-preview-card {
+            border: 1px solid #dbe4ea;
+            border-radius: 1.2rem;
+            background: #ffffff;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+        }
+
+        .production-calendar-form-card .card-body,
+        .production-calendar-preview-card .card-body {
+            padding: 1.25rem 1.35rem;
+        }
+
+        .production-calendar-form-intro {
+            display: grid;
+            gap: 0.45rem;
+            margin-bottom: 1rem;
+        }
+
+        .production-calendar-form-intro p {
+            margin: 0;
+            color: #64748b;
+            max-width: 72ch;
+        }
+
+        .production-calendar-config-note {
+            margin-top: 0.85rem;
+            padding: 0.9rem 1rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6f9 100%);
+            border: 1px solid #dbe4ea;
+            color: #475569;
+        }
+
+        .production-calendar-config-note strong {
+            display: block;
+            margin-bottom: 0.2rem;
+            color: #0f172a;
+        }
+
+        .production-calendar-preview-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .production-calendar-preview-title {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .production-calendar-preview-copy {
+            margin: 0.2rem 0 0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .production-calendar-summary__count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.85rem;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #075985;
+            font-size: 0.86rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .production-calendar-preview-meta {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .production-calendar-preview-stat {
+            padding: 0.9rem 1rem;
+            border-radius: 1rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .production-calendar-preview-stat span {
+            display: block;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .production-calendar-preview-stat strong {
+            color: #0f172a;
+            font-size: 0.96rem;
+        }
+
+        .production-calendar-preview-scroll {
+            overflow-x: visible;
+        }
+
+        .production-calendar-years {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .production-calendar-year {
+            border: 1px solid #dbe4ea;
+            border-radius: 1.1rem;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+
+        .production-calendar-year__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.95rem 1rem;
+            background: #e2e8f0;
+        }
+
+        .production-calendar-year__title,
+        .production-calendar-quarter__title,
+        .production-calendar-month__title {
+            margin: 0;
+            color: #0f172a;
+            font-weight: 800;
+        }
+
+        .production-calendar-year__meta,
+        .production-calendar-month__meta {
+            font-size: 0.8rem;
+            color: #475569;
+            font-weight: 700;
+        }
+
+        .production-calendar-quarters {
+            display: grid;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .production-calendar-quarter {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .production-calendar-quarter__header,
+        .production-calendar-month__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .production-calendar-quarter__meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.38rem 0.65rem;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .production-calendar-month-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.85rem;
+        }
+
+        .production-calendar-month {
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: #ffffff;
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
+            overflow: hidden;
+        }
+
+        .production-calendar-month__header {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6ff 100%);
+        }
+
+        .production-calendar-month__body {
+            padding: 0.65rem 0.75rem 0.8rem;
+            overflow-x: visible;
+        }
+
+        .production-calendar-grid {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            table-layout: fixed;
+            min-width: 0;
+        }
+
+        .production-calendar-grid th,
+        .production-calendar-grid td {
+            border-bottom: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            padding: 0.38rem 0.24rem;
+            vertical-align: top;
+            background: #ffffff;
+        }
+
+        .production-calendar-grid th:first-child,
+        .production-calendar-grid td:first-child {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .production-calendar-grid thead th {
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 0.56rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            font-weight: 800;
+        }
+
+        .production-calendar-grid .is-week-col {
+            width: 64px;
+            background: #f8fafc;
+        }
+
+        .production-calendar-workweek {
+            display: grid;
+            gap: 0.2rem;
+        }
+
+        .production-calendar-workweek strong {
+            font-size: 0.66rem;
+            color: #0f172a;
+        }
+
+        .production-calendar-workweek span {
+            font-size: 0.55rem;
+            color: #64748b;
+        }
+
+        .production-calendar-daycell {
+            min-height: 42px;
+            display: grid;
+            align-content: start;
+            gap: 0.1rem;
+        }
+
+        .production-calendar-daycell.is-empty {
+            background: #f8fafc;
+        }
+
+        .production-calendar-daycell__date {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1;
+        }
+
+        .production-calendar-daycell__label {
+            font-size: 0.53rem;
+            color: #64748b;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        .production-calendar-empty {
+            padding: 2.75rem 1rem;
+            border: 1px dashed #cbd5e1;
+            border-radius: 1rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            text-align: center;
+            color: #64748b;
+        }
+
+        @@media (max-width: 767.98px) {
+            .production-calendar-preview-toolbar,
+            .production-calendar-year__header,
+            .production-calendar-quarter__header,
+            .production-calendar-month__header {
+                flex-direction: column;
+                align-items: start;
+            }
+
+            .production-calendar-preview-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .production-calendar-month-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+}
+
+<form id="productioncalendarForm" class="needs-validation" novalidate="">
+    <div class="row production-calendar-new-shell">
+        <div class="col-12">
+            <div class="card production-calendar-form-card">
+                <div class="card-body">
+                    <div class="production-calendar-form-intro">
+                        <h5 class="mb-0">New Production Calendar</h5>
+                        <p>Choose the calendar year, select the last day of work week 1, and decide whether January uses 4 or 5 workweeks before the rest of the year follows the standard 4-4-5 rhythm.</p>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="CalendarYear" class="form-label">Production Calendar Year<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="number" class="form-control" id="CalendarYear" name="CalendarYear" placeholder="Enter Valid Production Calendar Year" required="" min="1999" max="2100" maxlength="4">
+                            <div class="invalid-feedback">Please provide a valid production calendar year.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Week1End" class="form-label">Last day of Work Week 1 (Saturdays in January only)<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" data-field="date" id="Week1End" name="Week1End" placeholder="Enter week 1 end date" required="" readonly>
+                            <div class="invalid-feedback">Please select week 1 end date.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="JanuaryWorkWeeks" class="form-label">January Workweeks<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <select class="form-select" id="JanuaryWorkWeeks" name="JanuaryWorkWeeks" required>
+                                <option value="4" selected>4 workweeks in January</option>
+                                <option value="5">5 workweeks in January</option>
+                            </select>
+                            <div class="invalid-feedback">Please select 4 or 5 workweeks for January.</div>
+                        </div>
+                    </div>
+                    <div class="production-calendar-config-note" id="productionCalendarPatternNote">
+                        <strong>Quarter Pattern</strong>
+                        <span>Q1 uses 4-4-5. Q2 to Q4 continue with 4-4-5.</span>
+                    </div>
+                </div>
+                <div class="card-footer clearfix">
+                    <div class="m-0 float-end">
+                        <a href="@Url.Action("Index", "ProductionCalendars", new { area = "Operations" })" class="btn btn-default">Cancel</a>
+                        <button id="buttonSaveProductionCalendar" type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card production-calendar-preview-card">
+                <div class="card-body">
+                    <div class="production-calendar-preview-toolbar">
+                        <div>
+                            <h5 class="production-calendar-preview-title">Auto Preview</h5>
+                            <p id="productionCalendarPreviewSummary" class="production-calendar-preview-copy">Set the year, week 1 end date, and January workweeks to preview the generated calendar.</p>
+                        </div>
+                        <div id="productionCalendarPreviewCount" class="production-calendar-summary__count">
+                            <i class="bi bi-calendar3"></i>
+                            <span>0 days</span>
+                        </div>
+                    </div>
+                    <div class="production-calendar-preview-meta">
+                        <div class="production-calendar-preview-stat">
+                            <span>Q1 Pattern</span>
+                            <strong id="productionCalendarQuarterPreview">4-4-5</strong>
+                        </div>
+                        <div class="production-calendar-preview-stat">
+                            <span>Week 1 End</span>
+                            <strong id="productionCalendarWeek1Preview">Not selected</strong>
+                        </div>
+                        <div class="production-calendar-preview-stat">
+                            <span>Standard Pattern</span>
+                            <strong>Q2-Q4 use 4-4-5</strong>
+                        </div>
+                    </div>
+                    <div class="production-calendar-preview-scroll">
+                        <div id="productionCalendarPreview" class="production-calendar-years">
+                            <div class="production-calendar-empty">Set the form inputs to preview the generated production calendar.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+@section scripts{
+
+
+    <script src="~/node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+
+
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="~/Areas/Operations/Scripts/productioncalendars/new.js"></script>
+    <script>
+                                                                                // Example starter JavaScript for disabling form submissions if there are invalid fields
+                                                                                ////(() => {
+                                                                                ////    'use strict';
+
+                                                                                ////    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                                                                                ////    const forms = document.querySelectorAll('.needs-validation');
+
+                                                                                ////    // Loop over them and prevent submission
+                                                                                ////    Array.from(forms).forEach((form) => {
+                                                                                ////        form.addEventListener(
+                                                                                ////            'submit',
+                                                                                ////            (event) => {
+                                                                                ////                if (!form.checkValidity()) {
+                                                                                ////                    event.preventDefault();
+                                                                                ////                    event.stopPropagation();
+                                                                                ////                }
+
+                                                                                ////                form.classList.add('was-validated');
+                                                                                ////            },
+                                                                                ////            false,
+                                                                                ////        );
+                                                                                ////    });
+                                                                                ////})();
+    </script>
+}

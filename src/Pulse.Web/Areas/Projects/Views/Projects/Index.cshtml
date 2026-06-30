@@ -1,0 +1,847 @@
+﻿
+@{
+    ViewBag.Title = "Projects";
+    ViewBag.SubTitle = "Tabular view of multiple projects and their milestones.";
+    ViewBag.TitleIcon = "fas fa-table";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.IsActiveProjects = "active";
+}
+
+@section Styles {
+    <!-- Select2 -->
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Summernote -->
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+
+
+    <!-- Icon Picker -->
+    <link href="@Url.Content("~/node_modules/@simonwep/pickr/dist/themes/nano.min.css")" rel="stylesheet" />
+
+    <!-- Local -->
+    <link href="~/Content/locals/stacked-userprofiles.css" rel="stylesheet" />
+    <link href="~/Content/Icon-Picker.css" rel="stylesheet" />
+    <link href="~/Content/Side-drawer.css" rel="stylesheet" />
+
+    <style>
+
+        .projects-index-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .projects-index-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1.25rem;
+            background:
+                radial-gradient(circle at top right, rgba(59, 130, 246, 0.14), transparent 28%),
+                radial-gradient(circle at 80% 16%, rgba(15, 118, 110, 0.14), transparent 24%),
+                linear-gradient(135deg, #f8fbfd 0%, #eef6f9 52%, #f8fafc 100%);
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.07);
+        }
+
+        .projects-index-hero__main,
+        .projects-index-hero__side {
+            padding: 1.2rem 1.25rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(226, 232, 240, 0.95);
+        }
+
+        .projects-index-hero__main {
+            background: rgba(255, 255, 255, 0.78);
+        }
+
+        .projects-index-hero__side {
+            display: grid;
+            gap: 0.8rem;
+            align-content: start;
+            background: rgba(255, 255, 255, 0.86);
+        }
+
+        .projects-index-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1d4ed8;
+            background: rgba(219, 234, 254, 0.95);
+            border: 1px solid rgba(147, 197, 253, 0.85);
+        }
+
+        .projects-index-title {
+            margin: 0.9rem 0 0;
+            color: #0f172a;
+            font-size: clamp(1.85rem, 3vw, 3rem);
+            line-height: 0.96;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+        }
+
+        .projects-index-copy {
+            max-width: 64ch;
+            margin: 0.8rem 0 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .projects-index-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin-top: 1rem;
+        }
+
+        .projects-index-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 44px;
+            padding: 0 0.9rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: #ffffff;
+            color: #475569;
+            font-size: 0.84rem;
+            font-weight: 600;
+        }
+
+        .projects-index-pill strong {
+            color: #0f172a;
+            font-size: 0.92rem;
+            font-weight: 800;
+        }
+
+        .projects-index-note {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(219, 234, 254, 0.9);
+            background: linear-gradient(135deg, #f8fbff 0%, #f8fafc 100%);
+        }
+
+        .projects-index-note__label {
+            margin: 0 0 0.25rem;
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .projects-index-note__value {
+            margin: 0;
+            color: #0f172a;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .projects-index-note__text {
+            margin: 0.3rem 0 0;
+            color: #64748b;
+            font-size: 0.84rem;
+            line-height: 1.6;
+        }
+
+        .projects-index-summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .projects-summary-card {
+            padding: 1rem 1.05rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: #ffffff;
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.05);
+        }
+
+        .projects-summary-card__label {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .projects-summary-card__value {
+            margin: 0.45rem 0 0;
+            color: #0f172a;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .projects-summary-card__meta {
+            margin-top: 0.45rem;
+            color: #64748b;
+            font-size: 0.84rem;
+        }
+
+        .projects-index-workspace {
+            border: 1px solid #dbe4ea;
+            border-radius: 1.25rem;
+            background: #ffffff;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+            overflow: hidden;
+        }
+
+        .projects-index-workspace__head {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 1.1rem 1.2rem;
+            border-bottom: 1px solid #e5edf3;
+            background: linear-gradient(180deg, #f8fbfd 0%, #ffffff 100%);
+        }
+
+        .projects-index-workspace__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+
+        .projects-index-workspace__copy {
+            margin: 0.35rem 0 0;
+            color: #64748b;
+            font-size: 0.86rem;
+            line-height: 1.6;
+        }
+
+        .projects-index-workspace__status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.6rem 0.85rem;
+            border-radius: 999px;
+            background: rgba(219, 234, 254, 0.92);
+            color: #1d4ed8;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+
+
+
+
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background-color: #374151;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #f9fafb;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Shared rounded look */
+        .card {
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+        }
+
+        .font-weight-semibold {
+            font-weight: 600;
+        }
+
+        .request-card {
+            transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.08s ease;
+        }
+
+            .request-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
+                background-color: #f9fafb;
+            }
+
+        .request-extra {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            text-transform: uppercase;
+        }
+
+        .avatar-sm {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background-color: #c4b5fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #312e81;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .request-actions .btn {
+            margin-bottom: 0.15rem;
+        }
+
+        @@media (max-width: 992px) {
+            .request-card .d-lg-flex {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+
+            .request-card .request-actions {
+                align-items: flex-start !important;
+                margin-top: 0.5rem;
+            }
+        }
+
+        .progress {
+            height: 6px;
+        }
+
+        .progress-wrap {
+            position: relative;
+            height: 6px;
+            background: #eee;
+            border-radius: 999px;
+        }
+
+            .progress-wrap .progress-bar {
+                height: 100%;
+                border-radius: 999px;
+                background: #2f9e44;
+            }
+
+            .progress-wrap.small {
+                height: 4px;
+            }
+
+        .progress-label {
+            margin-left: 4px;
+            font-size: 11px;
+            vertical-align: middle;
+        }
+
+        .table-filter-toolbar {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(150px, max-content)) minmax(260px, 1fr);
+            gap: 0.85rem;
+            align-items: end;
+            margin: 0;
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #e5edf3;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6f9 100%);
+        }
+
+            .table-filter-toolbar > * {
+                min-width: 0;
+            }
+
+            .table-filter-toolbar .table-filter-toolbar__item {
+                display: flex;
+                align-items: center;
+                min-width: 0;
+            }
+
+                .table-filter-toolbar .table-filter-toolbar__item .btn,
+                .table-filter-toolbar .table-filter-toolbar__item .form-select,
+                .table-filter-toolbar .table-filter-toolbar__item .form-control {
+                    width: 100%;
+                }
+
+                .table-filter-toolbar .table-filter-toolbar__item .btn {
+                    justify-content: center;
+                    white-space: nowrap;
+                }
+
+                .table-filter-toolbar .table-filter-toolbar__item .btn.table-toolbar-btn {
+                    gap: 0.45rem;
+                    min-height: 44px;
+                    border-radius: 0.9rem;
+                    font-weight: 700;
+                }
+
+                .table-filter-toolbar .table-filter-toolbar__item .form-select,
+                .table-filter-toolbar .table-filter-toolbar__item .form-control {
+                    min-height: 44px;
+                    border-radius: 0.9rem;
+                    border-color: #d6e0ea;
+                    box-shadow: none;
+                }
+
+        .table-toolbar-filter-note {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 0.9rem;
+            border-radius: 0.9rem;
+            border: 1px dashed #bfdbfe;
+            background: rgba(239, 246, 255, 0.95);
+            color: #1d4ed8;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+            .table-filter-toolbar .toolbar-search {
+                min-width: 0;
+            }
+
+            .table-filter-toolbar .dt-search,
+            .table-filter-toolbar .dt-length {
+                width: 100%;
+                margin: 0;
+            }
+
+                .table-filter-toolbar .dt-search label,
+                .table-filter-toolbar .dt-length label {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    width: 100%;
+                    margin: 0;
+                }
+
+                .table-filter-toolbar .dt-search input,
+                .table-filter-toolbar .dt-length select {
+                    width: 100% !important;
+                    min-width: 0;
+                }
+
+        @@media (max-width: 1599px) {
+            .table-filter-toolbar {
+                grid-template-columns: repeat(4, minmax(180px, 1fr));
+            }
+
+                .table-filter-toolbar .toolbar-search {
+                    grid-column: span 2;
+                }
+        }
+
+        @@media (max-width: 1199px) {
+            .table-filter-toolbar {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+                .table-filter-toolbar .toolbar-search {
+                    grid-column: auto;
+                }
+        }
+
+        @@media (max-width: 767px) {
+            .table-filter-toolbar {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .projects-advanced-filters {
+            margin: 1rem 1.2rem 0;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            box-shadow: none;
+        }
+
+        .projects-advanced-filters .card-body {
+            padding: 1.1rem;
+            background: #fbfdff;
+        }
+
+        .projects-advanced-filters__head {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .projects-advanced-filters__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 800;
+        }
+
+        .projects-advanced-filters__copy {
+            margin: 0.25rem 0 0;
+            color: #64748b;
+            font-size: 0.82rem;
+        }
+
+        .projects-advanced-filters__badge {
+            display: inline-flex;
+            align-items: center;
+            min-height: 32px;
+            padding: 0 0.7rem;
+            border-radius: 999px;
+            background: rgba(15, 118, 110, 0.1);
+            color: #0f766e;
+            font-size: 0.76rem;
+            font-weight: 800;
+        }
+
+        .projects-index-table {
+            padding: 1rem 1.2rem 0;
+        }
+
+        .projects-index-table .dataTables_wrapper {
+            margin: 0;
+        }
+
+        .projects-index-table table.dataTable.no-footer {
+            border-bottom: 0;
+        }
+
+        .projects-index-table .dataTables_empty {
+            padding: 1.5rem 0;
+        }
+
+        .projects-index-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: center;
+            padding: 0.95rem 1.2rem 1.15rem;
+            border-top: 1px solid #e5edf3;
+            background: #ffffff;
+        }
+
+        .projects-index-footer .card-tools-projectsTable-size,
+        .projects-index-footer .card-tools-projectsTable-pagination {
+            color: #64748b;
+            font-size: 0.84rem;
+        }
+
+        .projects-project-card {
+            border-radius: 1rem;
+            border: 1px solid #e6edf3;
+            box-shadow: 0 16px 30px rgba(15, 23, 42, 0.05);
+            overflow: hidden;
+        }
+
+        .projects-project-card .card-body {
+            padding: 1rem 1.15rem;
+        }
+
+        .projects-project-card__header {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .projects-project-card__identity {
+            min-width: 0;
+        }
+
+        .projects-project-card__title {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .projects-project-card__link {
+            font-size: 1.02rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .projects-project-card__codes {
+            color: #64748b;
+            font-size: 0.82rem;
+            line-height: 1.6;
+        }
+
+        .projects-project-card__meta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.85rem;
+        }
+
+        .projects-project-card__meta {
+            padding: 0.8rem 0.9rem;
+            border-radius: 0.9rem;
+            background: #f8fafc;
+            border: 1px solid #e6edf3;
+        }
+
+        .projects-project-card__label {
+            display: block;
+            margin-bottom: 0.35rem;
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .projects-project-card__value {
+            color: #0f172a;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .projects-project-card__value--muted {
+            color: #475569;
+        }
+
+        .projects-project-card__actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 0.45rem;
+        }
+
+        .projects-project-card__actions .btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+        }
+
+        .projects-project-card__foot {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 0.85rem;
+            padding-top: 0.85rem;
+            border-top: 1px solid #edf2f7;
+        }
+
+        @@media (max-width: 1199px) {
+            .projects-index-hero,
+            .projects-index-summary,
+            .projects-project-card__meta-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @@media (max-width: 991.98px) {
+            .projects-index-hero,
+            .projects-index-summary,
+            .projects-project-card__meta-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .projects-index-workspace__head,
+            .projects-project-card__header,
+            .projects-project-card__foot,
+            .projects-index-footer,
+            .projects-advanced-filters__head {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .projects-project-card__actions {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+}
+<!--begin::Row-->
+<div class="projects-index-shell">
+    <section class="projects-index-hero" aria-label="Projects overview">
+        <article class="projects-index-hero__main">
+            <span class="projects-index-eyebrow"><i class="bi bi-diagram-3"></i>Projects Workspace</span>
+            <h1 class="projects-index-title">Project Portfolio Index</h1>
+            <p class="projects-index-copy">
+                Review the full project portfolio in one place, sort it by the dimensions that matter, and narrow the table with
+                advanced filters without losing the quick access actions your team already uses.
+            </p>
+            <div class="projects-index-highlights">
+                <div class="projects-index-pill"><strong id="projectsSummaryVisible">0</strong> visible on page</div>
+                <div class="projects-index-pill"><strong id="projectsSummaryFiltered">0</strong> matching current view</div>
+                <div class="projects-index-pill"><strong id="projectsSummaryScope">All Projects</strong> scope</div>
+            </div>
+        </article>
+
+        <aside class="projects-index-hero__side">
+            <div class="projects-index-note">
+                <p class="projects-index-note__label">Current Sort</p>
+                <p class="projects-index-note__value" id="projectsSummarySort">Project Name · Ascending</p>
+                <p class="projects-index-note__text">The table keeps server-side paging, filtering, and sorting intact.</p>
+            </div>
+            <div class="projects-index-note">
+                <p class="projects-index-note__label">Filter State</p>
+                <p class="projects-index-note__value" id="projectsSummaryFilters">No advanced filters</p>
+                <p class="projects-index-note__text">Advanced filters are optional and now show their active state more clearly.</p>
+            </div>
+        </aside>
+    </section>
+
+    <section class="projects-index-summary" aria-label="Projects quick stats">
+        <article class="projects-summary-card">
+            <p class="projects-summary-card__label">Visible Rows</p>
+            <p class="projects-summary-card__value" id="projectsSummaryVisibleCard">0</p>
+            <div class="projects-summary-card__meta">Rows rendered in the current page.</div>
+        </article>
+        <article class="projects-summary-card">
+            <p class="projects-summary-card__label">Matching Results</p>
+            <p class="projects-summary-card__value" id="projectsSummaryFilteredCard">0</p>
+            <div class="projects-summary-card__meta">Projects matching the current filters and search.</div>
+        </article>
+        <article class="projects-summary-card">
+            <p class="projects-summary-card__label">Status Scope</p>
+            <p class="projects-summary-card__value" id="projectsSummaryStatusCard">All</p>
+            <div class="projects-summary-card__meta">Active or inactive scope from the top filter.</div>
+        </article>
+        <article class="projects-summary-card">
+            <p class="projects-summary-card__label">Advanced Filters</p>
+            <p class="projects-summary-card__value" id="projectsSummaryAdvancedCard">0</p>
+            <div class="projects-summary-card__meta">Advanced filter fields currently in effect.</div>
+        </article>
+    </section>
+
+    <section class="projects-index-workspace" aria-label="Projects table workspace">
+        <div class="projects-index-workspace__head">
+            <div>
+                <h2 class="projects-index-workspace__title">Projects Table</h2>
+                <p class="projects-index-workspace__copy">Browse, search, and jump into project details, review, quick edit, or configuration directly from each project card.</p>
+            </div>
+            <div class="projects-index-workspace__status" id="projectsWorkspaceStatus">Ready to browse</div>
+        </div>
+
+        <div class="table-filter-toolbar"></div>
+
+        <!-- Advanced filters panel -->
+        <div id="advanced-filters" class="projects-advanced-filters card d-none">
+            <div class="card-body">
+                <div class="projects-advanced-filters__head">
+                    <div>
+                        <h3 class="projects-advanced-filters__title">Advanced Filters</h3>
+                        <p class="projects-advanced-filters__copy">Refine the portfolio using project number, product coding, site, and category metadata.</p>
+                    </div>
+                    <div class="projects-advanced-filters__badge" id="projectsAdvancedBadge">0 active</div>
+                </div>
+        <div class="row g-3">
+            @*<div class="col-md-4">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="filter-status" multiple>
+                        <option value="ONGOING">Ongoing</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="ON HOLD">On Hold</option>
+                        <option value="ARCHIVED">Archived</option>
+                    </select>
+                    <small class="text-muted">Ctrl/⌘ + click to select multiple</small>
+                </div>*@
+
+            <div class="col-md-4">
+                <label class="form-label">Project No.</label>
+                <input type="text" class="form-control" id="filter-project-no" placeholder="e.g. PIC7-2026-000124">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Product Code</label>
+                <input type="text" class="form-control" id="filter-product-code" placeholder="e.g. CGZW*2402BDA">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Product Group</label>
+                <select class="form-select" id="filter-product-group"></select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Product Division</label>
+                <select class="form-select" id="filter-product-division"></select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Plant</label>
+                <select class="form-select" id="filter-plant"></select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Category</label>
+                <select class="form-select" id="filter-category"></select>
+            </div>
+
+        </div>
+
+        <div class="d-flex justify-content-end mt-3 gap-2">
+            <button class="btn btn-outline-secondary btn-sm" id="btn-filters-reset">Reset</button>
+            <button class="btn btn-primary btn-sm" id="btn-filters-apply">Apply filters</button>
+        </div>
+    </div>
+        </div>
+
+        <div class="projects-index-table">
+            <table id="projectsTable" class="display" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="projects-index-footer">
+            <div class="card-tools-projectsTable-size"></div>
+            <div class="card-tools-projectsTable-pagination"></div>
+        </div>
+    </section>
+</div>
+<!-- /.card-footer -->
+@Html.Partial("_IconPickerPartial")
+
+<!-- Side Drawer Backdrop -->
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<div id="drawerContent">
+    @Html.Partial("_DrawerUpdateProjectPartial")
+</div>
+
+@section scripts{
+    <!-- jquery.validate -->
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <!-- datatables -->
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <!-- html2canvas -->
+    <script src="~/node_modules/html2canvas/dist/html2canvas.min.js"></script>
+
+    <!-- Dependencies -->
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <script src="~/node_modules/sortablejs/Sortable.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+    <!-- select2 -->
+    <script src="~/node_modules/select2/dist/js/select2.min.js"></script>
+
+
+    <!-- picker -->
+    <script src="@Url.Content("~/node_modules/@simonwep/pickr/dist/pickr.min.js")"></script>
+
+    <!-- local-dynamic-fields -->
+    <script src="~/Scripts/locals/utils.js"></script>
+    <script src="~/Scripts/locals/dynamic-fields.js"></script>
+    <script src="~/Scripts/locals/stacked-userprofiles.js"></script>
+
+    <script src="~/Areas/Projects/Scripts/projects/common.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/config.js"></script>
+
+    <script src="~/Areas/Projects/Scripts/projects/index.js"></script>
+
+
+}
+

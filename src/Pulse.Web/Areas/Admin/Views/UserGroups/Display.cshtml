@@ -1,0 +1,59 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Display User Group";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review the selected user group, including the access it can carry when assigned to users.";
+    ViewBag.ContentHeaderChips = new[] { "Assignable groups", "Linked access", "Read-only review" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Inspect how this group packages user access.";
+    ViewBag.ContentHeaderAsideBody = "Use this read-only view to verify the group definition before it is assigned broadly or updated for a different access need.";
+    ViewBag.IsActiveAdminUserGroups = "menu-open";
+    ViewBag.IsActiveAdminUserGroupsAll = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="mb-3">
+                    User Group Details
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Read-only information for the selected user group</small>
+                </h5>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">User Group ID</label>
+                        <div id="userGroupId" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Status</label>
+                        <div id="userGroupStatus" class="form-control bg-light d-flex align-items-center">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">User Group Name</label>
+                        <div id="userGroupName" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Description</label>
+                        <div id="userGroupDescription" class="form-control bg-light">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="m-0 float-end">
+                    <a href="@Url.Action("Index", "UserGroups", new { area = "Admin" })" class="btn btn-default">Back to list</a>
+                    <a href="@Url.Action("Edit", "UserGroups", new { area = "Admin", id = ViewBag.Id })" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Admin/Scripts/usergroups/display.js"></script>
+}

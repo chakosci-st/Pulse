@@ -1,0 +1,245 @@
+﻿<h5 class="fw-semibold mb-3">Form Designer</h5>
+<div class="row g-4">
+    <!-- Field Designer Side Panel -->
+    <div class="col-md-5 col-sm-12 col-12">
+        <div class="card shadow-sm mb-4 rounded-3">
+            <div class="card-header bg-primary text-white rounded-top-3">
+                <i class="bi bi-pencil-square me-2"></i>Add/Edit Field
+            </div>
+            <div class="card-body">
+
+                <form id="addFieldForm" autocomplete="off">
+                    <input type="hidden" id="editFieldIdx">
+                    <input type="hidden" id="editFieldId">
+                    <input type="hidden" id="editFieldSysId">
+                    <input type="hidden" id="editFieldUseDefaults">
+
+                    <div class="border rounded-3 p-3 mb-3 bg-light">
+                        <label for="fieldReferenceSelect" class="form-label fw-semibold mb-2">Use Existing Field</label>
+                        <div class="d-flex gap-2">
+                            <select class="form-select" id="fieldReferenceSelect" style="width:100%"></select>
+                            <button type="button" class="btn btn-outline-primary" id="addReferenceFieldBtn">
+                                <i class="bi bi-link-45deg"></i>
+                                Use
+                            </button>
+                        </div>
+                        <small class="text-muted d-block mt-2">Select a maintained field reference, or continue below to create a brand-new field.</small>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="fieldLabel" placeholder="Label" required>
+                        <label for="fieldLabel">Label</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="fieldType">
+                            <option value="text">Text</option>
+                            <option value="textarea">Textarea</option>
+                            <option value="richtext">Rich Text/HTML</option>
+                            <option value="number">Number</option>
+                            <option value="date">Date</option>
+                            <option value="selection">Selection</option>
+                            <option value="checkbox">Checkbox (Single)</option>
+                            <option value="checkboxcollection">Checkbox (Collection)</option>
+                            <option value="radio">Radio</option>
+                            <option value="children">Children (Detail Table)</option>
+                            <option value="file">File Upload</option>
+                            <option value="url">URL</option>
+                        </select>
+                        <label for="fieldType">Type</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="fieldRequired">
+                        <label class="form-check-label" for="fieldRequired">Required</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="fieldPlaceholder" placeholder="Placeholder">
+                        <label for="fieldPlaceholder">Placeholder</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="fieldTooltip" placeholder="Tooltip">
+                        <label for="fieldTooltip">Tooltip</label>
+                    </div>
+                    <div class="form-floating mb-3" id="fieldDefaultValueGroup" style="display:none;">
+                        <input type="text" class="form-control" id="fieldDefaultValue" placeholder="Default Value">
+                        <label for="fieldDefaultValue">Default Value</label>
+                    </div>
+                    <div class="form-floating mb-3" id="fieldDefaultClobValueGroup" style="display:none;">
+                        <textarea id="fieldDefaultClobValue" class="form-control" placeholder="Default Value" style="height: 100px"></textarea>
+                        <label for="fieldDefaultClobValue">Default Value</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="fieldReadAccess" placeholder="Read Access" value="*">
+                        <label for="fieldReadAccess">Read Access (User Code, * for all)</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="fieldWriteAccess" placeholder="Write Access" value="*">
+                        <label for="fieldWriteAccess">Write Access (User Code, * for all)</label>
+                    </div>
+                    <!-- Min/Max Length for text/textarea/url -->
+                    <div class="form-floating mb-3" id="minLengthGroup" style="display:none;">
+                        <input type="number" class="form-control" id="fieldMinLength" placeholder="Min Length" min="0" max="4000" maxlength="4">
+                        <label for="fieldMinLength">Min Length</label>
+                    </div>
+                    <div class="form-floating mb-3" id="maxLengthGroup" style="display:none;">
+                        <input type="number" class="form-control" id="fieldMaxLength" placeholder="Max Length" min="0" max="4000" maxlength="4">
+                        <label for="fieldMaxLength">Max Length</label>
+                    </div>
+                    <!-- Case Option for text/textarea/url -->
+                    <div class="form-floating mb-3" id="caseOptionGroup" style="display:none;">
+                        <select class="form-select" id="fieldCaseOption">
+                            <option value="">No Case Change</option>
+                            <option value="upper">Always Uppercase</option>
+                            <option value="lower">Always Lowercase</option>
+                        </select>
+                        <label for="fieldCaseOption">Force Case</label>
+                    </div>
+                    <!-- Options for static select/radio/checkbox -->
+                    <div class="form-floating mb-3" id="optionsGroup" style="display:none;">
+                        <input type="text" class="form-control" id="fieldOptions" placeholder="Options">
+                        <label for="fieldOptions">Options (comma separated)</label>
+                    </div>
+                    <!-- Datasource for select/radio/checkboxcollection -->
+                    <div class="form-floating mb-3" id="datasourceGroup" style="display:none;">
+                        <input type="text" class="form-control" id="fieldDatasource" placeholder="Datasource">
+                        <label for="fieldDatasource">Datasource (JSON array or URL)</label>
+                    </div>
+                    <!-- Datasource param field -->
+                    <div class="mb-3" id="datasourceParamGroup" style="display:none;">
+                        <label for="datasourceParamField" class="form-label">
+                            Datasource Parameter Field (optional)
+                            <span class="text-muted">(Use <code>{param}</code> in your URL)</span>
+                        </label>
+                        <select class="form-select" id="datasourceParamField"></select>
+                    </div>
+                    <!-- File type and size options -->
+                    <div class="form-floating mb-3" id="fileTypesGroup" style="display:none;">
+                        <input type="text" class="form-control" id="fieldFileTypes" placeholder="e.g. .jpg,.png,.pdf or image/*">
+                        <label for="fieldFileTypes">Allowed File Types (comma separated, e.g. .jpg,.png,.pdf or image/*)</label>
+                    </div>
+                    <div class="form-floating mb-3" id="fileMaxSizeGroup" style="display:none;">
+                        <input type="number" class="form-control" id="fieldFileMaxSize" placeholder="Max Size (MB)">
+                        <label for="fieldFileMaxSize">Max File Size (MB)</label>
+                    </div>
+                    <!-- Children fields -->
+                    <div class="mb-3" id="childrenGroup" style="display:none;">
+                        <label for="fieldChildren" class="form-label">Child Fields (JSON array)</label>
+                        <textarea class="form-control" id="fieldChildren" rows="3" placeholder='[{"title":"Product","type":"text","name":"Product"},{"title":"Qty","type":"number","name":"Qty"}]'></textarea>
+                    </div>
+                    <!-- Conditional logic -->
+                    <div class="mb-3" id="conditionalGroup" style="display:none;">
+                        <label for="conditionalField" class="form-label">Show this field only if...</label>
+                        <select class="form-select" id="conditionalField"></select>
+                        <input type="text" class="form-control mt-1" id="conditionalValue" placeholder="Value">
+                    </div>
+                    <!-- Custom validation -->
+                    <div class="form-floating mb-3" id="validationGroup" style="display:none;">
+                        <input type="text" class="form-control" id="fieldValidation" placeholder="Custom Validation">
+                        <label for="fieldValidation">Custom Validation (JS expression, use <code>value</code>)</label>
+                    </div>
+                    <!-- Add inside your URL field options group -->
+                    <div id="urlParamGroup" class=" mb-3" style="display:none;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="urlIsParam" />
+                            <label class="form-check-label" for="urlIsParam">Parameterized URL</label>
+                        </div>
+                        <input type="text" class="form-control mt-2" id="urlDefaultPattern" placeholder="e.g. https://example.com/user/{key}" />
+                    </div>
+                    <!-- Rules builder -->
+                    <div class="mb-3" id="rulesGroup" style="display:none;">
+                        <label class="form-label">Conditional Rules</label>
+                        <div id="rulesList"></div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="addRuleBtn">
+                            <i class="bi bi-plus-circle"></i> Add Rule
+                        </button>
+                    </div>
+                    <!-- Field to insert -->
+                    <div class="form-floating mb-3" id="caseTargetGroup">
+                        <select class="form-select" id="fieldTarget">
+                            <option value="main">Main Form</option>
+                            <!-- Dynamically add options for each children field -->
+                        </select>
+                        <label for="fieldCaseOption">Force Case</label>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success" id="addFieldBtn">
+                            <i class="bi bi-plus-circle"></i> Add Field
+                        </button>
+                        <button type="button" class="btn btn-warning" id="updateFieldBtn" style="display:none;">
+                            <i class="bi bi-arrow-repeat"></i> Update Field
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="cancelEditBtn" style="display:none;">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-7 col-sm-12 col-12">
+        <div class="row">
+            <div class="col-12 mb-4">
+
+                <div class="card shadow-sm rounded-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-list-ul me-2"></i>Fields</span>
+                        <div class="d-flex gap-2 mb-2">
+                            <button type="button" class="btn btn-outline-danger btn-sm" id="clearAllBtn">
+                                <i class="bi bi-trash"></i> Clear All
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" id="exportBtn"><i class="bi bi-download"></i> Export</button>
+                            <button id="copyFormJsonBtn" class="btn btn-outline-secondary btn-sm">Copy JSON to Clipboard</button>
+                            <button class="btn btn-outline-secondary btn-sm" id="importBtn"><i class="bi bi-upload"></i> Import</button>
+                            <input type="file" id="importJsonInput" accept=".json" style="display:none">
+                        </div>
+
+                    </div>
+                    <ul class="list-group list-group-flush" id="fieldsList">
+                        <!-- Fields will be rendered here -->
+                    </ul>
+                </div>
+
+            </div>
+            <!-- Form Preview and JSON -->
+            <div class="col-6 col-sm-12">
+                <div class="card shadow-sm mb-4 rounded-3" id="formPreviewCard">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <span>
+                            <i class="bi bi-eye me-2"></i>Form Preview
+                        </span>
+                        <button type="button" class="btn btn-sm btn-light border-0" id="toggleFormPreview" aria-label="Minimize" title="Minimize/Show">
+                            <i class="bi bi-chevron-up" id="formPreviewChevron" style="display: inline-block; transition: transform 0.2s;"></i>
+                        </button>
+                    </div>
+                    <div class="card-body" id="formPreviewBody">
+                        <form id="previewForm"></form>
+                        <button id="getFormValuesBtn" class="btn btn-primary mt-3">
+                            <i class="bi bi-clipboard-data"></i> Get Form Values
+                        </button>
+                        <pre id="formOutput" class="mt-3 bg-light p-3 rounded-2"></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-12">
+                <div class="card shadow-sm rounded-3" id="formStructureCard">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <span>
+                            <i class="bi bi-code-slash me-2"></i>Form Structure JSON
+                        </span>
+                        <button type="button" class="btn btn-sm btn-light border-0" id="toggleFormStructure" aria-label="Minimize" title="Minimize/Show">
+                            <i class="bi bi-chevron-up" id="formStructureChevron" style="display: inline-block; transition: transform 0.2s;"></i>
+                        </button>
+                    </div>
+                    <div class="card-body" id="formStructureBody">
+                        <pre id="formStructure" class="bg-light p-3 rounded-2"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+</div>

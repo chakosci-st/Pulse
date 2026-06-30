@@ -1,0 +1,69 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Edit User Group";
+    ViewBag.TitleIcon = "bi bi-pencil-square";
+    ViewBag.SubTitle = "Update an assignable user group and refine the linked access it carries to users.";
+    ViewBag.ContentHeaderChips = new[] { "Assignable groups", "Linked access", "Permission maintenance" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Keep shared access bundles accurate.";
+    ViewBag.ContentHeaderAsideBody = "Adjust group definitions here when the user population or the linked access they should inherit changes over time.";
+    ViewBag.IsActiveAdminUserGroups = "menu-open";
+    ViewBag.IsActiveAdminUserGroupsAll = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+<form id="usergroupForm" class="needs-validation" novalidate=""> 
+    @Html.Hidden("Id")
+    @Html.Hidden("TransactionKey")
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        Update User Group
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Update existing user group</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">User Group Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Enter User Group Name" required="">
+                            <div class="invalid-feedback">Please provide a user group name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">User Group Description</label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Description" name="Description" placeholder="Enter User Group Description">
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <div id="isActive"></div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "UserGroups", new { area = "Admin" })" class="btn btn-default">Cancel</a> <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/Scripts/locals/switch-button.js"></script>
+    <script>
+        var id = '@ViewBag.Id';
+        $('#Id').val(id);
+    </script>
+    <script src="~/Areas/Admin/Scripts/usergroups/edit.js"></script>
+}

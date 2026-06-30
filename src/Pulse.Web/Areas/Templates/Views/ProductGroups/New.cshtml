@@ -1,0 +1,99 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New Product Group";
+    ViewBag.TitleIcon = "bi bi-plus-circle";
+    ViewBag.SubTitle = "Create a product group that organizes related products within a broader division.";
+    ViewBag.ContentHeaderChips = new[] { "Mid-level portfolio grouping", "Division alignment", "Shared product families" };
+    ViewBag.ContentHeaderAsideLabel = "New group";
+    ViewBag.ContentHeaderAsideTitle = "Define the mid-level grouping that related products and projects will share.";
+    ViewBag.ContentHeaderAsideBody = "A strong product group structure makes it easier to manage related work inside the correct division context.";
+    ViewBag.IsActiveTemplatesProductGroups = "menu-open";
+    ViewBag.IsActiveTemplatesProductGroupsNew = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+
+<form id="productgroupForm" class="needs-validation" novalidate="">
+    <!--begin::Row-->
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        New Product Group
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Create new product group</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="Code" class="form-label">Product Group Code<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Code" name="Code" placeholder="Enter Valid Product Group Code" required="">
+                            <div class="invalid-feedback">Please provide a valid product group code.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">Product Group Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input class="form-control" id="Name" name="Name" placeholder="Enter Product Group Name" required="">
+                            <div class="invalid-feedback">Please provide a product group name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Description" class="form-label">Product Group Description</label>
+                        <div class="input-group has-validation">
+                            <input class="form-control" id="Description" name="Description" placeholder="Enter Product Group Description">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "ProductGroups", new { area = "Templates" })" class="btn btn-default">Cancel</a> <button class="btn btn-success">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+
+
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="~/Areas/Templates/Scripts/productgroups/new.js"></script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        ////(() => {
+        ////    'use strict';
+
+        ////    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        ////    const forms = document.querySelectorAll('.needs-validation');
+
+        ////    // Loop over them and prevent submission
+        ////    Array.from(forms).forEach((form) => {
+        ////        form.addEventListener(
+        ////            'submit',
+        ////            (event) => {
+        ////                if (!form.checkValidity()) {
+        ////                    event.preventDefault();
+        ////                    event.stopPropagation();
+        ////                }
+
+        ////                form.classList.add('was-validated');
+        ////            },
+        ////            false,
+        ////        );
+        ////    });
+        ////})();
+    </script>
+}

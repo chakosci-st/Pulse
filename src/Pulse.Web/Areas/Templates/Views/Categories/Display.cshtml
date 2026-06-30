@@ -1,0 +1,60 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Display Category";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review how this category is used to classify projects.";
+    ViewBag.ContentHeaderChips = new[] { "Project classification", "Portfolio grouping", "Reporting consistency" };
+    ViewBag.ContentHeaderAsideLabel = "Category review";
+    ViewBag.ContentHeaderAsideTitle = "Inspect the classification details before reusing or refining this category.";
+    ViewBag.ContentHeaderAsideBody = "This view keeps the category meaning visible so teams can apply it consistently across projects.";
+    ViewBag.IsActiveTemplatesCategories = "menu-open";
+    ViewBag.IsActiveTemplatesCategoriesAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="mb-3">
+                    Category Details
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Read-only information for the selected category</small>
+                </h5>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Category Code</label>
+                        <div id="categoryCode" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Status</label>
+                        <div id="categoryStatus" class="form-control bg-light d-flex align-items-center">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Category Name</label>
+                        <div id="categoryName" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Description</label>
+                        <div id="categoryDescription" class="form-control bg-light">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="m-0 float-end">
+                    <a href="@Url.Action("Index", "Categories", new { area = "Templates" })" class="btn btn-default">Back to list</a>
+                    <a href="@Url.Action("Edit", "Categories", new { area = "Templates", code = ViewBag.Id })" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/categories/display.js"></script>
+}

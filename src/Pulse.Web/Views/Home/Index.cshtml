@@ -1,0 +1,1148 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    ViewBag.TitleIcon = "bi bi-speedometer2";
+
+    ViewBag.SubTitle = "Overview of all projects and tasks.";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+
+@section Styles {
+    <link href="~/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-rowgroup-bs5/css/rowGroup.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/Content/datatables-bs5-fix.css" rel="stylesheet" />
+
+    <!-- Summernote -->
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+    <link href="~/Content/locals/stacked-userprofiles.css" rel="stylesheet" />
+    <style>
+        .dashboard-hero {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.9fr);
+            gap: 1.25rem;
+            padding: 1.6rem 1.75rem;
+            margin-bottom: 1.35rem;
+            border: 1px solid rgba(148, 163, 184, 0.26);
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, #0f172a 0%, #12324a 52%, #edf6ff 100%);
+            box-shadow: 0 24px 54px rgba(15, 23, 42, 0.16);
+            color: #e2e8f0;
+        }
+
+            .dashboard-hero::after {
+                content: "";
+                position: absolute;
+                inset: auto -90px -110px auto;
+                width: 260px;
+                height: 260px;
+                border-radius: 999px;
+                background: radial-gradient(circle, rgba(125, 211, 252, 0.28) 0%, rgba(125, 211, 252, 0) 70%);
+                pointer-events: none;
+            }
+
+        .dashboard-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.16);
+            color: #bfdbfe;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .dashboard-hero h1 {
+            margin: 0.9rem 0 0.55rem;
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: #f8fafc;
+        }
+
+        .dashboard-hero p {
+            max-width: 720px;
+            margin: 0;
+            color: rgba(226, 232, 240, 0.88);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .dashboard-hero__chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            margin-top: 1rem;
+        }
+
+        .dashboard-hero__scope {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+            margin-top: 1.05rem;
+            padding: 0.85rem 1rem;
+            border-radius: 1rem;
+            background: rgba(15, 23, 42, 0.2);
+            border: 1px solid rgba(191, 219, 254, 0.15);
+        }
+
+        .dashboard-hero__scope-copy {
+            display: block;
+            margin-top: 0.15rem;
+            color: rgba(226, 232, 240, 0.72);
+            font-size: 0.78rem;
+        }
+
+        .dashboard-hero__scope .form-check-label {
+            color: #e2e8f0;
+            font-weight: 700;
+        }
+
+        .dashboard-hero__scope .form-check-input {
+            width: 2.6rem;
+            height: 1.35rem;
+            margin-top: 0;
+            cursor: pointer;
+        }
+
+        .dashboard-hero__chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.52rem 0.78rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.26);
+            border: 1px solid rgba(191, 219, 254, 0.16);
+            color: #dbeafe;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .dashboard-hero__stats {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.85rem;
+            align-self: stretch;
+        }
+
+        .dashboard-hero__stat {
+            padding: 1rem;
+            border-radius: 1.2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            box-shadow: 0 18px 30px rgba(8, 47, 73, 0.14);
+            color: #0f172a;
+        }
+
+        .dashboard-hero__stat-label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #475569;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .dashboard-hero__stat-value {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            color: #0f172a;
+        }
+
+        .dashboard-hero__stat-copy {
+            display: block;
+            margin-top: 0.22rem;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .btn-link.no-underline {
+            text-decoration: none !important;
+        }
+
+
+
+        .table thead th {
+            font-size: 0.78rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.04em !important;
+            color: #6b7280 !important;
+            border-top: none !important;
+            border-bottom: 1px solid #e5e7eb !important;
+            background-color: #f3f4f6 !important;
+        }
+
+        .table tbody td {
+            vertical-align: middle !important;
+            font-size: 0.86rem !important;
+            border-color: #e5e7eb !important;
+        }
+
+
+        .project-row {
+            background-color: #ffffff;
+        }
+
+        .project-name {
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: #111827;
+        }
+
+        .badge-status {
+            border-radius: 999px;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            font-weight: 500;
+        }
+
+        .badge-status-progress {
+            background-color: rgba(59,130,246,0.1);
+            color: #1d4ed8;
+        }
+
+        .badge-status-notstarted {
+            background-color: rgba(107,114,128,0.15);
+            color: #374151;
+        }
+
+        .badge-status-closed {
+            background-color: rgba(107,114,128,0.15);
+            color: #374151;
+        }
+
+        .badge-status-risk {
+            background-color: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fed7aa;
+        }
+
+        .milestone-row {
+            background-color: #f9fafb;
+        }
+
+        .milestone-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+        }
+
+        .milestone-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .milestone-progress {
+            font-size: 0.8rem;
+            color: #374151;
+        }
+
+        .progress {
+            height: 6px;
+        }
+
+        .table-sm > :not(caption) > * > * {
+            padding-top: 0.4rem;
+            padding-bottom: 0.4rem;
+        }
+
+        .btn-toggle-row {
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin-right: 0.25rem;
+            color: #6b7280;
+        }
+
+            .btn-toggle-row:focus {
+                outline: none;
+                box-shadow: none;
+            }
+
+        .subheader {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #e5e7eb;
+        }
+
+        .subheader-muted {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+
+
+        #projectsMilestonesTable tbody tr.project-row {
+            background: #fafafa;
+            font-weight: 600;
+        }
+
+        .progress-wrap {
+            position: relative;
+            height: 6px;
+            background: #eee;
+            border-radius: 999px;
+        }
+
+            .progress-wrap .progress-bar {
+                height: 100%;
+                border-radius: 999px;
+                background: #2f9e44;
+            }
+
+            .progress-wrap.small {
+                height: 4px;
+            }
+
+        .progress-label {
+            margin-left: 4px;
+            font-size: 11px;
+            vertical-align: middle;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+        }
+
+        .badge-blue {
+            background: #e7f1ff;
+            color: #1864ab;
+        }
+
+        .badge-gray {
+            background: #f1f3f5;
+            color: #495057;
+        }
+
+        .badge-orange {
+            background: #fff4e6;
+            color: #d9480f;
+        }
+
+        .badge-green {
+            background: #e6fcf5;
+            color: #2b8a3e;
+        }
+
+        td.dt-control::before {
+            content: "▸";
+            cursor: pointer;
+        }
+
+        tr.shown td.dt-control::before {
+            content: "▾";
+        }
+
+
+        .info-box-button {
+            cursor: pointer;
+            transition: box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+        }
+
+            .info-box-button:hover {
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+                transform: translateY(-2px);
+                background-color: #f8f9fa; /* light highlight, adjust as needed */
+            }
+
+        .analytics-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            background: radial-gradient(circle at top right, rgba(14, 116, 144, 0.08), transparent 38%), linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: 0 1.2rem 2.6rem rgba(15, 23, 42, 0.06);
+        }
+
+            .analytics-card .card-body {
+                padding: 1.35rem;
+            }
+
+        .analytics-kicker {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #0f766e;
+        }
+
+        .analytics-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.2rem;
+        }
+
+        .analytics-copy {
+            font-size: 0.84rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .analytics-grid-secondary {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-panel {
+            min-height: 100%;
+        }
+
+        .chart-shell {
+            border-radius: 0.9rem;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: rgba(255, 255, 255, 0.82);
+            padding: 1rem;
+            height: 100%;
+        }
+
+        .chart-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.85rem;
+        }
+
+            .chart-title h3 {
+                font-size: 0.95rem;
+                font-weight: 700;
+                margin: 0;
+                color: #111827;
+            }
+
+            .chart-title span {
+                font-size: 0.76rem;
+                color: #64748b;
+            }
+
+        .donut-layout {
+            display: grid;
+            grid-template-columns: 180px minmax(0, 1fr);
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .chart-donut {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+
+            .chart-donut::after {
+                content: "";
+                position: absolute;
+                inset: 20px;
+                background: #fff;
+                border-radius: 50%;
+                box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.14);
+            }
+
+        .chart-donut-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .chart-donut-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1;
+        }
+
+        .chart-donut-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 0.35rem;
+        }
+
+        .legend-list {
+            display: grid;
+            gap: 0.7rem;
+        }
+
+        .legend-row {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 0.65rem;
+            align-items: center;
+            font-size: 0.84rem;
+            color: #1f2937;
+        }
+
+        .legend-swatch {
+            width: 0.8rem;
+            height: 0.8rem;
+            border-radius: 999px;
+        }
+
+        .legend-value {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .bar-list {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .bar-row {
+            display: grid;
+            grid-template-columns: 110px 1fr auto;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .bar-label {
+            font-size: 0.82rem;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .bar-track {
+            position: relative;
+            height: 0.7rem;
+            border-radius: 999px;
+            overflow: hidden;
+            background: #e2e8f0;
+        }
+
+        .bar-fill {
+            position: absolute;
+            inset: 0 auto 0 0;
+            border-radius: 999px;
+        }
+
+        .bar-value {
+            min-width: 2.4rem;
+            text-align: right;
+            font-size: 0.82rem;
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .stacked-band {
+            display: flex;
+            width: 100%;
+            height: 1rem;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #e2e8f0;
+            margin-bottom: 1rem;
+        }
+
+        .stacked-band-segment {
+            height: 100%;
+            min-width: 0;
+        }
+
+        .owner-chart-list {
+            display: grid;
+            gap: 0.95rem;
+        }
+
+        .owner-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 130px auto;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .owner-name {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: #111827;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .insight-panel {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .insight-pill {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            padding: 0.85rem 0.95rem;
+            border-radius: 0.9rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+            .insight-pill i {
+                font-size: 1rem;
+                margin-top: 0.12rem;
+            }
+
+            .insight-pill strong {
+                display: block;
+                font-size: 0.84rem;
+                color: #0f172a;
+            }
+
+            .insight-pill span {
+                display: block;
+                font-size: 0.8rem;
+                color: #64748b;
+            }
+
+        .chart-empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+            border: 1px dashed #cbd5e1;
+            border-radius: 0.8rem;
+            background: rgba(248, 250, 252, 0.7);
+        }
+
+        .analytics-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 0.4rem;
+            border-top: 1px solid #e5e7eb;
+            font-size: 0.79rem;
+            color: #64748b;
+        }
+
+            .analytics-footer strong {
+                color: #0f172a;
+            }
+
+        @@media (max-width: 1199.98px) {
+            .analytics-grid,
+            .analytics-grid-secondary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @@media (max-width: 767.98px) {
+            .donut-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .bar-row,
+            .owner-row {
+                grid-template-columns: 1fr;
+            }
+
+            .analytics-footer,
+            .chart-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .dashboard-hero {
+                grid-template-columns: 1fr;
+                padding: 1.35rem;
+            }
+
+            .dashboard-hero__stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .dashboard-hero__stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+}
+<section class="dashboard-hero">
+    <div>
+        <span class="dashboard-hero__eyebrow"><i class="bi bi-graph-up-arrow"></i> Pulse command center</span>
+        <h1>Portfolio health.</h1>
+        <p>Track live workload, delivery pressure, and portfolio movement from one dashboard before jumping into projects, tasks, or the deeper analytics panels below.</p>
+        <div class="dashboard-hero__chips">
+            <span class="dashboard-hero__chip"><i class="bi bi-folder-check"></i> Project momentum</span>
+            <span class="dashboard-hero__chip"><i class="bi bi-hourglass-split"></i> Task pressure</span>
+            <span class="dashboard-hero__chip"><i class="bi bi-bar-chart-line"></i> Delivery signals</span>
+        </div>
+        <div class="dashboard-hero__scope">
+            <div>
+                <div class="subheader">Content scope</div>
+                <span class="dashboard-hero__scope-copy">Show dashboard content for the current user or every accessible project.</span>
+            </div>
+            <div class="form-check form-switch m-0 ps-0 d-flex align-items-center gap-2">
+                <label class="form-check-label" for="dashboardContentScopeToggle">My content</label>
+                <input class="form-check-input m-0" type="checkbox" role="switch" id="dashboardContentScopeToggle">
+                <label class="form-check-label" for="dashboardContentScopeToggle">All content</label>
+            </div>
+        </div>
+    </div>
+    <div class="dashboard-hero__stats">
+        <div class="dashboard-hero__stat">
+            <span class="dashboard-hero__stat-label">Active projects</span>
+            <span class="dashboard-hero__stat-value activeproducts">0</span>
+            <span class="dashboard-hero__stat-copy">Current portfolio footprint</span>
+        </div>
+        <div class="dashboard-hero__stat">
+            <span class="dashboard-hero__stat-label">In progress</span>
+            <span class="dashboard-hero__stat-value inprogress">0</span>
+            <span class="dashboard-hero__stat-copy">Open execution in flight</span>
+        </div>
+        <div class="dashboard-hero__stat">
+            <span class="dashboard-hero__stat-label">Completed</span>
+            <span class="dashboard-hero__stat-value completedtasks">0</span>
+            <span class="dashboard-hero__stat-copy">Closed tasks delivered</span>
+        </div>
+        <div class="dashboard-hero__stat">
+            <span class="dashboard-hero__stat-label">Overdue</span>
+            <span class="dashboard-hero__stat-value overdue">0</span>
+            <span class="dashboard-hero__stat-copy">Items needing attention</span>
+        </div>
+    </div>
+</section>
+
+@*<div class="d-flex justify-content-between align-items-end mb-3">
+        <div>
+            <div class="subheader">
+                <i class="fas fa-table me-2 text-primary"></i>Projects vs Milestones
+            </div>
+            <div class="subheader-muted">
+                Tabular view of multiple projects and their milestones
+            </div>
+        </div>
+    </div>*@
+
+
+<!-- ================= CARDS ================= -->
+<div class="row">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box info-box-button" onclick="goToActiveProjects()">
+            <span class="info-box-icon text-bg-primary shadow-sm">
+                <i class="bi bi-folder-check"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text">ACTIVE PROJECTS</span>
+                <span class="info-box-number activeproducts">
+                    0
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box info-box-button" onclick="goToInProgressTasks()">
+            <span class="info-box-icon text-bg-warning shadow-sm">
+                <i class="bi bi-clock"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text">IN PROGRESS</span>
+                <span class="info-box-number inprogress">
+                    0
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- fix for small devices only -->
+    <!-- <div class="clearfix hidden-md-up"></div> -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box info-box-button" onclick="goToCompletedTasks()">
+            <span class="info-box-icon text-bg-success shadow-sm">
+                <i class="bi bi-check-circle"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text">COMPLETED TASKS</span>
+                <span class="info-box-number completedtasks">
+                    0
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box info-box-button" onclick="goToOverdue()">
+            <span class="info-box-icon text-bg-danger shadow-sm">
+                <i class="bi bi-exclamation-triangle"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text">OVERDUE</span>
+                <span class="info-box-number overdue">
+                    0
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+</div>
+
+<div class="analytics-card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+            <div>
+                <div class="analytics-kicker">Decision Support</div>
+                <div class="analytics-title">Portfolio Health At A Glance</div>
+                <div class="analytics-copy">
+                    Charts below turn the live project feed into workload, progress, and deadline signals so users can see where action is needed first.
+                </div>
+            </div>
+            <div class="text-muted" id="analyticsLastUpdated" style="font-size:0.8rem;">Waiting for dashboard data...</div>
+        </div>
+
+        <div class="analytics-grid">
+            <div class="chart-panel">
+                <div class="chart-shell">
+                    <div class="chart-title">
+                        <h3>Portfolio Status Mix</h3>
+                        <span>Projects by current state</span>
+                    </div>
+                    <div id="portfolioStatusChart"></div>
+                </div>
+            </div>
+            <div class="chart-panel">
+                <div class="chart-shell">
+                    <div class="chart-title">
+                        <h3>Delivery Window</h3>
+                        <span>Target completion pressure</span>
+                    </div>
+                    <div id="deliveryWindowChart"></div>
+                </div>
+            </div>
+            <div class="chart-panel">
+                <div class="chart-shell">
+                    <div class="chart-title">
+                        <h3>Completion Bands</h3>
+                        <span>Projects grouped by completion</span>
+                    </div>
+                    <div id="completionBandChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-grid-secondary">
+            <div class="chart-panel">
+                <div class="chart-shell">
+                    <div class="chart-title">
+                        <h3>Owner Capacity Snapshot</h3>
+                        <span>Top owners by project count</span>
+                    </div>
+                    <div id="ownerLoadChart"></div>
+                </div>
+            </div>
+            <div class="chart-panel">
+                <div class="chart-shell">
+                    <div class="chart-title">
+                        <h3>Suggested Focus</h3>
+                        <span>Priorities generated from live counters</span>
+                    </div>
+                    <div id="dashboardInsights" class="insight-panel"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-footer">
+            <div>Data source: <strong>Projects dashboard feed</strong> and <strong>live task counters</strong></div>
+            <div id="analyticsCoverage">No project distribution loaded yet.</div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ================= SUMMARY TABLE: PROJECTS & ROOT MILESTONES ================= -->
+<div class="card card-main mb-4">
+    <div class="card-body p-3 p-lg-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="section-title">Projects & Root Milestones (Summary)</span>
+            <small class="text-muted" style="font-size:0.78rem;">
+                One row per project & top-level milestone
+            </small>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm align-middle" id="projectsRootMilestonesTable">
+                <thead>
+                    <tr>
+                        <th style="width:26%">Project</th>
+                        <th style="width:10%">Project Owner</th>
+                        <th style="width:12%">Project Period</th>
+                        <th style="width:8%">Proj. %</th>
+                        <th style="width:10%">Project Status</th>
+                        <th style="width:20%">Root Milestone</th>
+                        <th style="width:12%">Milestone Period</th>
+                        <th style="width:8%">Ms. %</th>
+                        <th style="width:10%">Ms. Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ================= DETAILED TABLE: PROJECTS vs MILESTONES ================= -->
+<div class="card card-main">
+    <div class="card-body p-3 p-lg-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="section-title">Detailed Projects & Milestones</span>
+        </div>
+
+        <div class="pulse-index-toolbar mb-3">
+            <div class="pulse-index-toolbar-field">
+                <label for="filterProjectStatus">Project Status</label>
+                <select class="form-select form-select-sm" id="filterProjectStatus">
+                    <option value="">All</option>
+                    <option value="Not Started">Not Started</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Hold">Hold</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="At Risk">At Risk</option>
+                </select>
+            </div>
+            <div class="pulse-index-toolbar-field">
+                <label for="filterMilestoneStatus">Milestone Status</label>
+                <select class="form-select form-select-sm" id="filterMilestoneStatus">
+                    <option value="">All</option>
+                    <option value="Not Started">Not Started</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Hold">Hold</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="At Risk">At Risk</option>
+                </select>
+            </div>
+            <div class="pulse-index-toolbar-field">
+                <label for="filterOwner">Owner</label>
+                <input type="text" class="form-control form-control-sm" id="filterOwner"
+                       placeholder="Project or milestone owner">
+            </div>
+            <div class="pulse-index-toolbar-field">
+                <label for="filterSearch">Search</label>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-search text-gray-500"></i>
+                    </span>
+                    <input type="text" class="form-control" id="filterSearch"
+                           placeholder="Project / milestone name">
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm align-middle" id="projectsMilestonesTable">
+                <thead>
+                    <tr>
+                        <th style="width:32px;"></th>
+                        <th>Project</th>
+                        <th style="width:14%">Project Period</th>
+                        <th style="width:8%">Proj. %</th>
+                        <th style="width:10%">Project Owner</th>
+                        <th style="width:10%">Project Status</th>
+                        <th style="width:16%">Milestone / Period</th>
+                        <th style="width:8%">Ms. %</th>
+                        <th style="width:12%">Milestone Owner</th>
+                        <th style="width:10%">Milestone Status</th>
+                    </tr>
+                </thead>
+                <tbody id="projectsMilestonesBody">
+                    <!-- rows will be injected here via JS -->
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+    </div>
+</div>
+
+<div style="display:none">
+    <div id="hdn-avatar-group-container"></div>
+</div>
+<!-- /.card-body -->
+<div class="card-footer clearfix">
+    <div class="card-tools-projectsTable-size" style="float:left"></div> <div class="card-tools-projectsTable-pagination float-end"></div>
+</div>
+<!-- /.card-footer -->
+
+
+@section scripts{
+    <!-- datatables -->
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-rowgroup/js/dataTables.rowGroup.min.js"></script>
+    <script src="~/node_modules/datatables.net-rowgroup-bs5/js/rowGroup.bootstrap5.min.js"></script>
+    <!-- html2canvas -->
+    <script src="~/node_modules/html2canvas/dist/html2canvas.min.js"></script>
+
+    <!-- Dependencies -->
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <script src="~/node_modules/sortablejs/Sortable.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+
+
+    <!-- local-dynamic-fields -->
+    <script src="~/Scripts/locals/utils.js"></script>
+    <script src="~/Scripts/locals/dynamic-fields.js"></script>
+
+    <script src="~/Scripts/locals/stacked-userprofiles.js"></script>
+    <script src="~/Scripts/home/index.js"></script>
+
+
+
+}
+
+
+
+@*@section styles{
+        <link href="~/Content/locals/stacked-userprofiles.css" rel="stylesheet" />
+        <style>
+        </style>
+
+
+
+    }
+
+    <div id="avatar-group-container"></div>
+
+
+
+
+    @section scripts{
+        <script src="~/Scripts/locals/stacked-userprofiles.js"></script>
+
+        <script>
+
+            $(document).ready(function () {
+                ////loadAndRenderAvatarGroup({
+                ////    dataSource:  [
+                ////        { name: "Alice Anderson", initials: "AAS" },
+                ////        { name: "Bob Brown", initials: "BB" },
+                ////        { name: "Charlie Clark", initials: "CC" },
+                ////        { name: "Diana Davis", initials: "DD" },
+                ////        { name: "Ethan Evans", initials: "EE" },
+                ////        { name: "Fiona Foster", initials: "FF" },
+                ////        { name: "George Green", initials: "GG" },
+                ////        { name: "Hannah Harris", initials: "HH" },
+                ////        { name: "Ian Irving", initials: "II" },
+                ////        { name: "Julia Jones", initials: "JJ" },
+                ////        { name: "Kevin King", initials: "KK" },
+                ////        { name: "Laura Lee", initials: "LL" },
+                ////        { name: "Mike Miller", initials: "MM" },
+                ////        { name: "Nina Nelson", initials: "NN" },
+                ////        { name: "Oscar Owens", initials: "OO" },
+                ////        { name: "Paula Price", initials: "PP" },
+                ////        { name: "Quentin Quinn", initials: "QQ" },
+                ////        { name: "Rachel Reed", initials: "RR" },
+                ////        { name: "Steve Smith", initials: "SS" },
+                ////        { name: "Tina Turner", initials: "TT" },
+                ////        { name: "Uma Underwood", initials: "UU" },
+                ////        { name: "Victor Vaughn", initials: "VV" },
+                ////        { name: "Wendy White", initials: "WW" },
+                ////        { name: "Xander Xu", initials: "XX" },
+                ////        { name: "Yara Young", initials: "YY" },
+                ////        { name: "Zane Zimmerman", initials: "ZZ" },
+                ////        { name: "Amber Adams", initials: "AA" },
+                ////        { name: "Brian Blake", initials: "BB" },
+                ////        { name: "Cathy Carter", initials: "CC" },
+                ////        { name: "Derek Drake", initials: "DD" },
+                ////        { name: "Elena Edwards", initials: "EE" },
+                ////        { name: "Frankie Flynn", initials: "FF" },
+                ////        { name: "Gina Grant", initials: "GG" },
+                ////        { name: "Harvey Hall", initials: "HH" },
+                ////        { name: "Isabel Ingram", initials: "II" },
+                ////        { name: "Jackie Johnson", initials: "JJ" },
+                ////        { name: "Kurt Knight", initials: "KK" },
+                ////        { name: "Lily Lewis", initials: "LL" },
+                ////        { name: "Mason Moore", initials: "MM" }
+                ////    ],
+                ////    container: '#avatar-group-container',
+                ////    maxVisible: 8,
+                ////    avatarSize: 40,
+                ////    avatarSpacing: 15,
+                ////    label: 'Member',
+                ////    emptyText: 'No members found',
+                ////    backgroundColor: '#FFC107', // orange
+                ////    fontColor: '#222',          // dark text
+                ////    labelBackgroundColor: '#607d8b', // blue-grey for "+N"
+                ////    labelFontColor: '#fff',
+                ////    // Sort alphabetically by initials
+                ////    sort: 'initials',
+                ////    //// Descending by name
+                ////    //sort: function(a, b) { return b.name.localeCompare(a.name); },
+                ////    //// Sorting by date (asc)
+                ////    //sort: function (a, b) {
+                ////    //    // Convert to Date objects for comparison
+                ////    //    return new Date(a.registeredDate) - new Date(b.registeredDate);
+                ////    //},
+                ////    //// Sorting by date (desc)
+                ////    //sort: function (a, b) {
+                ////    //    return new Date(b.registeredDate) - new Date(a.registeredDate);
+                ////    //},
+                ////});
+
+
+            });
+
+
+        </script>
+
+
+    }*@

@@ -1,0 +1,80 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New Field";
+    ViewBag.TitleIcon = "bi bi-plus-circle";
+    ViewBag.SubTitle = "Create a reusable field definition with a single-field designer and live preview.";
+    ViewBag.ContentHeaderChips = new[] { "Reusable field templates", "Single-field designer", "Consistent form inputs" };
+    ViewBag.ContentHeaderAsideLabel = "New field";
+    ViewBag.ContentHeaderAsideTitle = "Design one field at a time and save it as a reusable template.";
+    ViewBag.ContentHeaderAsideBody = "Use the field designer to configure behavior, validation, and data source while previewing the final input immediately.";
+    ViewBag.IsActiveTemplatesFields = "menu-open";
+    ViewBag.IsActiveTemplatesFieldsNew = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+
+@section styles{
+
+    <link href="~/node_modules/dropzone/dist/dropzone.css" rel="stylesheet" />
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Summernote -->
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+
+    <link href="~/Content/locals/dynamic-fields.css" rel="stylesheet" />
+
+}
+
+<form id="fieldForm" class="needs-validation" novalidate="">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body p-4">
+                    <h5 class="mb-3">
+                        New Field
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Create one reusable field template</small>
+                    </h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="FieldSysId" class="form-label">Field Code (Auto-generated GUID)</label>
+                            <div class="input-group has-validation">
+                                <input type="text" class="form-control" id="FieldSysId" name="FieldSysId" readonly disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="DesignerSummary" class="form-label">Designer Status</label>
+                            <input type="text" class="form-control" id="DesignerSummary" value="Configure field details below" readonly>
+                        </div>
+                    </div>
+                    <hr class="my-4" />
+                    @Html.Partial("_SingleFieldDesigner")
+                </div>
+                <div class="card-footer clearfix">
+                    <div class="m-0 float-end">
+                        <a href="@Url.Action("Index", "Fields", new { area = "Templates" })" class="btn btn-default">Cancel</a>
+                        <button id="buttonClear" type="button" class="btn btn-outline-secondary">Clear</button>
+                        <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <!-- Dependencies -->
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <script src="~/node_modules/sortablejs/Sortable.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+    <script src="~/node_modules/select2/dist/js/select2.min.js"></script>
+
+    <script src="~/Scripts/locals/utils.js"></script>
+    <script src="~/Scripts/locals/dynamic-fields.js"></script>
+
+    <script src="~/Areas/Templates/Scripts/fields/common.js"></script>
+    <script src="~/Areas/Templates/Scripts/fields/new.js"></script>
+}

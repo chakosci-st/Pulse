@@ -1,0 +1,569 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Production Calendar";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review how this production calendar maps fiscal dates into workweeks, months, quarters, and years.";
+    ViewBag.ContentHeaderChips = new[] { "Fiscal date mapping", "Workweek alignment", "Quarter and year rollup" };
+    ViewBag.ContentHeaderAsideLabel = "Calendar review";
+    ViewBag.ContentHeaderAsideTitle = "Inspect the fiscal structure before it is reused across manufacturing planning.";
+    ViewBag.ContentHeaderAsideBody = "This view shows the calendar rules that determine how daily dates roll up into operational and reporting periods.";
+    ViewBag.IsActiveOperationsProductionCalendars = "menu-open";
+    ViewBag.IsActiveOperationsProductionCalendarsAll = "active";
+    ViewBag.SelectedMenu = "Operations";
+    ViewBag.IsActiveOperations = "active";
+}
+@section Styles {
+    <link href="~/node_modules/datatables/media/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/Content/datatables-bs5-fix.css" rel="stylesheet" />
+
+    <link href="~/node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" />
+
+    <style>
+        .production-calendar-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .production-calendar-toolbar {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) repeat(2, minmax(180px, 0.55fr)) auto auto;
+            gap: 0.85rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6f9 100%);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+            align-items: center;
+        }
+
+        .production-calendar-toolbar .form-control,
+        .production-calendar-toolbar .form-select {
+            min-height: 46px;
+            border-radius: 0.8rem;
+            border-color: #cbd5e1;
+        }
+
+        .production-calendar-toolbar__buttons {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .project-view-mode-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            background: #ffffff;
+            min-height: 46px;
+            justify-self: end;
+        }
+
+        .project-view-mode-btn {
+            border: none;
+            background: transparent;
+            color: #475569;
+            border-radius: 999px;
+            padding: 0.5rem 0.95rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .project-view-mode-btn.active {
+            background: linear-gradient(135deg, #0f766e 0%, #0f172a 100%);
+            color: #f8fafc;
+            box-shadow: 0 10px 18px rgba(15, 23, 42, 0.14);
+        }
+
+        .production-calendar-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 0.25rem;
+        }
+
+        .production-calendar-summary__title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .production-calendar-summary__copy {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .production-calendar-summary__count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.85rem;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #075985;
+            font-size: 0.86rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .production-calendar-panel {
+            border: 1px solid #dbe4ea;
+            border-radius: 1.2rem;
+            background: #ffffff;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+        }
+
+        .production-calendar-panel__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.1rem;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.28), transparent 32%), linear-gradient(135deg, #0f766e 0%, #0f172a 100%);
+            color: #f8fafc;
+        }
+
+        .production-calendar-panel__title {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .production-calendar-panel__copy {
+            margin: 0.25rem 0 0;
+            font-size: 0.88rem;
+            opacity: 0.82;
+        }
+
+        .production-calendar-panel__meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.14);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .production-calendar-panel__body {
+            padding: 1rem 1.1rem 1.1rem;
+        }
+
+        .btn-custom-dt {
+            background-color: #FFC107 !important;
+            color: #03234b !important;
+            border: none !important;
+            border-radius: 4px !important;
+            font-weight: bold;
+            margin-right: 5px;
+            transition: background 0.2s;
+        }
+
+            .btn-custom-dt:hover, .btn-custom-dt:focus {
+                background-color: #FFD54F !important;
+                color: #03234b !important;
+            }
+
+        .production-calendar-toolbar__buttons .dt-buttons {
+            display: inline-flex;
+            gap: 0.45rem;
+            flex-wrap: wrap;
+        }
+
+        .production-calendar-toolbar__buttons .btn,
+        .production-calendar-toolbar__buttons .dt-button {
+            margin: 0 !important;
+        }
+
+        .production-calendar-datatable-wrap .dataTables_wrapper .dt-search,
+        .production-calendar-datatable-wrap .dataTables_wrapper .dt-length,
+        .production-calendar-datatable-wrap .dataTables_wrapper .dt-info,
+        .production-calendar-datatable-wrap .dataTables_wrapper .dt-buttons,
+        .production-calendar-datatable-wrap .dataTables_wrapper .dt-paging {
+            display: none;
+        }
+
+        #productioncalendarTable {
+            width: 100% !important;
+        }
+
+        .production-calendar-table-meta {
+            margin-top: 0.9rem;
+            font-size: 0.86rem;
+            color: #64748b;
+        }
+
+        .production-calendar-table-meta .dt-info {
+            margin: 0;
+        }
+
+        .production-calendar-years {
+            display: grid;
+            gap: 1.1rem;
+        }
+
+        .production-calendar-year {
+            border: 1px solid #dbe4ea;
+            border-radius: 1.1rem;
+            background: #f8fafc;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+            overflow: hidden;
+        }
+
+        .production-calendar-year__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.95rem 1rem;
+            background: #e2e8f0;
+        }
+
+        .production-calendar-year__title {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .production-calendar-year__meta {
+            font-size: 0.82rem;
+            color: #475569;
+            font-weight: 700;
+        }
+
+        .production-calendar-quarters {
+            display: grid;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .production-calendar-quarter {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .production-calendar-quarter__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .production-calendar-quarter__title {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .production-calendar-quarter__meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.38rem 0.65rem;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .production-calendar-month-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        .production-calendar-month {
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: #ffffff;
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
+            overflow: hidden;
+        }
+
+        .production-calendar-month__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.68rem 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6ff 100%);
+        }
+
+        .production-calendar-month__title {
+            margin: 0;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .production-calendar-month__meta {
+            font-size: 0.64rem;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .production-calendar-month__body {
+            padding: 0.55rem 0.6rem 0.65rem;
+            overflow-x: visible;
+        }
+
+        .production-calendar-grid {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            table-layout: fixed;
+            min-width: 0;
+        }
+
+        .production-calendar-grid th,
+        .production-calendar-grid td {
+            border-bottom: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            padding: 0.26rem 0.14rem;
+            vertical-align: top;
+            background: #ffffff;
+        }
+
+        .production-calendar-grid th:first-child,
+        .production-calendar-grid td:first-child {
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .production-calendar-grid thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 0.48rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            font-weight: 800;
+        }
+
+        .production-calendar-grid .is-week-col {
+            width: 50px;
+            background: #f8fafc;
+        }
+
+        .production-calendar-workweek {
+            display: grid;
+            gap: 0.1rem;
+        }
+
+        .production-calendar-workweek strong {
+            font-size: 0.58rem;
+            color: #0f172a;
+        }
+
+        .production-calendar-workweek span {
+            font-size: 0.47rem;
+            color: #64748b;
+        }
+
+        .production-calendar-daycell {
+            min-height: 34px;
+            display: grid;
+            align-content: start;
+            gap: 0.08rem;
+        }
+
+        .production-calendar-daycell.is-empty {
+            background: #f8fafc;
+        }
+
+        .production-calendar-daycell__date {
+            font-size: 0.64rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1;
+        }
+
+        .production-calendar-daycell__label {
+            font-size: 0.46rem;
+            color: #64748b;
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        .production-calendar-empty {
+            padding: 3rem 1rem;
+            border: 1px dashed #cbd5e1;
+            border-radius: 1rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            text-align: center;
+            color: #64748b;
+        }
+
+        [data-view-pane] {
+            display: none;
+        }
+
+        [data-view-pane].is-active {
+            display: block;
+        }
+
+        @@media (max-width: 1199.98px) {
+            .production-calendar-toolbar {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .project-view-mode-toggle,
+            .production-calendar-toolbar__buttons {
+                justify-self: stretch;
+                justify-content: space-between;
+            }
+        }
+
+        @@media (max-width: 767.98px) {
+            .production-calendar-toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .production-calendar-summary,
+            .production-calendar-panel__header,
+            .production-calendar-year__header,
+            .production-calendar-quarter__header,
+            .production-calendar-month__header {
+                flex-direction: column;
+                align-items: start;
+            }
+
+            .production-calendar-month-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+}
+<!--begin::Row-->
+<div class="production-calendar-shell">
+    <div class="production-calendar-toolbar">
+        <input id="productionCalendarSearch" type="search" class="form-control" placeholder="Search by date, workweek, month, or quarter" />
+        <select id="productionCalendarQuarterFilter" class="form-select">
+            <option value="">All quarters</option>
+        </select>
+        <select id="productionCalendarMonthFilter" class="form-select">
+            <option value="">All months</option>
+        </select>
+        <div class="project-view-mode-toggle" role="tablist" aria-label="Production calendar view mode">
+            <button type="button" class="project-view-mode-btn active" data-view-mode="table">Table View</button>
+            <button type="button" class="project-view-mode-btn" data-view-mode="calendar">Calendar View</button>
+        </div>
+        <div class="production-calendar-toolbar__buttons">
+            <span class="production-calendar-toolbar__dt-buttons"></span>
+            <a href="@Url.Action("Index", "ProductionCalendars", new { area = "Operations" })" class="btn btn-outline-secondary">Done</a>
+        </div>
+    </div>
+
+    <div class="production-calendar-summary">
+        <div>
+            <div class="production-calendar-summary__title">Production Calendar: @ViewBag.Id</div>
+            <div id="productionCalendarSummary" class="production-calendar-summary__copy">Loading production calendar...</div>
+        </div>
+        <div id="productionCalendarCount" class="production-calendar-summary__count">
+            <i class="bi bi-calendar3"></i>
+            <span>0 days</span>
+        </div>
+    </div>
+
+    <div class="production-calendar-panel">
+        <div class="production-calendar-panel__header">
+            <div>
+                <h3 class="production-calendar-panel__title">Calendar Workspace</h3>
+                <p class="production-calendar-panel__copy">Switch between a searchable table and a grouped calendar arranged by workweek and day of week.</p>
+            </div>
+            <div id="productionCalendarActiveViewLabel" class="production-calendar-panel__meta">
+                <i class="bi bi-table"></i>
+                <span>Table View</span>
+            </div>
+        </div>
+        <div class="production-calendar-panel__body">
+            <div id="productionCalendarTablePane" data-view-pane="table" class="is-active">
+                <div class="production-calendar-datatable-wrap">
+                    <table id="productioncalendarTable" class="display">
+                        <thead>
+                            <tr>
+                                <th>Fiscal Date</th>
+                                <th>WorkWeek</th>
+                                <th>Month</th>
+                                <th>Quarter</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="production-calendar-table-meta">
+                    <div class="card-tools-productioncalendarTable-size"></div>
+                </div>
+            </div>
+
+            <div id="productionCalendarCalendarPane" data-view-pane="calendar">
+                <div class="production-calendar-calendar-scroll">
+                    <div id="productionCalendarCalendar" class="production-calendar-years">
+                        <div class="production-calendar-empty">Loading production calendar...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="productionCalendarEmptyState" class="production-calendar-empty" style="display:none;">
+                No production calendar entries match the current filters.
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Row-->
+
+
+
+@section scripts{
+    <!-- datatables -->
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <!-- DataTables Buttons -->
+    <script src="~/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+
+    <script src="~/node_modules/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+    <!-- JSZip for Excel export -->
+    <script src="~/node_modules/jszip/dist/jszip.min.js"></script>
+    <!-- pdfMake for PDF export (must be before buttons.html5) -->
+    <script src="~/node_modules/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/node_modules/pdfmake/build/vfs_fonts.js"></script>
+    <!-- DataTables Buttons HTML5 and Print -->
+    <script src="~/node_modules/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/node_modules/datatables.net-buttons/js/buttons.print.min.js"></script>
+
+
+    <!-- jquery-validation -->
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+
+
+
+
+
+    <!-- local -->
+    <script src="~/Scripts/locals/switch-button.js"></script>
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Operations/Scripts/productioncalendars/display.js"></script>
+}

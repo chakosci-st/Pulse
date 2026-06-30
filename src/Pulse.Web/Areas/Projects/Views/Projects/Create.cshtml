@@ -1,0 +1,1647 @@
+﻿
+@{
+    ViewBag.Title = "Create project";
+    ViewBag.SubTitle = "Initialize a new project using a roadmap template and assign team members.";
+    ViewBag.TitleIcon = "bi bi-journal-plus";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.IsActiveRegisterProject = "active";
+}
+@section styles{
+    <!-- Datatables -->
+    <link href="~/node_modules/datatables/media/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/Content/datatables-bs5-fix.css" rel="stylesheet" />
+    <!-- Select2 -->
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/locals/dynamic-fields.css" rel="stylesheet" />
+    <link href="~/node_modules/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
+    <!-- YearPicker -->
+    <link href="~/Content/YearPicker/yearpicker.css" rel="stylesheet" />
+
+    <!-- Icon Picker -->
+    <link href="@Url.Content("~/node_modules/@simonwep/pickr/dist/themes/nano.min.css")" rel="stylesheet" />
+
+    <!-- Local -->
+    <link href="~/Content/Icon-Picker.css" rel="stylesheet" />
+
+    <style>
+
+
+        /* ======= BADGES ======= */
+        .badge-soft {
+            font-size: 0.7rem;
+            border-radius: 999px;
+            padding: 0.16rem 0.65rem;
+            background: #e0ecff;
+            color: #1d4ed8;
+            border: 1px solid rgba(37,99,235,0.18);
+        }
+
+        .badge-maturity {
+            font-size: 0.7rem;
+            border-radius: 999px;
+            padding: 0.08rem 0.5rem;
+            background: #0f172a;
+            color: #e5e7eb;
+            border: 1px solid rgba(148,163,184,0.35);
+        }
+
+        .badge-required {
+            font-size: 0.7rem;
+            border-radius: 999px;
+            padding: 0.08rem 0.5rem;
+            background: rgba(220,38,38,0.07);
+            color: #b91c1c;
+            border: 1px solid rgba(248,113,113,0.6);
+        }
+
+        .badge-optional {
+            font-size: 0.7rem;
+            border-radius: 999px;
+            padding: 0.08rem 0.5rem;
+            background: rgba(16,185,129,0.06);
+            color: #047857;
+            border: 1px solid rgba(52,211,153,0.6);
+        }
+
+        /* ======= MEMBERS ======= */
+        .member-pill {
+            border-radius: 999px;
+            padding: 0.2rem 0.6rem;
+            background-color: #e5e7eb;
+            color: #111827;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin: 0.15rem;
+        }
+
+            .member-pill button {
+                border: none;
+                background: transparent;
+                padding: 0;
+                font-size: 0.8rem;
+                line-height: 1;
+                color: #6b7280;
+            }
+
+                .member-pill button:hover {
+                    color: #111827;
+                }
+
+        /* ======= MILESTONES & TASKS ======= */
+        #milestonesContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .milestones-header-row {
+            display: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.25rem;
+        }
+
+        @@media (min-width: 768px) {
+            .milestones-header-row {
+                display: flex;
+            }
+        }
+
+        .layout-main-card,
+        .milestone-row,
+        .milestone-body,
+        .task-card {
+            overflow: visible;
+        }
+
+        .milestone-row {
+            background: #ffffff;
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 0;
+            box-shadow: 0 4px 15px rgba(15,23,42,0.04);
+            transition: box-shadow 0.15s ease, transform 0.15s ease;
+        }
+
+            .milestone-row:hover {
+                box-shadow: 0 10px 25px rgba(15,23,42,0.08);
+                transform: translateY(-1px);
+            }
+
+        .milestone-row--root {
+            border-color: rgba(96, 165, 250, 0.45);
+            box-shadow: 0 14px 28px rgba(59, 130, 246, 0.08);
+        }
+
+        .milestone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            cursor: pointer;
+            gap: 1rem;
+            padding: 0.8rem 0.9rem;
+            background: linear-gradient(90deg, #f9fafb, #eff6ff);
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .milestone-row--root .milestone-header {
+            background: linear-gradient(90deg, #eff6ff, #f8fbff);
+        }
+
+        .milestone-title {
+            font-size: 0.95rem;
+            font-weight: 650;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+            .milestone-title i {
+                font-size: 0.92rem;
+            }
+
+        .milestone-meta {
+            font-size: 0.75rem;
+            color: #6b7280;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            align-items: center;
+        }
+
+        .milestone-summary-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.22rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid #dbe2ea;
+            background: #ffffff;
+            color: #475569;
+            font-size: 0.73rem;
+            line-height: 1.2;
+        }
+
+        .milestone-summary-chip--ok {
+            background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.2);
+            color: #047857;
+        }
+
+        .milestone-summary-chip--warning {
+            background: rgba(245,158,11,0.1);
+            border-color: rgba(245,158,11,0.22);
+            color: #b45309;
+        }
+
+        .milestone-summary-chip--neutral {
+            background: #f8fafc;
+            color: #475569;
+        }
+
+        .milestone-toggle-icon {
+            font-size: 0.85rem;
+            color: #6b7280;
+            transition: transform 0.15s ease;
+            margin-top: 0.1rem;
+        }
+
+        .milestone-header[aria-expanded="true"] .milestone-toggle-icon {
+            transform: rotate(90deg);
+        }
+
+        .milestone-body {
+            margin-top: 0;
+            padding: 0.9rem;
+            background-color: #ffffff;
+        }
+
+        .milestone-detail-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.45fr);
+            gap: 0.75rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .milestone-detail-card,
+        .task-detail-card {
+            padding: 0.85rem 0.9rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.95rem;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        .milestone-detail-card__label,
+        .task-detail-card__label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .milestone-date-grid,
+        .task-dates-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.65rem;
+        }
+
+        .milestone-field label,
+        .task-field label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .milestone-root-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            padding: 0.85rem 0.95rem;
+            border: 1px dashed rgba(96, 165, 250, 0.55);
+            border-radius: 0.95rem;
+            background: linear-gradient(135deg, rgba(239,246,255,0.95), rgba(248,250,252,0.95));
+            color: #1d4ed8;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            margin-bottom: 0.8rem;
+        }
+
+        .tasks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .task-row {
+            padding: 0;
+            border-bottom: none;
+            font-size: 0.85rem;
+        }
+
+        .task-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.95rem;
+            background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        .task-card--required {
+            border-color: rgba(248,113,113,0.38);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 10px 18px rgba(248,113,113,0.08);
+        }
+
+        .task-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.85rem;
+            padding: 0.82rem 0.92rem;
+        }
+
+        .task-summary__main {
+            min-width: 0;
+            display: grid;
+            gap: 0.28rem;
+        }
+
+        .task-name {
+            font-weight: 600;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+            .task-name i {
+                color: #4b5563;
+                font-size: 0.8rem;
+            }
+
+        .task-meta {
+            font-size: 0.72rem;
+            color: #6b7280;
+            margin-top: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            align-items: center;
+        }
+
+        .task-summary__aside {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .task-summary-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.26rem 0.56rem;
+            border: 1px solid #dbe2ea;
+            border-radius: 999px;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 0.73rem;
+            line-height: 1.2;
+        }
+
+        .task-summary-chip--ok {
+            background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.2);
+            color: #047857;
+        }
+
+        .task-summary-chip--warning {
+            background: rgba(245,158,11,0.1);
+            border-color: rgba(245,158,11,0.22);
+            color: #b45309;
+        }
+
+        .task-summary__toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.72rem;
+            border: none;
+            border-radius: 999px;
+            background: #e0ecff;
+            color: #1d4ed8;
+            font-size: 0.73rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+            .task-summary__toggle i {
+                transition: transform 0.15s ease;
+            }
+
+            .task-summary__toggle[aria-expanded="true"] i {
+                transform: rotate(90deg);
+            }
+
+        .task-details {
+            padding: 0 0.92rem 0.92rem;
+        }
+
+        .task-details__grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.45fr);
+            gap: 0.75rem;
+        }
+
+        .owners-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .owners-input {
+            min-height: 46px;
+            padding: 4px 36px 4px 6px;
+            border: 1px solid #d1d5db;
+            border-radius: 0.85rem;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.35rem;
+            cursor: pointer;
+        }
+
+            .owners-input.focused {
+                border-color: #2563eb;
+                box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+                background-color: #ffffff;
+            }
+
+        .owners-chip {
+            border-radius: 999px;
+            padding: 0.16rem 0.5rem 0.16rem 0.24rem;
+            background-color: #e0ecff;
+            border: 1px solid #bfdbfe;
+            color: #1f2937;
+            font-size: 0.72rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            max-width: 100%;
+        }
+
+            .owners-chip button {
+                border: none;
+                background: transparent;
+                padding: 0;
+                font-size: 0.72rem;
+                line-height: 1;
+                color: #475569;
+            }
+
+        .owners-chip__avatar,
+        .owners-item-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 20px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            background: #1d4ed8;
+            color: #ffffff;
+        }
+
+        .owners-chip__label {
+            max-width: 108px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .owners-chip--overflow {
+            border-style: dashed;
+            background: #f8fafc;
+            color: #475569;
+            padding-inline: 0.58rem;
+        }
+
+        .owners-placeholder {
+            font-size: 0.79rem;
+            color: #9ca3af;
+        }
+
+        .owners-caret {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            pointer-events: none;
+        }
+
+        .owners-dropdown {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 6px);
+            z-index: 1051;
+            background-color: #ffffff;
+            border-radius: 0.85rem;
+            box-shadow: 0 18px 34px rgba(15,23,42,0.2);
+            border: 1px solid #e5e7eb;
+            max-height: 220px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+        }
+
+        .owners-item {
+            padding: 0.45rem 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            cursor: pointer;
+        }
+
+            .owners-item:hover {
+                background-color: #eff6ff;
+            }
+
+            .owners-item.active-owner {
+                background-color: #e0ecff;
+                font-weight: 500;
+            }
+
+        .owners-item-name {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            min-width: 0;
+        }
+
+        .owners-item-avatar {
+            width: 26px;
+            height: 26px;
+            flex-basis: 26px;
+            font-size: 0.68rem;
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .owners-item-text {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .owners-item-text strong,
+        .owners-item-text small {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .owners-item-text strong {
+            font-size: 0.78rem;
+            color: #0f172a;
+        }
+
+        .owners-item-text small {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        .owners-item-check {
+            color: #2563eb;
+            font-size: 0.8rem;
+        }
+
+        .owners-helper {
+            font-size: 0.72rem;
+            color: #6b7280;
+            margin-top: 0.22rem;
+        }
+
+        .preview-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .preview-sub {
+            font-size: 0.78rem;
+            color: #9ca3af;
+        }
+
+        @@media (max-width: 991px) {
+            .milestone-detail-grid,
+            .task-details__grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .milestone-date-grid,
+            .task-dates-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @@media (max-width: 767px) {
+            .milestone-header,
+            .task-summary {
+                flex-direction: column;
+            }
+
+            .task-summary__aside {
+                justify-content: flex-start;
+            }
+
+            .milestone-date-grid,
+            .task-dates-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+
+        .form-floating-date-picker {
+            padding-left: 2.5rem; /* space for the icon */
+        }
+
+        .form-floating .input-icon-right {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none; /* so clicks go to the input */
+            color: #6c757d;
+        }
+
+
+        /* Red border for invalid Select2 control */
+        .select2-container--default .select2-selection--single.is-invalid,
+        .select2-container--default .select2-selection--multiple.is-invalid {
+            border-color: #dc3545;
+        }
+
+        /* Example: warning icon as background */
+        .select2-container--default .select2-selection--single.is-invalid {
+            background-image: url("/path/to/warning-icon.svg");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 16px;
+        }
+
+        .project-create-shell {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .project-create-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.9fr);
+            gap: 1rem;
+            padding: 1.35rem 1.4rem;
+            border: 1px solid rgba(191, 219, 254, 0.9);
+            border-radius: 1.25rem;
+            background:
+                radial-gradient(circle at top right, rgba(59,130,246,0.16), transparent 34%),
+                linear-gradient(135deg, #f8fbff 0%, #eef6ff 52%, #f8fafc 100%);
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08);
+        }
+
+        .project-create-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.32rem 0.72rem;
+            border-radius: 999px;
+            font-size: 0.73rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1d4ed8;
+            background: rgba(219, 234, 254, 0.95);
+            border: 1px solid rgba(147, 197, 253, 0.9);
+            margin-bottom: 0.85rem;
+        }
+
+        .project-create-hero__title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0;
+            color: #0f172a;
+            font-size: clamp(1.35rem, 2vw, 1.95rem);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        .project-create-hero__title-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #1d4ed8;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.55);
+        }
+
+        .project-create-hero__copy {
+            max-width: 64ch;
+            margin: 0.8rem 0 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .project-create-hero__chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+        }
+
+        .project-create-hero__panel {
+            display: grid;
+            gap: 0.8rem;
+            align-content: start;
+        }
+
+        .project-create-hero__stat {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            box-shadow: 0 12px 28px rgba(148, 163, 184, 0.16);
+        }
+
+        .project-create-hero__stat-label {
+            display: block;
+            margin-bottom: 0.28rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .project-create-hero__stat strong {
+            display: block;
+            font-size: 0.96rem;
+            color: #0f172a;
+        }
+
+        .project-create-main {
+            border-radius: 1.25rem;
+            border: 1px solid #e2e8f0;
+            background: linear-gradient(180deg, #fcfdff 0%, #f8fafc 100%);
+            box-shadow: 0 22px 50px rgba(15, 23, 42, 0.08);
+        }
+
+        .project-create-main__body {
+            padding: 1.3rem;
+        }
+
+        .project-create-section {
+            margin-bottom: 1rem;
+            padding: 1.2rem;
+            border-radius: 1.1rem;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+        }
+
+        .project-create-section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .project-create-section__header {
+            margin-bottom: 1rem;
+        }
+
+        .project-create-section__header--actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .project-create-section__toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .project-create-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.85rem;
+            margin-top: 0.85rem;
+        }
+
+        .project-create-info-card,
+        .project-create-subsection,
+        .project-create-note {
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+        }
+
+        .project-create-info-card {
+            padding: 0.95rem 1rem;
+        }
+
+        .project-create-info-card__label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .project-create-info-card .form-control-plaintext {
+            min-height: auto;
+            margin: 0;
+            color: #475569 !important;
+        }
+
+        .project-create-subsection {
+            padding: 1rem;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .project-create-subsection__header {
+            margin-bottom: 0.8rem;
+        }
+
+        .project-create-subsection__title {
+            margin: 0;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .project-create-subsection__copy {
+            margin: 0.25rem 0 0;
+            font-size: 0.82rem;
+            color: #64748b;
+        }
+
+        .project-create-shell .form-control,
+        .project-create-shell .form-select,
+        .project-create-shell .select2-container--default .select2-selection--single,
+        .project-create-shell .select2-container--default .select2-selection--multiple {
+            min-height: 48px;
+            border-radius: 0.95rem;
+            border-color: #cbd5e1;
+            background-color: #ffffff;
+            box-shadow: none;
+        }
+
+        .project-create-shell .form-control:focus,
+        .project-create-shell .form-select:focus,
+        .project-create-shell .select2-container--default.select2-container--focus .select2-selection--single,
+        .project-create-shell .select2-container--default.select2-container--focus .select2-selection--multiple {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        }
+
+        .project-create-shell .select2-container .select2-selection--single .select2-selection__rendered {
+            line-height: 46px;
+            padding-left: 0.95rem;
+            color: #0f172a;
+        }
+
+        .project-create-shell .select2-container .select2-selection--single .select2-selection__arrow {
+            height: 46px;
+            right: 0.5rem;
+        }
+
+        .project-create-shell .form-floating > .form-control,
+        .project-create-shell .form-floating > .form-select {
+            padding-top: 1.35rem;
+            padding-bottom: 0.55rem;
+        }
+
+        .project-create-shell .form-floating > label {
+            color: #64748b;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .project-create-shell textarea.form-control {
+            min-height: 120px;
+            border-radius: 1rem;
+        }
+
+        .project-create-shell .btn {
+            border-radius: 999px;
+        }
+
+        .project-create-shell .btn-primary {
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22);
+        }
+
+        .project-create-shell .btn-outline-primary,
+        .project-create-shell .btn-outline-secondary {
+            border-width: 1px;
+        }
+
+        .project-create-shell .appearance-pill {
+            position: relative;
+            min-height: 48px;
+            padding: 0.42rem 0.82rem;
+            border-radius: 999px;
+            border: 1px solid #dbe2ea;
+            background: #ffffff;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+            transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+        }
+
+        .project-create-shell .appearance-pill:hover {
+            border-color: #bfdbfe;
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .project-create-shell .appearance-pill:focus-visible {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14);
+        }
+
+        .project-create-shell .appearance-pill .appearance-pill__swatch,
+        .project-create-shell .appearance-pill .appearance-pill__icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 28px;
+            border: 1px solid #dbe2ea;
+            background: #f8fafc;
+        }
+
+        .project-create-shell .appearance-pill__icon i {
+            font-size: 0.95rem;
+        }
+
+        .project-create-shell .appearance-pill__label {
+            color: #64748b;
+            font-size: 0.82rem;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .project-create-shell .color-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            border: 2px solid rgba(255, 255, 255, 0.92);
+            box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.4);
+        }
+
+        .project-create-color-picker-mount {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .project-create-color-picker-mount .pcr-button {
+            width: 100%;
+            height: 100%;
+            border: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        .project-create-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+            padding: 1rem 1.1rem;
+            border-radius: 1rem;
+            border: 1px solid #dbeafe;
+            background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+        }
+
+        .project-create-actions__meta {
+            font-size: 0.82rem;
+            color: #64748b;
+        }
+
+        .project-create-note {
+            padding: 1rem 1.05rem;
+        }
+
+        .project-create-note__eyebrow {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+        }
+
+        .project-create-note__title {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .project-create-note__copy {
+            margin: 0.45rem 0 0;
+            font-size: 0.84rem;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .project-create-note__list {
+            margin: 0.75rem 0 0;
+            padding-left: 1rem;
+            color: #475569;
+            font-size: 0.82rem;
+        }
+
+        .project-create-note__list li + li {
+            margin-top: 0.35rem;
+        }
+
+        .preview-card {
+            border-radius: 1rem;
+            background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+            color: #e5e7eb;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            padding: 1rem 1.05rem;
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.22);
+        }
+
+        .project-create-shell .card-tools-productcodesList-filter .dt-search {
+            width: 100%;
+        }
+
+        .project-create-product-toolbar {
+            align-items: end;
+        }
+
+        .project-create-product-toolbar .card-tools-productcodesList-filter {
+            min-width: 0;
+        }
+
+        .project-create-shell .card-tools-productcodesList-filter .dt-search label {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            width: 100%;
+            margin: 0;
+        }
+
+        .project-create-shell .card-tools-productcodesList-filter .dt-search input {
+            width: 100%;
+            min-width: 220px;
+            min-height: 40px;
+            margin-left: 0;
+            border-radius: 999px;
+            border: 1px solid #cbd5e1;
+            padding-inline: 0.9rem;
+        }
+
+        .project-create-table-shell {
+            margin-top: 1rem;
+            border: 1px solid #dbe2ea;
+            border-radius: 1rem;
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        .project-create-table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .project-create-table-responsive table {
+            min-width: 920px;
+            margin-bottom: 0;
+            border-collapse: separate !important;
+            border-spacing: 0;
+        }
+
+        .project-create-table-responsive #productcodesList,
+        .project-create-table-responsive #productcodesList thead th,
+        .project-create-table-responsive #productcodesList tbody td {
+            font-size: 0.78rem;
+        }
+
+        .project-create-table-responsive #productcodesList thead th,
+        .project-create-table-responsive #productcodesList tbody td {
+            padding: 0.45rem 0.6rem;
+            white-space: nowrap;
+        }
+
+        .project-create-table-responsive #productcodesList .btnDelete {
+            font-size: 0.72rem;
+            padding: 0.22rem 0.55rem;
+        }
+
+        .project-create-table-responsive #productcodesList thead th:last-child,
+        .project-create-table-responsive #productcodesList tbody td.productcodes-action-cell {
+            position: sticky;
+            right: 0;
+            z-index: 2;
+            text-align: center;
+            min-width: 88px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.92) 0%, #ffffff 18%);
+            box-shadow: -10px 0 14px -16px rgba(15, 23, 42, 0.55);
+        }
+
+        .project-create-table-responsive #productcodesList thead th:last-child {
+            z-index: 3;
+        }
+
+        .project-create-table-responsive #productcodesList tbody td.productcodes-action-cell {
+            backdrop-filter: blur(2px);
+        }
+
+        .project-create-table-responsive #productcodesList tbody td.productcodes-action-cell .btnDelete {
+            min-width: 64px;
+        }
+
+        .project-create-table-hint {
+            padding: 0.55rem 0.9rem 0;
+            font-size: 0.76rem;
+            color: #64748b;
+        }
+
+        @@media (max-width: 1199px) {
+            .project-create-hero {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @@media (max-width: 991px) {
+            .project-create-main__body,
+            .project-create-section {
+                padding: 1rem;
+            }
+
+            .project-create-info-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @@media (max-width: 767px) {
+            .project-create-hero {
+                padding: 1rem;
+            }
+
+            .project-create-hero__title {
+                align-items: flex-start;
+            }
+
+            .project-create-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .project-create-shell .card-tools-productcodesList-filter .dt-search input {
+                min-width: 0;
+            }
+
+            .project-create-table-responsive table {
+                min-width: 780px;
+            }
+        }
+
+
+
+    </style>
+
+}
+<div class="project-create-shell">
+    <section class="project-create-hero">
+        <div>
+            <span class="project-create-hero__eyebrow">
+                <i class="bi bi-stars"></i>
+                Project Setup
+            </span>
+            <h2 class="project-create-hero__title">
+                <span class="project-create-hero__title-icon">
+                    <i class="bi bi-journal-plus"></i>
+                </span>
+                <span>Create a project that fits the new Pulse theme</span>
+            </h2>
+            <p class="project-create-hero__copy">
+                Start from a roadmap template, shape the team, define timing, then launch with a cleaner, more intentional workspace that matches the newer project and admin screens.
+            </p>
+            <div class="project-create-hero__chips">
+                <span class="project-chip"><i class="fas fa-route"></i> Template-first setup</span>
+                <span class="project-chip"><i class="fas fa-users"></i> Team and ownership</span>
+                <span class="project-chip"><i class="fas fa-palette"></i> Appearance-aware project card</span>
+            </div>
+        </div>
+        <div class="project-create-hero__panel">
+            <div class="project-create-hero__stat">
+                <span class="project-create-hero__stat-label">Flow</span>
+                <strong>Template to milestones to launch</strong>
+            </div>
+            <div class="project-create-hero__stat">
+                <span class="project-create-hero__stat-label">What You Control</span>
+                <strong>Owners, timing, products, members, icon and color</strong>
+            </div>
+            <div class="project-create-hero__stat">
+                <span class="project-create-hero__stat-label">Outcome</span>
+                <strong>A project shell ready for execution and monitoring</strong>
+            </div>
+        </div>
+    </section>
+
+    <div class="card layout-main-card project-create-main">
+        <div class="card-body project-create-main__body">
+                <form id="projectInitForm" class="needs-validation">
+                    <div id="projectCreateLoadingStatus" class="text-muted d-none mb-2" style="font-size:0.8rem;">
+                        <i class="fas fa-spinner fa-spin me-2"></i><span data-loading-text>Loading...</span>
+                    </div>
+                    <!-- 1. Roadmap Template -->
+                    <section class="project-create-section">
+                        <div class="project-create-section__header">
+                            <div class="section-title">
+                            <i class="fas fa-route text-primary"></i>
+                            Roadmap template
+                            </div>
+                            <div class="section-subtitle">
+                                Choose a template to pre-load milestones and tasks. You can still adjust owners and dates.
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-2">
+                                <div class="form-floating mb-2">
+                                    <select class="form-select" id="siteSelect" name="siteSelect" required>
+                                        <option></option>
+                                    </select>
+                                    <label for="siteSelect" class="form-label">Site <span class="text-danger">*</span></label>
+                                    <div class="invalid-feedback">Please select a site.</div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-2">
+                                    <select class="form-select" id="templateSelect" name="templateSelect" required>
+                                        <option></option>
+                                    </select>
+                                    <label for="templateSelect" class="form-label">Template <span class="text-danger">*</span></label>
+                                    <div class="invalid-feedback">Please select a roadmap template.</div>
+                                    <input type="hidden" id="templateJson" />
+                                    <input type="hidden" id="templatePlantRoadmapLinkSysId" />
+                                    <input type="hidden" id="templateCategoryValue" />
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="project-create-info-card h-100">
+                                    <span class="project-create-info-card__label">Template description</span>
+                                    <div class="form-control-plaintext" id="templateDescription" style="font-size:0.85rem;color:#6b7280;">
+                                        Select a template to see its structure.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-create-info-grid">
+                            <div class="project-create-info-card">
+                                <span class="project-create-info-card__label">Category</span>
+                                <div class="form-control-plaintext" id="templateCategory" style="font-size:0.85rem;color:#6b7280;">
+                                    Select a template to see its category.
+                                </div>
+                            </div>
+                            <div class="project-create-info-card">
+                                <span class="project-create-info-card__label">Launch posture</span>
+                                <div class="form-control-plaintext" style="font-size:0.85rem;color:#6b7280;">
+                                    Pulse will use this template to seed milestone ownership, activity structure and project timing.
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 2. Project Info & Members -->
+                    <section class="project-create-section">
+                        <div class="project-create-section__header">
+                            <div class="section-title">
+                            <i class="fas fa-folder-tree text-primary"></i>
+                            Project info & team
+                            </div>
+                            <div class="section-subtitle">
+                                Set the project name, owner, timeline and define the team members who can own tasks and milestones.
+                            </div>
+                        </div>
+
+                        <div class="row g-3 ">
+                            <div class="col-md-7">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="projectTitle" name="projectTitle" required placeholder="e.g. New Product Launch">
+                                    <label class="form-label" for="projectTitle">Project title <span class="text-danger">*</span> (e.g. New Product Launch)</label>
+                                    <div class="invalid-feedback">Please project name.</div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-floating">
+                                    <select class="form-select" id="projectownerSelect" name="projectownerSelect" required>
+                                        <option></option>
+                                    </select>
+                                    <label for="projectownerSelect">Project owner / manager <span class="text-danger">*</span></label>
+                                    <div class="invalid-feedback">Please assign a main project owner/manager.</div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <select class="form-select" id="productgroupSelect" name="productgroupSelect">
+                                        <option></option>
+                                    </select>
+                                    <label for="productgroupSelect">Product Group <span class="text-danger">*</span></label>
+                                    <div class="invalid-feedback">Please select a product group.</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <select class="form-select" id="productdivisionSelect" name="productdivisionSelect">
+                                        <option></option>
+                                    </select>
+                                    <label for="productdivisionSelect">Product Division <span class="text-danger">*</span></label>
+                                    <div class="invalid-feedback">Please select a product division.</div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-floating mb-3">
+                                    <input type="text"
+                                           class="form-control form-floating-date-picker yearpicker"
+                                           id="projectstartDatePicker"
+                                           name="projectstartDatePicker"
+                                           placeholder="Select date">
+                                    <label for="projectstartDatePicker">Target Start Year(YYYY)</label>
+                                    <i class="bi bi-calendar-date input-icon-right"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-floating mb-3">
+                                    @*<input type="text"
+                                               class="form-control form-floating-date-picker"
+                                               id="projectstartDatePicker"
+                                               name="projectstartDatePicker"
+                                               placeholder="Select date">
+                                        <label for="projectstartDatePicker">Start date</label>*@
+                                    @*<input type="text"
+                                        inputmode="numeric"
+                                        pattern="\d{1,6}"
+                                        minlength="6"
+                                        maxlength="6"
+                                        placeholder="Enter WorkWeek (YYYYWW)" class="form-control " id="targetstartInput">*@
+
+                                    <select class="form-select workweekSelect-root" id="targetstartworkweekSelect"><option></option></select>
+                                    <label for="targetstartworkweekSelect" class="form-label mb-1">Target Start (WW)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2 ">
+                                <div class="form-floating mb-3">
+                                    <input type="text"
+                                           class="form-control form-floating-date-picker yearpicker"
+                                           id="projectendDatePicker"
+                                           name="projectendDatePicker"
+                                           placeholder="Select date">
+                                    <label for="projectendDatePicker">Target End Year(YYYY)</label>
+                                    <i class="bi bi-calendar-date input-icon-right"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-floating mb-1">
+                                    @*<input type="text"
+                                               class="form-control form-floating-date-picker"
+                                               id="projectendDatePicker"
+                                               name="projectendDatePicker"
+                                               placeholder="Select date">
+                                        <label for="projectendDatePicker">Target completion date</label>*@
+
+
+                                    <select class="form-select workweekSelect-root" id="targetendworkweekSelect"><option></option></select>
+                                    <label for="targetendworkweekSelect" class="form-label mb-1">Target End (WW)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="form-floating">
+                                <textarea class="form-control" id="projectDescription" rows="2"
+                                          placeholder="Short description, main objectives, scope..."></textarea>
+                                <label class="form-label ms-2">Project description (Short description, main objectives, scope...)</label>
+                            </div>
+
+                        </div>
+
+                        <!-- Products -->
+                        <div class="row g-3 mt-1">
+                            <div class="col-xl-7">
+                                <div class="project-create-subsection">
+                                    <div class="project-create-subsection__header">
+                                        <h3 class="project-create-subsection__title">Referenced products</h3>
+                                        <p class="project-create-subsection__copy">Add one or more product codes to anchor the project context.</p>
+                                    </div>
+                                    <div class="row g-2 project-create-product-toolbar">
+                                        <div class="col-lg-5 col-md-6 col-sm-12">
+                                            <label class="form-label mb-1">Add product code</label>
+                                            <input type="text" class="form-control" id="productcodeInput"
+                                                   placeholder="e.g. ABCD*12345678">
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-4">
+                                            <button type="button" class="btn btn-outline-primary mt-2 mt-sm-0" id="btnAddProductCode">
+                                                <i class="bi bi-bag-plus-fill me-1"></i>Add
+                                            </button>
+                                        </div>
+                                        <div class="col-lg-4 col-md-12 col-sm-12 d-flex justify-content-lg-end card-tools-productcodesList-filter"></div>
+                                    </div>
+                                    <div class="project-create-table-shell">
+                                        <div class="project-create-table-hint">The table scrolls horizontally on tighter screens so it stays inside this section.</div>
+                                        <div class="project-create-table-responsive">
+                                            <table id="productcodesList" class="display table" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product Code</th>
+                                                        <th>Plant Type</th>
+                                                        <th>Product Family</th>
+                                                        <th>Macro Package</th>
+                                                        <th>Package</th>
+                                                        <th>PLine</th>
+                                                        <th>Maturity</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-5">
+                                <div class="project-create-subsection h-100">
+                                    <div class="project-create-subsection__header">
+                                        <h3 class="project-create-subsection__title">Assignable members</h3>
+                                        <p class="project-create-subsection__copy">Define the people who can own milestones and activities.</p>
+                                    </div>
+                                    <div class="row g-2 align-items-end">
+                                        <div class="col-md-8 col-sm-8">
+                                            <label for="projectmemberSelect">Add member</label>
+                                            <select class="form-select text-sm" style="width:100%" id="projectmemberSelect" name="projectmemberSelect">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4">
+                                            <button type="button" class="btn btn-outline-primary mt-2 mt-sm-0 w-100" id="btnAddMember">
+                                                <i class="fas fa-user-plus me-1"></i>Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3" id="membersList">
+                                        <!-- Member pills -->
+                                    </div>
+                                    <div class="small text-muted mt-2">
+                                        The project owner will automatically be included as an assignable member.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Project appearance (icon + color) -->
+                    <section class="project-create-section">
+                        <div class="project-create-section__header">
+                            <div class="section-title">
+                            <i class="bi bi-palette2 text-danger"></i>
+                            Project appearance
+                            </div>
+                            <div class="section-subtitle">
+                                Choose an icon and highlight color used in dashboards and notifications.
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Project icon</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="hidden" id="icon" />
+                                    <input type="hidden" id="iconcolor" />
+                                    <button type="button" class="appearance-pill" id="btnOpenIconPicker">
+                                        <span class="appearance-pill__icon">
+                                            <i id="projectIconPreview" class="bi bi-rocket-fill"></i>
+                                        </span>
+                                        <span id="projectIconLabel" class="appearance-pill__label">
+                                            bi bi-rocket-fill
+                                        </span>
+                                    </button>
+                                    <small class="text-muted d-none d-md-inline">
+                                        Bootstrap Icons · search in picker
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Primary color</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="appearance-pill" id="btnColorPicker">
+                                        <span id="btnColorPickerMount" class="project-create-color-picker-mount" aria-hidden="true"></span>
+                                        <span class="appearance-pill__swatch">
+                                            <span id="projectColorDot"
+                                                  class="color-dot"
+                                                  style="background:#3b82f6;"></span>
+                                        </span>
+                                        <span id="projectColorLabel" class="appearance-pill__label">
+                                            #3b82f6
+                                        </span>
+                                    </button>
+                                    <small class="text-muted d-none d-md-inline">
+                                        Color picker (Pickr)
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- 3. Milestones & Tasks from Template -->
+                    <section class="project-create-section">
+                        <div class="project-create-section__header project-create-section__header--actions">
+                            <div>
+                                <div class="section-title">
+                                <i class="fas fa-flag-checkered text-warning"></i>
+                                Milestones & tasks
+                                </div>
+                                <div class="section-subtitle">
+                                    Scan owners and target dates from the summary chips first, then open task details only where you need to edit.
+                                </div>
+                            </div>
+                            <div class="project-create-section__toolbar">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="btnExpandAllTaskDetails">Expand tasks</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="btnCollapseAllTaskDetails">Collapse tasks</button>
+                            </div>
+                        </div>
+
+                        <div id="milestonesContainer">
+                            <!-- Generated milestone/task rows -->
+                        </div>
+                    </section>
+
+                    <!-- Actions & Preview -->
+                    <div class="row g-3 align-items-start">
+                        <div class="col-xl-7">
+                            <div class="project-create-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    Create project
+                                </button>
+                                <button type="reset" class="btn btn-outline-secondary">
+                                    Reset
+                                </button>
+                                <div class="project-create-actions__meta">
+                                    Pulse will store your in-progress draft locally while you configure the project.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-5">
+                            <div class="project-create-note">
+                                <span class="project-create-note__eyebrow">What happens next</span>
+                                <h3 class="project-create-note__title">After creation, the project is ready for detail work</h3>
+                                <p class="project-create-note__copy">
+                                    Once created, you can move into tracking, ownership updates, milestone progress, forms and execution review without rebuilding the structure.
+                                </p>
+                                <ul class="project-create-note__list">
+                                    <li>The selected roadmap seeds milestones and activities.</li>
+                                    <li>Project members become available for milestone and task ownership.</li>
+                                    <li>Appearance settings flow into project cards and notifications.</li>
+                                </ul>
+                            </div>
+                            <div class="preview-card d-none mt-3" id="previewCard">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="preview-title" id="previewTitle"></div>
+                                        <div class="preview-sub" id="previewOwner"></div>
+                                        <div class="preview-sub" id="previewDates"></div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge-soft" id="previewBadge">
+                                            <i class="fas fa-users me-1"></i>
+                                            <span id="previewMemberCount">0</span> members
+                                        </span>
+                                        <div class="mt-1">
+                                            <span class="badge-soft">
+                                                <i class="fas fa-flag me-1"></i>
+                                                <span id="previewMilestoneCount">0</span> milestones
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 preview-sub" id="previewDescription"></div>
+                                <div class="mt-2" id="previewMilestonesList"></div>
+                                <div class="mt-2 preview-sub">
+                                    Project data is logged to console; send it to backend or pass it to the monitoring page.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+</div>
+<!-- Icon Picker Modal -->
+@Html.Partial("_IconPickerPartial")
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/node_modules/flatpickr/dist/flatpickr.min.js"></script>
+    <script src="~/node_modules/select2/dist/js/select2.min.js"></script>
+
+    <!-- datatables -->
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+
+    <!-- yearpicker -->
+    <script src="~/Content/YearPicker/yearpicker.js"></script>
+
+    <script src="@Url.Content("~/node_modules/@simonwep/pickr/dist/pickr.min.js")"></script>
+
+    <!-- locals -->
+    <script src="~/Scripts/locals/commonUtils.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/common.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/create.js"></script>
+
+
+
+}

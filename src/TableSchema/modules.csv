@@ -1,0 +1,41 @@
+MODULECODE,MODULENAME,MODULEDESCRIPTION
+NOTIFVIEW,Notification View,Notification View
+NOTIFADD,Notification Add,Notification Add
+CALNDRGEN,Calendar Generate,Template - Calendar Generate
+CALNDRVIEW,Calendar View,Template - Calendar View
+CATGRYADD,Category Add,Template - Category Add
+CATGRYDEL,Category Delete,Template - Category Delete
+CATGRYEDIT,Category Edit,Template - Category Edit
+CATGRYVIEW,Category List,Template - Category View
+FORMADD,Form Add,Template - Form Add
+FORMDEL,Form Delete,Template - Form Delete
+FORMEDIT,Form Edit,Template - Form Edit
+FORMVIEW,Form List,Template - Form View
+MATADD,Maturity Add,Template - Maturity Add
+MATDEL,Maturity Delete,Template - Maturity Delete
+MATEDIT,Maturity Edit,Template - Maturity Edit
+MATVIEW,Maturity List,Template - Maturity View
+MODULEADD,Module Add,Admin - Module Add
+MODULEDEL,Module Delete,Admin - Module Delete
+MODULEEDIT,Module Edit,Admin - Module Edit
+MODULEVIEW,Module List,Admin - Plant View
+PDIVADD,Product Division Add,Template - Product Division Add
+PDIVDEL,Product Division Delete,Template - Product Division Delete
+PDIVEDIT,Product Division Edit,Template - Product Division Edit
+PDIVVIEW,Product Division List,Template - Product Division View
+PGRPADD,Product Group Add,Template - Product Group Add
+PGRPDEL,Product Group Delete,Template - Product Group Delete
+PGRPEDIT,Product Group Edit,Template - Product Group Edit
+PGRPVIEW,Product Group List,Template - Product Group View
+PLANTADD,Plant Add,Template - Plant Add
+PLANTDEL,Plant Delete,Template - Plant Delete
+PLANTEDIT,Plant Edit,Template - Plant Edit
+PLANTVIEW,Plant List,Template - Plant View
+RMAPADD,Roadmap Add,Template - Roadmap Add
+RMAPDEL,Roadmap Delete,Template - Roadmap Delete
+RMAPEDIT,Roadmap Edit,Template - Roadmap Edit
+RMAPVIEW,Roadmap List,Template - Roadmap View
+USRGRPADD,User Group Add,Admin - User Group Add
+USRGRPDEL,User Group Delete,Admin - User Group Delete
+USRGRPEDIT,User Group Edit,Admin - User Group Edit
+USRGRPVIEW,User Group List,Admin - User Group View

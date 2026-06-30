@@ -1,0 +1,90 @@
+﻿@using Pulse.Web.Helpers
+@{
+    var selectedMenu = (ViewBag.SelectedMenu as string) ?? string.Empty;
+    var operationsNavItemClass = string.Equals(selectedMenu, "Operations", StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(selectedMenu) ? "active" : string.Empty;
+}
+<ul class="nav sidebar-menu flex-column"
+    data-lte-toggle="treeview"
+    role="navigation"
+    aria-label="Main navigation"
+    data-accordion="false"
+    id="navigation">
+
+    <li class="nav-item @operationsNavItemClass">
+        <a href="@Url.Action("Index", "Home", new { area = "Operations" })" class="nav-link @operationsNavItemClass @ViewBag.IsActiveDashboard">
+            <i class="nav-icon text-lg bi bi-buildings-fill h3"></i>
+            <p class="text-lg">Operations Console</p>
+        </a>
+    </li>
+    <li class="nav-header">OPERATIONS</li>
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "CALNDRVIEW"))
+    {
+        <li class="nav-item @ViewBag.IsActiveOperationsCalendars">
+            <a href="#" class="nav-link @ViewBag.IsActiveOperationsCalendars">
+                <i class="nav-icon bi bi-calendar3 h3"></i>
+                <p>
+                    Calendars
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "ProductionCalendars", new { area = "Operations" })" class="nav-link @ViewBag.IsActiveOperationsCalendarsReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "ProductionCalendars", new { area = "Operations" })" class="nav-link @ViewBag.IsActiveOperationsCalendarsAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All Calendars</p>
+                    </a>
+                </li>
+                @if (AuthorizationHelper.IsInGroupsOrModules("", "CALNDRGEN"))
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("New", "ProductionCalendars", new { area = "Operations" })" class="nav-link @ViewBag.IsActiveOperationsCalendarsNew">
+                            <i class="nav-icon bi bi-plus-circle"></i>
+                            <p>Generate Calendar</p>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "PLANTVIEW"))
+    {
+        <li class="nav-item">
+            <a href="#" class="nav-link @ViewBag.IsActiveOperationsPlants">
+                <i class="nav-icon bi bi-building-fill h3"></i>
+                <p>
+                    Plants
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "Plants", new { area = "Operations" })" class="nav-link @ViewBag.IsActiveOperationsPlantsReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Plants", new { area = "Operations" })" class="nav-link @ViewBag.IsActiveOperationsPlantsAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All Plants</p>
+                    </a>
+                </li>
+                @if (AuthorizationHelper.IsInGroupsOrModules("", "CALNDRGEN"))
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("New", "Plants", new { area = "Operations" })" class="nav-link @ViewBag.IsActiveOperationsPlantsNew">
+                            <i class="nav-icon bi bi-plus-circle"></i>
+                            <p>New Plant</p>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+</ul>

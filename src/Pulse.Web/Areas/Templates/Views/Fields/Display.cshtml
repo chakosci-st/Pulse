@@ -1,0 +1,104 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Display Field";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review this reusable field configuration and preview how users will interact with it.";
+    ViewBag.ContentHeaderChips = new[] { "Reusable field templates", "Single-field designer", "Consistent form inputs" };
+    ViewBag.ContentHeaderAsideLabel = "Field review";
+    ViewBag.ContentHeaderAsideTitle = "Inspect structure, constraints, and behavior before reusing this field elsewhere.";
+    ViewBag.ContentHeaderAsideBody = "This read-only view helps validate that type, rules, and options match the expected business input.";
+    ViewBag.IsActiveTemplatesFields = "menu-open";
+    ViewBag.IsActiveTemplatesFieldsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+@section styles{
+    <link href="~/node_modules/dropzone/dist/dropzone.css" rel="stylesheet" />
+    <link href="~/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Summernote -->
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+    <link href="~/Content/locals/dynamic-fields.css" rel="stylesheet" />
+}
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card shadow-lg h-100">
+            <div class="card-body">
+                <h5 class="mb-3">Field Summary</h5>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label text-muted">Field Code</label>
+                        <div id="fieldCode" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-muted">Status</label>
+                        <div id="fieldStatus" class="form-control bg-light d-flex align-items-center">-</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-muted">Field Title</label>
+                        <div id="fieldTitleDisplay" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-muted">Field Name</label>
+                        <div id="fieldNameDisplay" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-muted">Field Type</label>
+                        <div id="fieldTypeDisplay" class="form-control bg-light">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="m-0 float-end">
+                    <a href="@Url.Action("Index", "Fields", new { area = "Templates" })" class="btn btn-default">Back to list</a>
+                    <a href="@Url.Action("Edit", "Fields", new { area = "Templates", code = ViewBag.Id })" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card shadow-lg mb-4">
+            <div class="card-body">
+                <h5 class="mb-3">Field Preview</h5>
+                <div class="row g-3">
+                    <div class="col-lg-6 col-12">
+                        <div class="border rounded-3 p-3 h-100 bg-white">
+                            <div class="small text-uppercase text-muted fw-semibold mb-2">Write Mode</div>
+                            <div id="previewWriteForm"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-12">
+                        <div class="border rounded-3 p-3 h-100 bg-light">
+                            <div class="small text-uppercase text-muted fw-semibold mb-2">Read Mode</div>
+                            <div id="previewReadForm"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="mb-3">Field JSON</h5>
+                <pre id="fieldStructurePreview" class="bg-light border rounded-3 p-3 mb-0" style="max-height: 420px; overflow: auto; white-space: pre-wrap; word-break: break-word;">{}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+    <script src="~/node_modules/select2/dist/js/select2.min.js"></script>
+
+    <script src="~/Scripts/locals/utils.js"></script>
+    <script src="~/Scripts/locals/dynamic-fields.js"></script>
+
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/fields/common.js"></script>
+    <script src="~/Areas/Templates/Scripts/fields/display.js"></script>
+}

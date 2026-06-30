@@ -1,0 +1,511 @@
+@{
+    ViewBag.Title = "Project Status Board";
+    ViewBag.SubTitle = "Switch between owner projects, milestones, and tasks in a single board.";
+    ViewBag.TitleIcon = "bi bi-kanban";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+    ViewBag.IsActiveProjectStatusBoard = "active";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .status-board-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .status-board-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.85fr);
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1.25rem;
+            background: linear-gradient(140deg, #f5f8ff 0%, #eefbf4 46%, #fff6ec 100%);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07);
+        }
+
+        .status-board-hero__main,
+        .status-board-hero__side {
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            border-radius: 1rem;
+            padding: 1rem 1.1rem;
+            background: rgba(255, 255, 255, 0.86);
+        }
+
+        .status-board-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #0f766e;
+            background: #ccfbf1;
+            border: 1px solid #99f6e4;
+        }
+
+        .status-board-title {
+            margin: 0.75rem 0 0;
+            color: #0f172a;
+            font-size: clamp(1.7rem, 2.8vw, 2.6rem);
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            font-weight: 800;
+        }
+
+        .status-board-copy {
+            margin: 0.7rem 0 0;
+            color: #475569;
+            line-height: 1.65;
+            max-width: 72ch;
+        }
+
+        .project-view-toolbar.status-board-toolbar {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: minmax(260px, 1.2fr) minmax(160px, 0.35fr) auto auto;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .status-board-collapse-btn {
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            padding: 0.48rem 0.85rem;
+            background: #ffffff;
+            color: #334155;
+            font-size: 0.82rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .project-view-mode-toggle {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            padding: 0.25rem;
+            border-radius: 999px;
+            background: #f8fafc;
+            border: 1px solid #dbe4ea;
+            justify-self: end;
+        }
+
+        .project-view-mode-btn {
+            border: 0;
+            border-radius: 999px;
+            padding: 0.48rem 0.85rem;
+            background: transparent;
+            color: #475569;
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .project-view-mode-btn.active {
+            background: #0f172a;
+            color: #f8fafc;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+        }
+
+        .status-board-hero__side h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .status-board-hero__side p {
+            margin: 0.4rem 0 0;
+            color: #64748b;
+            font-size: 0.86rem;
+            line-height: 1.6;
+        }
+
+        .status-board-summary {
+            margin-top: 0.9rem;
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .status-board-summary-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.5rem 0.65rem;
+            background: #fff;
+            font-size: 0.84rem;
+            color: #334155;
+        }
+
+        .status-board-summary-item strong {
+            color: #0f172a;
+        }
+
+        .status-board-loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-top: 0.6rem;
+            color: #334155;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .status-board-loading i {
+            display: inline-block;
+            animation: status-board-spin 0.9s linear infinite;
+        }
+
+        @@keyframes status-board-spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .status-board-lanes {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(250px, 1fr);
+            grid-auto-rows: minmax(460px, 70vh);
+            gap: 0.8rem;
+            align-items: stretch;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+        }
+
+        .status-lane {
+            background: #ffffff;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            height: 100%;
+            min-height: 0;
+        }
+
+        .status-lane__head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            padding: 0.72rem 0.78rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .status-lane__title {
+            margin: 0;
+            font-size: 0.88rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #334155;
+        }
+
+        .status-lane__count {
+            min-width: 2rem;
+            text-align: center;
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            background: #e2e8f0;
+            color: #0f172a;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-lane__body {
+            flex: 1;
+            display: grid;
+            align-content: start;
+            gap: 0.65rem;
+            padding: 0.7rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        .status-lane.drag-over .status-lane__body {
+            outline: 2px dashed #2563eb;
+            outline-offset: -4px;
+            background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+        }
+
+        .status-lane.status-lane--drop-disabled {
+            opacity: 0.62;
+        }
+
+        .status-lane.status-lane--drop-disabled .status-lane__body {
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+        }
+
+        .status-card {
+            border: 1px solid #dbe4ea;
+            border-radius: 0.95rem;
+            background: #fff;
+            padding: 0.75rem;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+            cursor: grab;
+        }
+
+        .status-card__head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .status-card__collapse-btn {
+            border: 0;
+            background: transparent;
+            color: #64748b;
+            width: 1.8rem;
+            height: 1.8rem;
+            border-radius: 0.45rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+        }
+
+        .status-card__collapse-btn:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .status-card__body {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .status-card__collapsed-preview {
+            display: none;
+            margin-top: 0.35rem;
+            color: #64748b;
+            font-size: 0.78rem;
+            line-height: 1.45;
+        }
+
+        .status-card.is-collapsed .status-card__body {
+            display: none;
+        }
+
+        .status-card.is-collapsed .status-card__collapsed-preview {
+            display: grid;
+            gap: 0.2rem;
+        }
+
+        .status-card.is-collapsed .status-card__collapse-btn i {
+            transform: rotate(-90deg);
+        }
+
+        .status-card.dragging {
+            opacity: 0.45;
+            cursor: grabbing;
+        }
+
+        .status-card__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 0.92rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .status-card__meta {
+            display: grid;
+            gap: 0.18rem;
+            margin-top: 0.45rem;
+            color: #64748b;
+            font-size: 0.79rem;
+        }
+
+        .status-card__stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.45rem;
+            margin-top: 0.7rem;
+        }
+
+        .status-card__stat {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            background: #f8fafc;
+            padding: 0.48rem 0.55rem;
+        }
+
+        .status-card__stat-value {
+            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .status-card__stat-label {
+            margin-top: 0.18rem;
+            color: #64748b;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-card__tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-top: 0.7rem;
+        }
+
+        .status-card__tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            border-radius: 999px;
+            padding: 0.22rem 0.5rem;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .status-lane__empty {
+            border: 1px dashed #cbd5e1;
+            border-radius: 0.75rem;
+            padding: 0.65rem;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.82rem;
+            background: rgba(248, 250, 252, 0.92);
+        }
+
+        @@media (max-width: 1100px) {
+            .status-board-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .project-view-toolbar.status-board-toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .project-view-mode-toggle {
+                justify-self: start;
+            }
+        }
+    </style>
+}
+
+<div class="status-board-shell">
+    <section class="status-board-hero" aria-label="Owner status board">
+        <article class="status-board-hero__main">
+            <span class="status-board-eyebrow"><i class="bi bi-kanban"></i>Owner Status Board</span>
+            <h1 class="status-board-title">Move owner work across project, milestone, and task lanes</h1>
+            <p id="ownerBoardModeCopy" class="status-board-copy">
+                Review the owner-scoped backlog in one place, switch the board between projects, milestones, and tasks, then drag items between Not Started, Ongoing, On-Hold, Completed, Cancelled, and Archived.
+            </p>
+
+            <div class="project-view-toolbar status-board-toolbar">
+                <input id="ownerBoardSearch" type="search" class="form-control" placeholder="Search by project name, project no, product code, plant code, or category" aria-label="Search board items">
+                <select id="ownerBoardStatusFilter" class="form-select" aria-label="Filter by status">
+                    <option value="">All statuses</option>
+                    <option value="NOT STARTED">Not Started</option>
+                    <option value="ONGOING">Ongoing</option>
+                    <option value="HOLD">On-Hold</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="CANCELLED">Cancelled</option>
+                    <option value="ARCHIVED">Archived</option>
+                </select>
+                <div class="project-view-mode-toggle" role="tablist" aria-label="Owner board mode">
+                    <button type="button" class="project-view-mode-btn active" data-board-mode="projects">Project list</button>
+                    <button type="button" class="project-view-mode-btn" data-board-mode="milestones">Milestone list</button>
+                    <button type="button" class="project-view-mode-btn" data-board-mode="tasks">Task list</button>
+                </div>
+                <button id="ownerBoardToggleCollapse" type="button" class="status-board-collapse-btn">
+                    <i class="bi bi-arrows-collapse"></i>
+                    Collapse All
+                </button>
+            </div>
+        </article>
+
+        <aside class="status-board-hero__side">
+            <h3 id="ownerBoardSummaryTitle">Project list summary</h3>
+            <p id="ownerBoardSummaryCopy">Project cards include milestone stats and task stats so you can shift lane decisions without leaving the board.</p>
+            <div class="status-board-summary">
+                <div class="status-board-summary-item">
+                    <span>Visible items</span>
+                    <strong id="ownerBoardVisibleCount">0</strong>
+                </div>
+                <div class="status-board-summary-item">
+                    <span>Total loaded</span>
+                    <strong id="ownerBoardTotalCount">0</strong>
+                </div>
+                <div class="status-board-summary-item">
+                    <span>Board status</span>
+                    <strong id="ownerBoardStatus">Ready</strong>
+                </div>
+            </div>
+            <div id="ownerBoardLoading" class="status-board-loading d-none" aria-live="polite" aria-busy="true">
+                <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+                <span id="ownerBoardLoadingText">Loading...</span>
+            </div>
+        </aside>
+    </section>
+
+    <section class="status-board-lanes" id="ownerBoardLanes">
+        <article class="status-lane" data-lane-status="NOT STARTED">
+            <header class="status-lane__head">
+                <h2 class="status-lane__title">Not Started</h2>
+                <span class="status-lane__count" data-lane-count="NOT STARTED">0</span>
+            </header>
+            <div class="status-lane__body" data-lane-body="NOT STARTED"></div>
+        </article>
+        <article class="status-lane" data-lane-status="ONGOING">
+            <header class="status-lane__head">
+                <h2 class="status-lane__title">Ongoing</h2>
+                <span class="status-lane__count" data-lane-count="ONGOING">0</span>
+            </header>
+            <div class="status-lane__body" data-lane-body="ONGOING"></div>
+        </article>
+        <article class="status-lane" data-lane-status="COMPLETED">
+            <header class="status-lane__head">
+                <h2 class="status-lane__title">Completed</h2>
+                <span class="status-lane__count" data-lane-count="COMPLETED">0</span>
+            </header>
+            <div class="status-lane__body" data-lane-body="COMPLETED"></div>
+        </article>
+        <article class="status-lane" data-lane-status="HOLD">
+            <header class="status-lane__head">
+                <h2 class="status-lane__title">On-Hold</h2>
+                <span class="status-lane__count" data-lane-count="HOLD">0</span>
+            </header>
+            <div class="status-lane__body" data-lane-body="HOLD"></div>
+        </article>
+        <article class="status-lane" data-lane-status="CANCELLED">
+            <header class="status-lane__head">
+                <h2 class="status-lane__title">Cancelled</h2>
+                <span class="status-lane__count" data-lane-count="CANCELLED">0</span>
+            </header>
+            <div class="status-lane__body" data-lane-body="CANCELLED"></div>
+        </article>
+        <article class="status-lane" data-lane-status="ARCHIVED">
+            <header class="status-lane__head">
+                <h2 class="status-lane__title">Archived</h2>
+                <span class="status-lane__count" data-lane-count="ARCHIVED">0</span>
+            </header>
+            <div class="status-lane__body" data-lane-body="ARCHIVED"></div>
+        </article>
+    </section>
+</div>
+
+@section Scripts {
+    <script src="~/Areas/Projects/Scripts/projects/status-board.js"></script>
+}

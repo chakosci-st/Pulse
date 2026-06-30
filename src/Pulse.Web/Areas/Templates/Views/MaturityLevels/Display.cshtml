@@ -1,0 +1,60 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Display Maturity Level";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review how this maturity level supports product lifecycle tracking.";
+    ViewBag.ContentHeaderChips = new[] { "Lifecycle stages", "Manufacturing readiness", "Product maturity tracking" };
+    ViewBag.ContentHeaderAsideLabel = "Maturity review";
+    ViewBag.ContentHeaderAsideTitle = "Inspect the lifecycle stage before it is reused across manufacturing reporting.";
+    ViewBag.ContentHeaderAsideBody = "This view makes the maturity definition visible so teams can apply the stage consistently.";
+    ViewBag.IsActiveTemplatesMaturityLevels = "menu-open";
+    ViewBag.IsActiveTemplatesMaturityLevelsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="mb-3">
+                    Maturity Level Details
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Read-only information for the selected maturity level</small>
+                </h5>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Maturity Code</label>
+                        <div id="maturityCode" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Status</label>
+                        <div id="maturityStatus" class="form-control bg-light d-flex align-items-center">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Maturity Number</label>
+                        <div id="maturityNumber" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Sequence Number</label>
+                        <div id="sequenceNo" class="form-control bg-light">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="m-0 float-end">
+                    <a href="@Url.Action("Index", "MaturityLevels", new { area = "Templates" })" class="btn btn-default">Back to list</a>
+                    <a href="@Url.Action("Edit", "MaturityLevels", new { area = "Templates", code = ViewBag.Id })" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/maturitylevels/display.js"></script>
+}

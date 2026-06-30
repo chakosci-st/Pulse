@@ -1,0 +1,454 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "Admin Console";
+    ViewBag.TitleIcon = "bi bi-shield-lock-fill";
+
+    ViewBag.SubTitle = "Manage users, access rights, and application modules.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+<style>
+    :root {
+        --bg: #f4f7fb;
+        --card-bg: #ffffff;
+        --primary: #0052cc;
+        --primary-soft: #e3edff;
+        --accent: #ff3b86;
+        --text-main: #1a1f36;
+        --text-muted: #6c7393;
+        --border-soft: #dde3f0;
+        --radius-lg: 18px;
+        --radius-pill: 999px;
+        --shadow-soft: 0 14px 30px rgba(15, 35, 52, 0.08);
+        --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top left, #f7fbff 0, #edf1f9 40%, #e7ecf7 100%);
+        color: var(--text-main);
+        min-height: 100vh;
+    }
+ 
+    .admin-home-hero {
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.95fr);
+        gap: 1rem;
+        margin-bottom: 18px;
+        padding: 22px 24px;
+        border-radius: 24px;
+        border: 1px solid rgba(177, 193, 224, 0.55);
+        background: linear-gradient(135deg, #101828 0%, #2d1b69 52%, #f4f7fb 100%);
+        box-shadow: 0 22px 48px rgba(15, 23, 42, 0.14);
+    }
+
+        .admin-home-hero::after {
+            content: "";
+            position: absolute;
+            inset: auto -70px -95px auto;
+            width: 230px;
+            height: 230px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.22) 0%, rgba(244, 114, 182, 0) 72%);
+            pointer-events: none;
+        }
+
+    .admin-home-hero__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: var(--radius-pill);
+        background: rgba(255, 255, 255, 0.12);
+        color: #fbcfe8;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .admin-home-hero h1 {
+        margin-top: 14px;
+        font-size: 2.3rem;
+        letter-spacing: -0.04em;
+        color: #f8fafc;
+    }
+
+    .admin-home-hero p {
+        margin-top: 8px;
+        color: rgba(226, 232, 240, 0.84);
+        line-height: 1.7;
+        max-width: 720px;
+    }
+
+    .admin-home-hero__chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .admin-home-hero__chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: var(--radius-pill);
+        background: rgba(15, 23, 42, 0.26);
+        border: 1px solid rgba(244, 114, 182, 0.18);
+        color: #fce7f3;
+        font-size: 0.82rem;
+        font-weight: 600;
+    }
+
+    .admin-home-hero__panel {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 12px;
+        align-content: start;
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        color: var(--text-main);
+    }
+
+    .admin-home-hero__panel-label {
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
+
+    .admin-home-hero__panel strong {
+        font-size: 1.05rem;
+    }
+
+    .admin-home-hero__panel p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 0.84rem;
+        line-height: 1.6;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+        gap: 16px;
+    }
+
+    .title-block h1 {
+        font-size: 2rem;
+        letter-spacing: -0.02em;
+    }
+
+    .title-block p {
+        margin-top: 4px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .content-card {
+        background: rgba(255, 255, 255, 0.97);
+        border-radius: 22px;
+        padding: 18px 20px 24px;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(177, 193, 224, 0.5);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    .section-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    .section-meta {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .admin-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+    }
+
+    .admin-card {
+        background: var(--card-bg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-soft);
+        padding: 16px 16px 14px;
+        box-shadow: 0 8px 18px rgba(6, 32, 83, 0.06);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+        .admin-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(0, 82, 204, 0.08), transparent 55%);
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+            pointer-events: none;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 32px rgba(6, 25, 56, 0.18);
+            border-color: rgba(0, 82, 204, 0.35);
+            background: #ffffff;
+        }
+
+            .admin-card:hover::before {
+                opacity: 1;
+            }
+
+    .admin-meta {
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        letter-spacing: 0.09em;
+        font-weight: 600;
+    }
+
+    .admin-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+        .admin-title h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+    .admin-tag {
+        font-size: 0.7rem;
+        padding: 3px 9px;
+        border-radius: var(--radius-pill);
+        background: #f1f4ff;
+        border: 1px solid #dde3f6;
+        color: var(--text-muted);
+    }
+
+    .admin-desc {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+    }
+
+    .admin-actions {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .admin-btn {
+        flex: 1 1 80px;
+        min-width: 80px;
+        text-align: center;
+        border-radius: var(--radius-pill);
+        border: 1px solid rgba(0, 82, 204, 0.1);
+        padding: 7px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--primary);
+        background: var(--primary-soft);
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+    }
+
+        .admin-btn span.icon {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+    .admin-btn--secondary {
+        background: #f4f6fc;
+        color: var(--text-main);
+    }
+
+    .admin-btn--ghost {
+        background: #ffffff;
+        color: var(--text-muted);
+    }
+
+    .admin-btn:hover {
+        background: #ffffff;
+        color: var(--primary);
+        box-shadow: 0 7px 16px rgba(0, 82, 204, 0.25);
+        transform: translateY(-1px);
+        border-color: rgba(0, 82, 204, 0.45);
+    }
+
+    .admin-footer {
+        margin-top: 6px;
+        font-size: 0.76rem;
+        color: var(--text-muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #1ecb6b;
+        margin-right: 4px;
+        display: inline-block;
+    }
+
+    @@media (max-width: 600px) {
+        .admin-home-hero {
+            grid-template-columns: 1fr;
+            padding: 18px 16px;
+        }
+
+        .content-card {
+            padding: 14px 12px 18px;
+        }
+
+        .title-block h1 {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+<div class="page">
+    <section class="admin-home-hero">
+        <div>
+            <span class="admin-home-hero__eyebrow"><i class="bi bi-shield-check"></i> Access and control</span>
+            <h1>Govern who can use Pulse and what they can do.</h1>
+            <p>Manage user groups, module access, and administrative controls that define how teams enter, secure, and operate the platform.</p>
+            <div class="admin-home-hero__chips">
+                <span class="admin-home-hero__chip"><i class="bi bi-people"></i> User access</span>
+                <span class="admin-home-hero__chip"><i class="bi bi-grid"></i> Module control</span>
+                <span class="admin-home-hero__chip"><i class="bi bi-shield-lock"></i> Permission governance</span>
+                <span class="admin-home-hero__chip"><i class="bi bi-sliders"></i> Platform administration</span>
+            </div>
+        </div>
+        <aside class="admin-home-hero__panel">
+            <div class="admin-home-hero__panel-label">Admin scope</div>
+            <strong>Centralize access rules and application control in one workspace.</strong>
+            <p>Use the sections below to configure roles, maintain modules, and keep the operating model of Pulse aligned with your organization.</p>
+        </aside>
+    </section>
+
+    <main class="content-card">
+
+    <section class="admin-grid" aria-label="Admin sections">
+        <!-- User Groups -->
+        <article class="admin-card">
+            <div class="admin-meta">Access control</div>
+            <div class="admin-title">
+                <h3>User Groups</h3>
+                <span class="admin-tag">Roles &amp; Permissions</span>
+            </div>
+            <p class="admin-desc">
+                Create and maintain user groups, assign permissions, and control which modules they can access.
+            </p>
+            <div class="admin-actions">
+                <a href="@Url.Action("Index", "UserGroups", new { area = "Admin" })" class="admin-btn admin-btn--secondary">
+                    <span class="icon">📋</span> <span>List</span>
+                </a>
+                <a href="@Url.Action("New", "UserGroups", new { area = "Admin" })" class="admin-btn">
+                    <span class="icon">➕</span> <span>Add</span>
+                </a>
+                <a href="@Url.Action("Reports", "UserGroups", new { area = "Admin" })" class="admin-btn admin-btn--ghost">
+                    <span class="icon">📊</span> <span>Report</span>
+                </a>
+            </div>
+            @*<div class="admin-footer">
+                    <span><span class="status-dot"></span>Active</span>
+                    <span>Last change: 2 days ago</span>
+                </div>*@
+        </article>
+
+        <!-- Modules -->
+        <article class="admin-card">
+            <div class="admin-meta">Application</div>
+            <div class="admin-title">
+                <h3>Modules</h3>
+                <span class="admin-tag">Features</span>
+            </div>
+            <p class="admin-desc">
+                Configure functional modules, enable/disable features, and track module usage across tenants.
+            </p>
+            <div class="admin-actions">
+                <a href="@Url.Action("Index", "Modules", new { area = "Admin" })" class="admin-btn admin-btn--secondary">
+                    <span class="icon">📋</span> <span>List</span>
+                </a>
+                <a href="@Url.Action("New", "Modules", new { area = "Admin" })" class="admin-btn">
+                    <span class="icon">➕</span> <span>Add</span>
+                </a>
+                <a href="@Url.Action("Reports", "Modules", new { area = "Admin" })" class="admin-btn admin-btn--ghost">
+                    <span class="icon">📊</span> <span>Report</span>
+                </a>
+            </div>
+            @*<div class="admin-footer">
+                    <span><span class="status-dot"></span>Active</span>
+                    <span>Last change: 5 hours ago</span>
+                </div>*@
+        </article>
+
+        <!-- Users -->
+        <article class="admin-card">
+                <div class="admin-meta">Directory</div>
+                <div class="admin-title">
+                    <h3>Users</h3>
+                    <span class="admin-tag">Accounts</span>
+                </div>
+                <p class="admin-desc">
+                    Create and manage user accounts, reset passwords, and audit user activity and access history.
+                </p>
+                <div class="admin-actions">
+                    <a href="@Url.Action("Index", "Users", new { area = "Admin" })" class="admin-btn admin-btn--secondary">
+                        <span class="icon">📋</span> <span>List</span>
+                    </a>
+                    <a href="@Url.Action("New", "Users", new { area = "Admin" })" class="admin-btn">
+                        <span class="icon">➕</span> <span>Add</span>
+                    </a>
+                    <a href="@Url.Action("Reports", "Users", new { area = "Admin" })" class="admin-btn admin-btn--ghost">
+                        <span class="icon">📊</span> <span>Report</span>
+                    </a>
+                </div>
+                <div class="admin-footer">
+                    <span><span class="status-dot"></span>Active</span>
+                    <span>Last sync: 15 min ago</span>
+                </div>
+            </article>
+    </section>
+    </main>
+</div>

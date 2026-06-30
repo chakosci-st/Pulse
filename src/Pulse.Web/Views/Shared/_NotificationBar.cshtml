@@ -1,0 +1,905 @@
+<style>
+    .pulse-notification-empty {
+        padding: 1rem;
+        text-align: center;
+        color: #64748b;
+        font-size: 0.85rem;
+    }
+
+    .pulse-notification-item {
+        padding-top: 0.85rem;
+        padding-bottom: 0.85rem;
+    }
+
+    .pulse-notification-item .dropdown-item-title {
+        font-size: 0.86rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 0.2rem;
+    }
+
+    .pulse-notification-context {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #0f766e;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .pulse-notification-message {
+        margin: 0.35rem 0 0;
+        font-size: 0.8rem;
+        color: #475569;
+        white-space: normal;
+    }
+
+    .pulse-notification-meta {
+        margin-top: 0.35rem;
+        font-size: 0.73rem;
+        color: #64748b;
+    }
+
+    .pulse-notification-welcome-dialog {
+        max-width: 860px;
+    }
+
+    .pulse-notification-welcome-content {
+        border: none;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
+    }
+
+    .pulse-notification-welcome-header {
+        padding: 1.4rem 1.5rem 1.1rem;
+        background: radial-gradient(circle at top right, rgba(255,255,255,0.24), transparent 34%), linear-gradient(135deg, #0f4c81 0%, #0f766e 100%);
+        color: #f8fafc;
+    }
+
+    .pulse-notification-welcome-header .modal-title {
+        font-size: 1.35rem;
+        font-weight: 800;
+    }
+
+    .pulse-notification-welcome-subtitle {
+        margin: 0.45rem 0 0;
+        color: rgba(241, 245, 249, 0.92);
+    }
+
+    .pulse-notification-welcome-summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-top: 1rem;
+    }
+
+    .pulse-notification-summary-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        color: #f8fafc;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .pulse-notification-welcome-body {
+        padding: 1.25rem 1.5rem 0.9rem;
+        background: linear-gradient(180deg, #f8fafc 0%, #eef4f8 100%);
+    }
+
+    .pulse-notification-welcome-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .pulse-notification-welcome-actions {
+        display: inline-flex;
+        gap: 0.55rem;
+        flex-wrap: wrap;
+    }
+
+    .pulse-notification-selection-copy {
+        color: #475569;
+        font-size: 0.88rem;
+        font-weight: 600;
+    }
+
+    .pulse-notification-welcome-list {
+        max-height: 440px;
+        overflow-y: auto;
+        padding-right: 0.2rem;
+    }
+
+    .pulse-notification-welcome-group {
+        margin-bottom: 1rem;
+    }
+
+    .pulse-notification-welcome-group-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 0.7rem;
+        padding: 0.1rem 0.15rem;
+    }
+
+    .pulse-notification-welcome-group-title {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 0.84rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #0f4c81;
+    }
+
+    .pulse-notification-welcome-group-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2rem;
+        padding: 0.2rem 0.55rem;
+        border-radius: 999px;
+        background: #dbeafe;
+        color: #1d4ed8;
+        font-size: 0.75rem;
+        font-weight: 800;
+    }
+
+    .pulse-notification-welcome-item {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 0.9rem;
+        align-items: start;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        background: #ffffff;
+        border: 1px solid #dbe4ea;
+        border-radius: 1rem;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    .pulse-notification-welcome-item:hover {
+        border-color: #93c5fd;
+        box-shadow: 0 14px 26px rgba(15, 23, 42, 0.08);
+        transform: translateY(-1px);
+    }
+
+    .pulse-notification-welcome-item.is-selected {
+        border-color: #0f766e;
+        box-shadow: 0 18px 32px rgba(15, 118, 110, 0.14);
+    }
+
+    .pulse-notification-welcome-check {
+        padding-top: 0.15rem;
+    }
+
+    .pulse-notification-welcome-check .form-check-input {
+        width: 1.2rem;
+        height: 1.2rem;
+        margin-top: 0;
+        cursor: pointer;
+    }
+
+    .pulse-notification-welcome-title {
+        font-size: 0.98rem;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .pulse-notification-welcome-message {
+        margin: 0.45rem 0 0;
+        color: #475569;
+        line-height: 1.55;
+        font-size: 0.89rem;
+    }
+
+    .pulse-notification-welcome-context {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-bottom: 0.45rem;
+        color: #0f766e;
+        font-size: 0.74rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .pulse-notification-welcome-meta {
+        margin-top: 0.6rem;
+        color: #64748b;
+        font-size: 0.78rem;
+    }
+
+    .pulse-notification-welcome-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-decoration: none;
+        color: #0f4c81;
+        white-space: nowrap;
+    }
+
+    .pulse-notification-welcome-link:hover {
+        color: #0c3b63;
+    }
+
+    .pulse-notification-welcome-footer {
+        padding: 1rem 1.5rem 1.35rem;
+        border-top: 1px solid #e2e8f0;
+        background: #ffffff;
+    }
+
+    .pulse-notification-welcome-footer-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+    }
+
+    .pulse-notification-welcome-dismiss {
+        color: #475569;
+        font-size: 0.84rem;
+        font-weight: 600;
+    }
+
+    .pulse-notification-welcome-empty {
+        padding: 2rem 1rem;
+        text-align: center;
+        color: #64748b;
+        font-size: 0.95rem;
+        background: #ffffff;
+        border: 1px dashed #cbd5e1;
+        border-radius: 1rem;
+    }
+
+    @@media (max-width: 767.98px) {
+        .pulse-notification-welcome-item {
+            grid-template-columns: auto 1fr;
+        }
+
+        .pulse-notification-welcome-link {
+            grid-column: 2;
+        }
+    }
+</style>
+
+<li class="nav-item dropdown">
+    <a class="nav-link" data-bs-toggle="dropdown" href="#" aria-label="Notifications">
+        <i class="bi bi-bell"></i>
+        <span id="unreadNotificationCount" class="navbar-badge badge text-bg-warning" style="display:none;">0</span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+        <div id="unreadNotificationRecent">
+            <div class="pulse-notification-empty">Loading notifications...</div>
+        </div>
+
+        <a href="/Home/Notifications" class="dropdown-item dropdown-footer">See All Notifications</a>
+    </div>
+</li>
+
+<script>
+    window.PulseNotifications = window.PulseNotifications || (function () {
+        const welcomeSessionKey = 'pulse-notification-welcome-shown';
+        const welcomeDismissTodayKey = 'pulse-notification-welcome-dismiss-date';
+        let unreadItemsCache = [];
+        let notificationWelcomeDialog = null;
+
+        const notificationsApiRoot = function () {
+            return getApiRootPath() + '/api/notifications';
+        };
+
+        function escapeHtml(value) {
+            if (value == null) {
+                return '';
+            }
+
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function formatDateValue(value) {
+            if (!value) {
+                return '';
+            }
+
+            if (typeof window.formatDate === 'function') {
+                return window.formatDate(value, 'DD MMM YYYY HH:mm');
+            }
+
+            return new Date(value).toLocaleString();
+        }
+
+        function buildTargetUrl(item) {
+            const entityType = String(item.entityType || '').toUpperCase();
+            const entitySysId = item.entitySysId || '';
+
+            if (entityType === 'PLANT' && entitySysId) {
+                return '/Templates/Plants/Display/' + encodeURIComponent(entitySysId);
+            }
+
+            if (entityType === 'PROJECT' && entitySysId) {
+                return '/Projects/Details/' + encodeURIComponent(entitySysId);
+            }
+
+            return '/Home/Notifications#notification-' + encodeURIComponent(item.notificationSysId || '');
+        }
+
+        function renderDropdownItem(item) {
+            return [
+                '<a href="', escapeHtml(buildTargetUrl(item)), '" class="dropdown-item pulse-notification-item js-notification-link" data-notification-id="', escapeHtml(item.notificationSysId), '">',
+                '<div class="dropdown-item-title">', escapeHtml(item.title || 'Notification'), '</div>',
+                '<div class="pulse-notification-context"><i class="bi bi-pin-angle-fill"></i><span>', escapeHtml(item.contextLabel || 'General'), '</span></div>',
+                '<p class="pulse-notification-message">', escapeHtml(item.message || ''), '</p>',
+                '<div class="pulse-notification-meta">', escapeHtml(item.createdByDisplayName || ''), ' • ', escapeHtml(formatDateValue(item.notificationDate || item.createdDate)), '</div>',
+                '</a>',
+                '<div class="dropdown-divider"></div>'
+            ].join('');
+        }
+
+        function buildSummaryMarkup(items) {
+            const unreadCount = Array.isArray(items) ? items.length : 0;
+            const groups = Array.from(new Set((items || []).map(function (item) {
+                return normalizeEntityType(item.entityType);
+            }).filter(Boolean)));
+            const latestItem = (items || []).slice().sort(function (left, right) {
+                return new Date(right.notificationDate || right.createdDate) - new Date(left.notificationDate || left.createdDate);
+            })[0];
+            const summaryBits = [
+                '<span class="pulse-notification-summary-chip"><i class="bi bi-bell"></i><span>' + escapeHtml(unreadCount) + ' unread</span></span>',
+                '<span class="pulse-notification-summary-chip"><i class="bi bi-diagram-3"></i><span>' + escapeHtml(groups.length) + ' group' + (groups.length === 1 ? '' : 's') + '</span></span>'
+            ];
+
+            if (latestItem) {
+                summaryBits.push('<span class="pulse-notification-summary-chip"><i class="bi bi-clock-history"></i><span>Latest ' + escapeHtml(formatDateValue(latestItem.notificationDate || latestItem.createdDate)) + '</span></span>');
+            }
+
+            return summaryBits.join('');
+        }
+
+        function normalizeEntityType(entityType) {
+            return String(entityType || 'OTHER').trim().toUpperCase() || 'OTHER';
+        }
+
+        function getWelcomeGroupMeta(entityType) {
+            switch (normalizeEntityType(entityType)) {
+                case 'PLANT':
+                    return { key: 'PLANT', title: 'Plant notifications', icon: 'bi bi-buildings' };
+                case 'PROJECT':
+                    return { key: 'PROJECT', title: 'Project notifications', icon: 'bi bi-kanban' };
+                case 'MILESTONE':
+                    return { key: 'MILESTONE', title: 'Milestone notifications', icon: 'bi bi-signpost-split' };
+                case 'TASK':
+                    return { key: 'TASK', title: 'Task notifications', icon: 'bi bi-list-check' };
+                case 'SYSTEM':
+                    return { key: 'SYSTEM', title: 'System notifications', icon: 'bi bi-cpu' };
+                default:
+                    return { key: 'OTHER', title: 'Other notifications', icon: 'bi bi-bell' };
+            }
+        }
+
+        function getWelcomeGroupOrder(entityType) {
+            switch (normalizeEntityType(entityType)) {
+                case 'PLANT': return 1;
+                case 'PROJECT': return 2;
+                case 'MILESTONE': return 3;
+                case 'TASK': return 4;
+                case 'SYSTEM': return 5;
+                default: return 6;
+            }
+        }
+
+        function formatWelcomeSubtitle(items) {
+            const count = Array.isArray(items) ? items.length : 0;
+            if (count <= 0) {
+                return 'You are all caught up for now.';
+            }
+
+            if (count === 1) {
+                return 'You have 1 unread notification ready for review before you continue.';
+            }
+
+            return 'You have ' + count + ' unread notifications grouped by where they need your attention.';
+        }
+
+        function renderWelcomeItem(item) {
+            return [
+                '<article class="pulse-notification-welcome-item" data-notification-id="', escapeHtml(item.notificationSysId), '">',
+                '<div class="pulse-notification-welcome-check form-check">',
+                '<input class="form-check-input js-notification-welcome-checkbox" type="checkbox" value="', escapeHtml(item.notificationSysId), '" id="welcome-notification-', escapeHtml(item.notificationSysId), '">',
+                '</div>',
+                '<div>',
+                '<div class="pulse-notification-welcome-context"><i class="bi bi-pin-angle-fill"></i><span>', escapeHtml(item.contextLabel || 'General'), '</span></div>',
+                '<div class="pulse-notification-welcome-title">', escapeHtml(item.title || 'Notification'), '</div>',
+                '<p class="pulse-notification-welcome-message">', escapeHtml(item.message || ''), '</p>',
+                '<div class="pulse-notification-welcome-meta">', escapeHtml(item.createdByDisplayName || ''), ' • ', escapeHtml(formatDateValue(item.notificationDate || item.createdDate)), '</div>',
+                '</div>',
+                '<a href="', escapeHtml(buildTargetUrl(item)), '" class="pulse-notification-welcome-link js-notification-welcome-link" data-notification-id="', escapeHtml(item.notificationSysId), '">',
+                '<span>Open</span><i class="bi bi-arrow-right"></i>',
+                '</a>',
+                '</article>'
+            ].join('');
+        }
+
+        function groupUnreadItems(items) {
+            const map = {};
+            (items || []).forEach(function (item) {
+                const meta = getWelcomeGroupMeta(item.entityType);
+                map[meta.key] = map[meta.key] || {
+                    key: meta.key,
+                    title: meta.title,
+                    icon: meta.icon,
+                    items: []
+                };
+                map[meta.key].items.push(item);
+            });
+
+            return Object.keys(map)
+                .map(function (key) { return map[key]; })
+                .sort(function (left, right) {
+                    return getWelcomeGroupOrder(left.key) - getWelcomeGroupOrder(right.key);
+                });
+        }
+
+        function getTodayKey() {
+            const now = new Date();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return now.getFullYear() + '-' + month + '-' + day;
+        }
+
+        function isDismissedForToday() {
+            try {
+                return window.localStorage && localStorage.getItem(welcomeDismissTodayKey) === getTodayKey();
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function persistDismissTodayPreference() {
+            const dismissCheckbox = document.getElementById('notificationWelcomeDismissToday');
+            try {
+                if (!window.localStorage || !dismissCheckbox) {
+                    return;
+                }
+
+                if (dismissCheckbox.checked) {
+                    localStorage.setItem(welcomeDismissTodayKey, getTodayKey());
+                } else if (localStorage.getItem(welcomeDismissTodayKey) === getTodayKey()) {
+                    localStorage.removeItem(welcomeDismissTodayKey);
+                }
+            } catch (error) {
+                // Ignore storage failures.
+            }
+        }
+
+        function buildWelcomeDialogMarkup() {
+            return [
+                '<div class="pulse-notification-welcome-shell">',
+                '<div class="pulse-notification-welcome-header">',
+                '<div>',
+                '<h5 class="modal-title mb-0" id="notificationWelcomeModalLabel"><i class="bi bi-bell-fill me-2"></i>Welcome back</h5>',
+                '<p id="notificationWelcomeSubtitle" class="pulse-notification-welcome-subtitle">You have active notifications waiting for review.</p>',
+                '<div id="notificationWelcomeSummary" class="pulse-notification-welcome-summary"></div>',
+                '</div>',
+                '</div>',
+                '<div class="pulse-notification-welcome-body">',
+                '<div class="pulse-notification-welcome-toolbar">',
+                '<div class="form-check m-0">',
+                '<input class="form-check-input" type="checkbox" id="notificationWelcomeSelectAll">',
+                '<label class="form-check-label fw-semibold" for="notificationWelcomeSelectAll">Select all unread notifications</label>',
+                '</div>',
+                '<div class="pulse-notification-welcome-actions">',
+                '<button type="button" id="notificationWelcomeMarkSelected" class="btn btn-outline-primary btn-sm">Mark selected as read</button>',
+                '<button type="button" id="notificationWelcomeMarkAll" class="btn btn-primary btn-sm">Mark all as read</button>',
+                '</div>',
+                '</div>',
+                '<div id="notificationWelcomeSelectionCopy" class="pulse-notification-selection-copy mb-3">0 selected</div>',
+                '<div id="notificationWelcomeList" class="pulse-notification-welcome-list">',
+                '<div class="pulse-notification-welcome-empty">Loading notifications...</div>',
+                '</div>',
+                '</div>',
+                '<div class="pulse-notification-welcome-footer d-flex justify-content-between align-items-start gap-3">',
+                '<div class="pulse-notification-welcome-footer-copy">',
+                '<a href="/Home/Notifications" class="btn btn-link text-decoration-none px-0 text-start">Open notification center</a>',
+                '<div class="form-check m-0 pulse-notification-welcome-dismiss">',
+                '<input class="form-check-input" type="checkbox" id="notificationWelcomeDismissToday">',
+                '<label class="form-check-label" for="notificationWelcomeDismissToday">Don\'t show again today</label>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</div>'
+            ].join('');
+        }
+
+        function renderWelcomeList(items) {
+            const list = document.getElementById('notificationWelcomeList');
+            const summary = document.getElementById('notificationWelcomeSummary');
+            const subtitle = document.getElementById('notificationWelcomeSubtitle');
+            if (!list || !summary || !subtitle) {
+                return;
+            }
+
+            unreadItemsCache = Array.isArray(items) ? items.slice() : [];
+            summary.innerHTML = buildSummaryMarkup(unreadItemsCache);
+            subtitle.textContent = formatWelcomeSubtitle(unreadItemsCache);
+
+            if (!unreadItemsCache.length) {
+                list.innerHTML = '<div class="pulse-notification-welcome-empty">You are all caught up.</div>';
+                updateWelcomeSelectionState();
+                return;
+            }
+
+            list.innerHTML = groupUnreadItems(unreadItemsCache).map(function (group) {
+                return [
+                    '<section class="pulse-notification-welcome-group" data-group-key="', escapeHtml(group.key), '">',
+                    '<div class="pulse-notification-welcome-group-header">',
+                    '<div class="pulse-notification-welcome-group-title"><i class="', escapeHtml(group.icon), '"></i><span>', escapeHtml(group.title), '</span></div>',
+                    '<div class="pulse-notification-welcome-group-count">', escapeHtml(group.items.length), '</div>',
+                    '</div>',
+                    group.items.map(renderWelcomeItem).join(''),
+                    '</section>'
+                ].join('');
+            }).join('');
+
+            updateWelcomeSelectionState();
+        }
+
+        function getSelectedNotificationIds() {
+            const list = document.getElementById('notificationWelcomeList');
+            if (!list) {
+                return [];
+            }
+
+            return Array.from(list.querySelectorAll('.js-notification-welcome-checkbox:checked')).map(function (checkbox) {
+                return checkbox.value;
+            });
+        }
+
+        function setWelcomeActionBusy(isBusy, button) {
+            const markSelected = document.getElementById('notificationWelcomeMarkSelected');
+            const markAll = document.getElementById('notificationWelcomeMarkAll');
+            const selectAll = document.getElementById('notificationWelcomeSelectAll');
+            [markSelected, markAll, selectAll].forEach(function (element) {
+                if (element) {
+                    element.disabled = !!isBusy;
+                }
+            });
+
+            if (button) {
+                button.dataset.originalText = button.dataset.originalText || button.innerHTML;
+                button.innerHTML = isBusy
+                    ? '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Working...'
+                    : button.dataset.originalText;
+            }
+        }
+
+        function updateWelcomeSelectionState() {
+            const list = document.getElementById('notificationWelcomeList');
+            const selectAll = document.getElementById('notificationWelcomeSelectAll');
+            const selectionCopy = document.getElementById('notificationWelcomeSelectionCopy');
+            const markSelected = document.getElementById('notificationWelcomeMarkSelected');
+            if (!list || !selectAll || !selectionCopy || !markSelected) {
+                return;
+            }
+
+            const checkboxes = Array.from(list.querySelectorAll('.js-notification-welcome-checkbox'));
+            const checked = checkboxes.filter(function (checkbox) { return checkbox.checked; });
+            checkboxes.forEach(function (checkbox) {
+                const card = checkbox.closest('.pulse-notification-welcome-item');
+                if (card) {
+                    card.classList.toggle('is-selected', checkbox.checked);
+                }
+            });
+
+            selectAll.checked = checkboxes.length > 0 && checked.length === checkboxes.length;
+            selectAll.indeterminate = checked.length > 0 && checked.length < checkboxes.length;
+            selectionCopy.textContent = checked.length + ' selected';
+            markSelected.disabled = checked.length === 0;
+        }
+
+        function removeReadNotifications(notificationIds) {
+            const normalizedIds = new Set((notificationIds || []).map(function (id) { return String(id || ''); }));
+            unreadItemsCache = unreadItemsCache.filter(function (item) {
+                return !normalizedIds.has(String(item.notificationSysId || ''));
+            });
+            renderUnread(unreadItemsCache);
+            updateBadge(unreadItemsCache.length);
+            renderWelcomeList(unreadItemsCache);
+            ensureEmptyState();
+        }
+
+        function markSelectedAsRead(notificationIds) {
+            return $.ajax({
+                url: notificationsApiRoot() + '/read-selected',
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify({ notificationIds: notificationIds })
+            });
+        }
+
+        function markAllAsRead() {
+            return $.ajax({
+                url: notificationsApiRoot() + '/read-all',
+                type: 'POST',
+                dataType: 'json'
+            });
+        }
+
+        function maybeShowWelcomeModal(items) {
+            if (!Array.isArray(items) || !items.length) {
+                return;
+            }
+
+            if (isDismissedForToday()) {
+                return;
+            }
+
+            if (window.sessionStorage && sessionStorage.getItem(welcomeSessionKey) === '1') {
+                return;
+            }
+
+            if (typeof bootbox === 'undefined') {
+                return;
+            }
+
+            if (notificationWelcomeDialog) {
+                return;
+            }
+
+            notificationWelcomeDialog = bootbox.dialog({
+                message: buildWelcomeDialogMarkup(),
+                closeButton: true,
+                size: 'large',
+                className: 'pulse-notification-welcome-bootbox',
+                buttons: {
+                    reviewLater: {
+                        label: 'Review later',
+                        className: 'btn btn-outline-secondary'
+                    }
+                }
+            });
+
+            notificationWelcomeDialog.on('hidden.bs.modal', function () {
+                persistDismissTodayPreference();
+                notificationWelcomeDialog.remove();
+                notificationWelcomeDialog = null;
+            });
+
+            renderWelcomeList(items);
+            const dismissCheckbox = document.getElementById('notificationWelcomeDismissToday');
+            if (dismissCheckbox) {
+                dismissCheckbox.checked = false;
+            }
+            if (window.sessionStorage) {
+                sessionStorage.setItem(welcomeSessionKey, '1');
+            }
+        }
+
+        function ensureEmptyState() {
+            const container = document.getElementById('unreadNotificationRecent');
+            if (!container) {
+                return;
+            }
+
+            const remainingItems = container.querySelectorAll('.js-notification-link');
+            if (remainingItems.length > 0) {
+                return;
+            }
+
+            if (!container.querySelector('.pulse-notification-empty')) {
+                container.innerHTML = '<div class="pulse-notification-empty">No unread notifications.</div>';
+            }
+        }
+
+        function updateBadge(nextCount) {
+            const badge = document.getElementById('unreadNotificationCount');
+            if (!badge) {
+                return;
+            }
+
+            const safeCount = Math.max(0, Number(nextCount) || 0);
+            badge.textContent = safeCount;
+            badge.style.display = safeCount > 0 ? '' : 'none';
+        }
+
+        function decrementBadge() {
+            const badge = document.getElementById('unreadNotificationCount');
+            if (!badge) {
+                return;
+            }
+
+            const currentCount = Number(badge.textContent || '0');
+            updateBadge(currentCount - 1);
+        }
+
+        function markRead(notificationId) {
+            return $.ajax({
+                url: notificationsApiRoot() + '/' + encodeURIComponent(notificationId) + '/read',
+                type: 'POST',
+                dataType: 'json'
+            });
+        }
+
+        function renderUnread(items) {
+            const container = document.getElementById('unreadNotificationRecent');
+            if (!container) {
+                return;
+            }
+
+            if (!items || items.length === 0) {
+                container.innerHTML = '<div class="pulse-notification-empty">No unread notifications.</div>';
+                return;
+            }
+
+            const markup = items.slice(0, 5).map(renderDropdownItem).join('');
+            container.innerHTML = markup;
+        }
+
+        function fetchUnread() {
+            return $.ajax({
+                url: notificationsApiRoot() + '/active/unread',
+                type: 'GET',
+                dataType: 'json'
+            });
+        }
+
+        function loadUnread() {
+            fetchUnread()
+                .done(function (response) {
+                    const items = response && response.data ? response.data : [];
+                    const unreadCount = response && typeof response.unreadCount !== 'undefined' ? response.unreadCount : items.length;
+                    renderUnread(items);
+                    updateBadge(unreadCount);
+                    maybeShowWelcomeModal(items);
+                })
+                .fail(function () {
+                    const container = document.getElementById('unreadNotificationRecent');
+                    if (container) {
+                        container.innerHTML = '<div class="pulse-notification-empty">Unable to load notifications.</div>';
+                    }
+                    updateBadge(0);
+                });
+        }
+
+        document.addEventListener('click', function (event) {
+            const link = event.target.closest('.js-notification-link');
+            if (!link) {
+                const welcomeLink = event.target.closest('.js-notification-welcome-link');
+                if (!welcomeLink) {
+                    return;
+                }
+
+                const notificationId = welcomeLink.getAttribute('data-notification-id');
+                const href = welcomeLink.getAttribute('href');
+                if (!notificationId || !href) {
+                    return;
+                }
+
+                event.preventDefault();
+                markRead(notificationId).always(function () {
+                    removeReadNotifications([notificationId]);
+                    window.location.href = href;
+                });
+                return;
+            }
+
+            const notificationId = link.getAttribute('data-notification-id');
+            const href = link.getAttribute('href');
+            if (!notificationId || !href) {
+                return;
+            }
+
+            event.preventDefault();
+
+            markRead(notificationId).always(function () {
+                const divider = link.nextElementSibling;
+                link.remove();
+                if (divider && divider.classList.contains('dropdown-divider')) {
+                    divider.remove();
+                }
+                decrementBadge();
+                ensureEmptyState();
+                window.location.href = href;
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('change', function (event) {
+                const selectAll = event.target.closest('#notificationWelcomeSelectAll');
+                if (selectAll) {
+                    const welcomeList = document.getElementById('notificationWelcomeList');
+                    if (!welcomeList) {
+                        return;
+                    }
+
+                    Array.from(welcomeList.querySelectorAll('.js-notification-welcome-checkbox')).forEach(function (checkbox) {
+                        checkbox.checked = selectAll.checked;
+                    });
+                    updateWelcomeSelectionState();
+                    return;
+                }
+
+                if (event.target.classList.contains('js-notification-welcome-checkbox')) {
+                    updateWelcomeSelectionState();
+                }
+            });
+
+            document.addEventListener('click', function (event) {
+                const markSelectedButton = event.target.closest('#notificationWelcomeMarkSelected');
+                if (markSelectedButton) {
+                    const selectedIds = getSelectedNotificationIds();
+                    if (!selectedIds.length) {
+                        return;
+                    }
+
+                    setWelcomeActionBusy(true, markSelectedButton);
+                    markSelectedAsRead(selectedIds)
+                        .done(function () {
+                            removeReadNotifications(selectedIds);
+                            toastr.success('Selected notifications were marked as read.');
+                        })
+                        .fail(function () {
+                            toastr.error('Unable to mark the selected notifications as read.');
+                        })
+                        .always(function () {
+                            setWelcomeActionBusy(false, markSelectedButton);
+                        });
+                    return;
+                }
+
+                const markAllButton = event.target.closest('#notificationWelcomeMarkAll');
+                if (markAllButton) {
+                    setWelcomeActionBusy(true, markAllButton);
+                    markAllAsRead()
+                        .done(function (response) {
+                            const notificationIds = response && response.notificationIds ? response.notificationIds : unreadItemsCache.map(function (item) { return item.notificationSysId; });
+                            removeReadNotifications(notificationIds);
+                            toastr.success('All unread notifications were marked as read.');
+                            if (notificationWelcomeDialog && unreadItemsCache.length === 0) {
+                                notificationWelcomeDialog.modal('hide');
+                            }
+                        })
+                        .fail(function () {
+                            toastr.error('Unable to mark all notifications as read.');
+                        })
+                        .always(function () {
+                            setWelcomeActionBusy(false, markAllButton);
+                        });
+                }
+            });
+
+            loadUnread();
+        });
+
+        return {
+            buildTargetUrl: buildTargetUrl,
+            formatDateValue: formatDateValue,
+            loadUnread: loadUnread,
+            markRead: markRead,
+            markSelectedAsRead: markSelectedAsRead,
+            markAllAsRead: markAllAsRead,
+            updateBadge: updateBadge,
+            ensureEmptyState: ensureEmptyState,
+            maybeShowWelcomeModal: maybeShowWelcomeModal
+        };
+    })();
+</script>

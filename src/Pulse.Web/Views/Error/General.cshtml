@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewBag.Title = "";
+    ViewBag.TitleIcon = "bi bi-exclamation-triangle-fill";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container   d-flex flex-column justify-content-center align-items-center" style="margin-top:200px">
+    <div class="card shadow-lg border-0" style="min-width: 500px;">
+        <div class="card-body text-center">
+            <div class="mb-4">
+                <i class="bi bi-exclamation-triangle-fill text-secondary" style="font-size: 3rem;"></i>
+            </div>
+            <h2 class="  mb-3">An Error Occurred</h2>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <p class="card-text text-muted mb-4">
+                    <strong>Error:</strong> @ViewBag.ErrorMessage
+                </p>
+            }
+            else
+            {
+                <p class="card-text text-muted mb-4">
+                    An unexpected error occurred.
+                </p>
+            }
+
+
+            <a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-lg w-100">
+                <i class="bi bi-house-door-fill me-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+</div>

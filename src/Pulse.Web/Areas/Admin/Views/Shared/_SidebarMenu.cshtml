@@ -1,0 +1,117 @@
+﻿@using Pulse.Web.Helpers 
+@{
+    var selectedMenu = (ViewBag.SelectedMenu as string) ?? string.Empty;
+    var adminNavItemClass = string.Equals(selectedMenu, "Admin", StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(selectedMenu) ? "active" : string.Empty;
+}
+<ul class="nav sidebar-menu flex-column"
+    data-lte-toggle="treeview"
+    role="navigation"
+    aria-label="Main navigation"
+    data-accordion="false"
+    id="navigation">
+ 
+    <li class="nav-item @adminNavItemClass">
+        <a href="@Url.Action("Index", "Home", new { area = "Admin" })" class="nav-link @adminNavItemClass @ViewBag.IsActiveDashboard">
+            <i class="nav-icon text-lg bi bi-shield-lock-fill h3"></i>
+            <p class="text-lg">Admin Console</p>
+        </a>
+    </li>
+    <li class="nav-header">ADMINISTRATION</li>
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "MODULEVIEW"))
+    {
+        <li class="nav-item">
+            <a href="#" class="nav-link @ViewBag.IsActiveAdminModules">
+                <i class="nav-icon bi bi-puzzle h3 @ViewBag.IsActiveAdminModules"></i>
+                <p>
+                    Modules
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "Modules", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminModulesReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Modules", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminModulesAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All Modules</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("New", "Modules", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminModulesNew">
+                        <i class="nav-icon bi bi-plus-circle"></i>
+                        <p>New Module</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "USRGRPVIEW"))
+    {
+        <li class="nav-item">
+            <a href="#" class="nav-link @ViewBag.IsActiveAdminUserGroups">
+                <i class="nav-icon bi bi-people-fill h3 @ViewBag.IsActiveAdminUserGroups"></i>
+                <p>
+                    User Groups
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "UserGroups", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUserGroupsReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "UserGroups", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUserGroupsAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All User Groups</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("New", "UserGroups", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUserGroupsNew">
+                        <i class="nav-icon bi bi-plus-circle"></i>
+                        <p>New User Group</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+    @if (AuthorizationHelper.IsInGroupsOrModules("", "USERVIEW"))
+    {
+        <li class="nav-item">
+            <a href="#" class="nav-link @ViewBag.IsActiveAdminUsers">
+                <i class="nav-icon bi bi-person-fill h3 @ViewBag.IsActiveAdminUsers"></i>
+                <p>
+                    Users
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="@Url.Action("Reports", "Users", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUsersReports">
+                        <i class="nav-icon bi bi-book"></i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Users", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUsersAll">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>All Users</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("New", "Users", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUsersNew">
+                        <i class="nav-icon bi bi-plus-circle"></i>
+                        <p>New User</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+     
+</ul>

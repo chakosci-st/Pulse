@@ -1,0 +1,3244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulse User Acceptance Test Scenarios</title>
+  <style>
+    :root{
+      --st-blue:#03234b;
+      --st-light-blue:#0f6cbd;
+      --st-teal:#00a3ad;
+      --st-gray:#e9eef4;
+      --st-mid-gray:#c7d1db;
+      --text:#1f2933;
+      --border:#7a8a99;
+      --white:#ffffff;
+    }
+
+    @page {
+      size: A4;
+      margin: 18mm 14mm 18mm 14mm;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Calibri, "Segoe UI", Arial, Helvetica, sans-serif;
+      color: var(--text);
+      margin: 0;
+      background: #f6f8fb;
+      line-height: 1.5;
+      font-size: 11pt;
+    }
+
+    .document {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: var(--white);
+      padding: 32px 40px 60px 40px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    h1, h2, h3, h4, h5 {
+      color: var(--st-blue);
+      margin-top: 22px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 24pt;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: 16pt;
+      border-bottom: 2px solid var(--st-blue);
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      font-size: 13pt;
+      padding-left: 8px;
+      border-left: 4px solid var(--st-teal);
+    }
+
+    h4 {
+      font-size: 12pt;
+      background: var(--st-gray);
+      padding: 8px 10px;
+      border-left: 4px solid var(--st-light-blue);
+    }
+
+    h5 {
+      font-size: 11pt;
+    }
+
+    p {
+      margin: 8px 0;
+    }
+
+    .cover {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .cover .brand {
+      font-size: 34px;
+      font-weight: bold;
+      color: var(--st-blue);
+      letter-spacing: 1px;
+    }
+
+    .cover .subtitle {
+      font-size: 26px;
+      color: var(--st-light-blue);
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .cover .meta {
+      margin-top: 26px;
+      font-size: 14px;
+    }
+
+    .cover .sign {
+      margin-top: 28px;
+      line-height: 2;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+      margin-top: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 16px 0;
+      table-layout: auto;
+      font-size: 10.5pt;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      vertical-align: top;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    th {
+      background: var(--st-blue);
+      color: var(--white);
+      text-align: left;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tr:nth-child(even) td {
+      background: #fbfdff;
+    }
+
+    td:first-child {
+      font-weight: 600;
+      background: #f5f8fc;
+      width: 28%;
+    }
+
+    .toc {
+      background: #f8fbff;
+      border: 1px solid var(--st-mid-gray);
+      padding: 14px 16px;
+      margin-bottom: 24px;
+    }
+
+    .toc ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 6px 0;
+    }
+
+    .toc ul ul {
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .toc li {
+      margin: 4px 0;
+    }
+
+    .toc a {
+      text-decoration: none;
+      color: var(--st-light-blue);
+    }
+
+    .toc a:hover {
+      text-decoration: underline;
+    }
+
+    ul, ol {
+      margin-top: 6px;
+      margin-bottom: 10px;
+      padding-left: 22px;
+    }
+
+    .small {
+      font-size: 10pt;
+      color: #4a5a6a;
+    }
+
+    .back-top {
+      margin: 6px 0 16px 0;
+      font-size: 10pt;
+    }
+
+    .back-top a {
+      color: var(--st-light-blue);
+      text-decoration: none;
+    }
+
+    .back-top a:hover {
+      text-decoration: underline;
+    }
+
+    .section-banner {
+      background: linear-gradient(90deg, var(--st-blue), var(--st-light-blue));
+      color: var(--white);
+      padding: 10px 12px;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .print-note {
+      background: #eef7ff;
+      border-left: 4px solid var(--st-light-blue);
+      padding: 10px 12px;
+      margin: 12px 0 18px 0;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        font-size: 10.5pt;
+      }
+      .document {
+        box-shadow: none;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+      }
+      table {
+        page-break-inside: auto;
+      }
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+      th {
+        position: static;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .toc a::after {
+        content: "";
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="document" id="top">
+
+  <div class="cover">
+    <div class="brand">PULSE</div>
+    <div class="subtitle">User Acceptance Test Scenarios</div>
+
+    <div class="meta">
+      <p><strong>Version:</strong> 1.1</p>
+      <p><strong>Document Type:</strong> User Acceptance Testing</p>
+      <p><strong>Status:</strong> Draft for Execution</p>
+      <p><strong>Date:</strong> May 28, 2026</p>
+    </div>
+
+    <div class="sign">
+      <p><strong>Prepared By:</strong> ________________________________________</p>
+      <p><strong>Reviewed By:</strong> ________________________________________</p>
+      <p><strong>Approved By:</strong> ________________________________________</p>
+    </div>
+
+    <div class="meta">
+      <p><strong>Application:</strong> Pulse</p>
+      <p><strong>Audience:</strong> Business Users, Project Owners, Project Members, Template Managers, Administrators, QA Testers, Report Viewers</p>
+      <p><strong>Scope:</strong> Functional UAT for Pulse web workflows</p>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <h1>Approval Page</h1>
+
+  <table>
+    <tr>
+      <th>Role</th>
+      <th>Name</th>
+      <th>Signature</th>
+      <th>Date</th>
+      <th>Decision</th>
+    </tr>
+    <tr><td>Business Owner</td><td></td><td></td><td></td><td>Approved / Rejected</td></tr>
+    <tr><td>Product Owner</td><td></td><td></td><td></td><td>Approved / Rejected</td></tr>
+    <tr><td>QA Lead</td><td></td><td></td><td></td><td>Approved / Rejected</td></tr>
+    <tr><td>UAT Lead</td><td></td><td></td><td></td><td>Approved / Rejected</td></tr>
+  </table>
+
+  <h2>Document Revision History</h2>
+  <table>
+    <tr>
+      <th>Version</th>
+      <th>Date</th>
+      <th>Author</th>
+      <th>Description of Change</th>
+    </tr>
+    <tr><td>1.0</td><td>May 28, 2026</td><td></td><td>Initial draft</td></tr>
+    <tr><td>1.1</td><td>May 28, 2026</td><td></td><td>Enhanced formatting, print CSS, anchors, and full expanded scenarios</td></tr>
+  </table>
+
+  <h2>Distribution List</h2>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Role</th>
+      <th>Department</th>
+      <th>Copy Type</th>
+    </tr>
+    <tr><td></td><td></td><td></td><td>Controlled</td></tr>
+    <tr><td></td><td></td><td></td><td>Controlled</td></tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <div class="section-banner">Table of Contents</div>
+  <div class="toc">
+    <ul>
+      <li><a href="#sec-1">1. Document Control</a></li>
+      <li><a href="#sec-2">2. Purpose</a></li>
+      <li><a href="#sec-3">3. Scope</a></li>
+      <li><a href="#sec-4">4. Objectives</a></li>
+      <li><a href="#sec-5">5. Entry Criteria</a></li>
+      <li><a href="#sec-6">6. Exit Criteria</a></li>
+      <li><a href="#sec-7">7. Test Roles</a></li>
+      <li><a href="#sec-8">8. Required Test Data</a></li>
+      <li><a href="#sec-9">9. Test Execution Guidance</a></li>
+      <li><a href="#sec-10">10. Formal Test Cases</a>
+        <ul>
+          <li><a href="#sec-10-1">10.1 Projects</a></li>
+          <li><a href="#sec-10-2">10.2 Status Board</a></li>
+          <li><a href="#sec-10-3">10.3 Tasks</a></li>
+          <li><a href="#sec-10-4">10.4 View</a></li>
+          <li><a href="#sec-10-5">10.5 Chats</a></li>
+          <li><a href="#sec-10-6">10.6 Notifications</a></li>
+          <li><a href="#sec-10-7">10.7 Categories</a></li>
+          <li><a href="#sec-10-8">10.8 Fields</a></li>
+          <li><a href="#sec-10-9">10.9 Forms</a></li>
+          <li><a href="#sec-10-10">10.10 Maturity</a></li>
+          <li><a href="#sec-10-11">10.11 Product Division</a></li>
+          <li><a href="#sec-10-12">10.12 Product Group</a></li>
+          <li><a href="#sec-10-13">10.13 Roadmap</a></li>
+          <li><a href="#sec-10-14">10.14 Reports</a></li>
+          <li><a href="#sec-10-15">10.15 Negative and Access Control Scenarios</a></li>
+        </ul>
+      </li>
+      <li><a href="#sec-11">11. Regression Checklist</a></li>
+      <li><a href="#sec-12">12. UAT Sign-Off</a></li>
+      <li><a href="#sec-13">13. Defect Log</a></li>
+      <li><a href="#sec-14">14. Appendices</a></li>
+    </ul>
+  </div>
+
+  <div class="print-note">
+    <strong>Print-ready note:</strong> This HTML is formatted for browser viewing and printing to PDF on A4 paper, with page-break helpers, ST-style colors, anchors, and formal test-case tables.
+  </div>
+
+  <h2 id="sec-1">1. Document Control</h2>
+  <table>
+    <tr><th>Item</th><th>Value</th></tr>
+    <tr><td>1.1 Application</td><td>Pulse</td></tr>
+    <tr><td>1.2 Document Title</td><td>Pulse User Acceptance Test Scenarios</td></tr>
+    <tr><td>1.3 Document Type</td><td>User Acceptance Testing</td></tr>
+    <tr><td>1.4 Version</td><td>1.1</td></tr>
+    <tr><td>1.5 Status</td><td>Draft for Execution</td></tr>
+    <tr><td>1.6 Created Date</td><td>May 28, 2026</td></tr>
+    <tr><td>1.7 Last Updated</td><td>May 28, 2026</td></tr>
+    <tr><td>1.8 Owner</td><td>UAT Lead / Product Owner</td></tr>
+    <tr><td>1.9 Approval Required From</td><td>Business Owner, Product Owner, QA Lead</td></tr>
+    <tr><td>1.10 Scope</td><td>Functional UAT for Pulse web workflows</td></tr>
+  </table>
+  <div class="back-top"><a href="#top">Back to top</a></div>
+
+  <h2 id="sec-2">2. Purpose</h2>
+  <p>This document defines the User Acceptance Test scenarios for validating Pulse from an end-user and business workflow perspective.</p>
+  <p>The scenarios cover:</p>
+  <ul>
+    <li>Project registration and activation</li>
+    <li>Project review and execution</li>
+    <li>Task updates, scheduling, and closure</li>
+    <li>Collaboration through comments, attachments, chats, and notifications</li>
+    <li>Template and setup maintenance</li>
+    <li>Roadmap governance and synchronization</li>
+    <li>Reports and project comparison</li>
+    <li>Negative and access-control validation</li>
+    <li>Regression validation prior to release</li>
+  </ul>
+  <p>The purpose of this document is to confirm that Pulse supports expected business workflows, enforces intended access restrictions, and is ready for operational deployment.</p>
+  <div class="back-top"><a href="#top">Back to top</a></div>
+
+  <h2 id="sec-3">3. Scope</h2>
+  <h3>3.1 In Scope</h3>
+  <ol>
+    <li>Projects</li>
+    <li>Status Board</li>
+    <li>Tasks</li>
+    <li>View</li>
+    <li>Chats</li>
+    <li>Notifications</li>
+    <li>Categories</li>
+    <li>Fields</li>
+    <li>Forms</li>
+    <li>Maturity</li>
+    <li>Product Division</li>
+    <li>Product Group</li>
+    <li>Roadmap</li>
+    <li>Reports</li>
+    <li>Negative and Access Control Scenarios</li>
+    <li>Regression Validation</li>
+  </ol>
+
+  <h3>3.2 Out of Scope</h3>
+  <ul>
+    <li>Performance and load testing</li>
+    <li>Security penetration testing</li>
+    <li>Mobile responsiveness validation</li>
+    <li>Unsupported browser testing</li>
+    <li>Back-end API validation not visible through business workflows</li>
+    <li>Data migration validation unless specifically requested</li>
+  </ul>
+  <div class="back-top"><a href="#top">Back to top</a></div>
+
+  <h2 id="sec-4">4. Objectives</h2>
+  <ul>
+    <li>Confirm that business users can complete core Pulse workflows successfully.</li>
+    <li>Validate that project owners can register, manage, configure, and monitor projects.</li>
+    <li>Confirm that task owners can update assigned work, provide evidence, and close tasks.</li>
+    <li>Validate that template managers can maintain reusable configuration records.</li>
+    <li>Confirm that collaboration features such as comments, chats, attachments, and notifications work correctly.</li>
+    <li>Validate that reporting functions support monitoring, export, and comparison needs.</li>
+    <li>Confirm that access control prevents unauthorized actions.</li>
+  </ul>
+  <div class="back-top"><a href="#top">Back to top</a></div>
+
+  <h2 id="sec-5">5. Entry Criteria</h2>
+  <ul>
+    <li>UAT environment is available</li>
+    <li>Required users and roles are provisioned</li>
+    <li>Required test data exists</li>
+    <li>Functional QA testing is completed</li>
+    <li>Known issue list is shared</li>
+    <li>Release scope is confirmed</li>
+  </ul>
+  <div class="back-top"><a href="#top">Back to top</a></div>
+
+  <h2 id="sec-6">6. Exit Criteria</h2>
+  <ul>
+    <li>All in-scope scenarios have been executed</li>
+    <li>Critical and high defects are resolved or formally accepted</li>
+    <li>Regression checklist is completed</li>
+    <li>Business approval is recorded</li>
+  </ul>
+  <div class="back-top"><a href="#top">Back to top</a></div>
+
+  <h2 id="sec-7">7. Test Roles</h2>
+  <table>
+    <tr><th>Role</th><th>Primary Focus</th></tr>
+    <tr><td>Daily User / Task Owner</td><td>Tasks, notifications, comments, attachments, task closure</td></tr>
+    <tr><td>Project Owner</td><td>Register, Projects, Project Review, Project Configuration, Status Board</td></tr>
+    <tr><td>Project Member</td><td>Assigned work, collaboration, task updates, review visibility</td></tr>
+    <tr><td>Template Manager</td><td>Categories, Fields, Forms, Maturity, Product Division, Product Group, Roadmap</td></tr>
+    <tr><td>Administrator</td><td>Access governance, controlled actions, maintenance</td></tr>
+    <tr><td>Report Viewer</td><td>Project Export, Monitoring Matrix, Project Comparison</td></tr>
+  </table>
+  <div class="back-top"><a href="#top">Back to top</a></div>
+
+  <h2 id="sec-8">8. Required Test Data</h2>
+  <table>
+    <tr><th>Data Type</th><th>Minimum Requirement</th></tr>
+    <tr><td>Plants / Sites</td><td>At least one active site</td></tr>
+    <tr><td>Users</td><td>At least two project users and one admin/template manager</td></tr>
+    <tr><td>Product Division</td><td>At least one active value</td></tr>
+    <tr><td>Product Group</td><td>At least one active value</td></tr>
+    <tr><td>Product Codes</td><td>At least two values</td></tr>
+    <tr><td>Category</td><td>At least one active value</td></tr>
+    <tr><td>Maturity</td><td>At least one active value</td></tr>
+    <tr><td>Roadmap</td><td>At least one roadmap with multiple milestones and tasks</td></tr>
+    <tr><td>Form / Fields</td><td>At least one editable form with DMS or similar field</td></tr>
+    <tr><td>Project</td><td>One active project and one configurable project</td></tr>
+    <tr><td>File</td><td>One small test file</td></tr>
+    <tr><td>Notifications</td><td>At least one read/unread or active/archived notification</td></tr>
+    <tr><td>Chat Access</td><td>At least two users in same chat context</td></tr>
+  </table>
+  <div class="back-top"><a href="#top">Back to top</a></div>
+
+  <div class="page-break"></div>
+
+  <h2 id="sec-9">9. Test Execution Guidance</h2>
+
+  <h3>9.1 Result Codes</h3>
+  <table>
+    <tr><th>Result</th><th>Meaning</th></tr>
+    <tr><td>Pass</td><td>Scenario completed and expected result met</td></tr>
+    <tr><td>Fail</td><td>Scenario completed but expected result not met</td></tr>
+    <tr><td>Blocked</td><td>Scenario could not be executed</td></tr>
+    <tr><td>Not Applicable</td><td>Scenario does not apply to test role or scope</td></tr>
+  </table>
+
+  <h3>9.2 Evidence Requirements</h3>
+  <ul>
+    <li>Screenshot</li>
+    <li>Export file</li>
+    <li>Project ID</li>
+    <li>Task ID</li>
+    <li>Notification reference</li>
+    <li>Chat timestamp</li>
+    <li>Defect ID</li>
+  </ul>
+
+  <h3>9.3 Defect Logging</h3>
+  <ol>
+    <li>Record the exact step where the issue occurred</li>
+    <li>Capture evidence</li>
+    <li>Log a defect</li>
+    <li>Reference the defect ID in the test execution result</li>
+  </ol>
+  <div class="back-top"><a href="#top">Back to top</a></div>
+
+  <div class="page-break"></div>
+
+  <h2 id="sec-10">10. Formal Test Cases</h2>
+
+  <div class="section-banner" id="sec-10-1">10.1 Projects</div>
+
+  <h4 id="UAT-PROJ-001">10.1.1 UAT-PROJ-001 - Register Project - Auto-Start On Specific Milestone</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-001</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Register Project - Auto-Start On Specific Milestone</td></tr>
+    <tr><td>Objective</td><td>Verify that a project can be created and started directly on a selected milestone</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User has Register access. A roadmap exists with at least three milestones. Required plant, product, category, maturity, owner, and date values are available</td></tr>
+    <tr><td>Test Data</td><td>Roadmap with Milestone 1, Milestone 2, and Milestone 3. Select Milestone 2 as starting milestone</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Register</td><td>Register screen opens</td></tr>
+    <tr><td>2</td><td>Enter required project details</td><td>Required fields accept valid inputs</td></tr>
+    <tr><td>3</td><td>Select start immediately option</td><td>Start option is accepted</td></tr>
+    <tr><td>4</td><td>Select Milestone 2 as starting milestone</td><td>Selected milestone is retained</td></tr>
+    <tr><td>5</td><td>Save the project</td><td>Project is created successfully</td></tr>
+    <tr><td>6</td><td>Open created project from Projects, Project Review, or Status Board</td><td>Project is visible</td></tr>
+    <tr><td>7</td><td>Verify status and milestone status</td><td>Selected milestone is active, current, or positioned as the start according to Pulse rules</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-002">10.1.2 UAT-PROJ-002 - Register Project - Create Only To Be Started In Status Board</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-002</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Register Project - Create Only To Be Started In Status Board</td></tr>
+    <tr><td>Objective</td><td>Verify that a project can be created without immediately starting execution</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User has Register access and project creation permission</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Register</td><td>Register screen opens</td></tr>
+    <tr><td>2</td><td>Enter all required project details</td><td>Data is accepted</td></tr>
+    <tr><td>3</td><td>Select create-only, draft, inactive, or non-start option</td><td>Create-only state is selected</td></tr>
+    <tr><td>4</td><td>Save the project</td><td>Project record is created</td></tr>
+    <tr><td>5</td><td>Open Status Board</td><td>Status Board opens</td></tr>
+    <tr><td>6</td><td>Locate the created project</td><td>Created project is visible</td></tr>
+    <tr><td>7</td><td>Start or activate project if included in scope</td><td>Project can be started from Status Board</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-003">10.1.3 UAT-PROJ-003 - Project Review - Add ADHOC Task Using My Tasks</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-003</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Add ADHOC Task Using My Tasks</td></tr>
+    <tr><td>Objective</td><td>Verify that a user can add an unplanned ADHOC task from My Tasks in Project Review</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Project Member</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Active project exists. User has permission to add tasks</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Projects</td><td>Project list opens</td></tr>
+    <tr><td>2</td><td>Select an active project</td><td>Project opens</td></tr>
+    <tr><td>3</td><td>Open Project Review</td><td>Review page opens</td></tr>
+    <tr><td>4</td><td>Go to My Tasks or member task area</td><td>Task section is available</td></tr>
+    <tr><td>5</td><td>Select add task or ADHOC task</td><td>Add task form opens</td></tr>
+    <tr><td>6</td><td>Enter task title, assignee, target date, and description</td><td>Data is accepted</td></tr>
+    <tr><td>7</td><td>Save the task</td><td>ADHOC task is created</td></tr>
+    <tr><td>8</td><td>Refresh the task list if needed</td><td>Task appears in task list</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-004">10.1.4 UAT-PROJ-004 - Project Review - Switch Project-Centric To Member-Centric</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-004</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Switch Project-Centric To Member-Centric</td></tr>
+    <tr><td>Objective</td><td>Verify that Project Review supports switching between project-centric and member-centric views</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Project has multiple tasks assigned to at least two members</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Projects</td><td>Project list opens</td></tr>
+    <tr><td>2</td><td>Select a project with multiple tasks</td><td>Project opens</td></tr>
+    <tr><td>3</td><td>Open Project Review</td><td>Review page opens</td></tr>
+    <tr><td>4</td><td>Select project-centric view</td><td>Tasks grouped by project structure</td></tr>
+    <tr><td>5</td><td>Validate grouping</td><td>Milestone, phase, or project structure is correct</td></tr>
+    <tr><td>6</td><td>Switch to member-centric view</td><td>Tasks grouped by user or member</td></tr>
+    <tr><td>7</td><td>Validate grouping</td><td>Member grouping is correct</td></tr>
+    <tr><td>8</td><td>Switch back to project-centric view</td><td>Original grouping restored</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-005">10.1.5 UAT-PROJ-005 - Project Review - Add Attachment</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-005</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Add Attachment</td></tr>
+    <tr><td>Objective</td><td>Verify that attachments can be added to a project or task in Project Review</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Project Member</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has permission to upload attachments. Test file is available</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Review for an active project</td><td>Review page opens</td></tr>
+    <tr><td>2</td><td>Select relevant project item, milestone, or task</td><td>Target item is selected</td></tr>
+    <tr><td>3</td><td>Open Attachments</td><td>Attachment area opens</td></tr>
+    <tr><td>4</td><td>Upload test file</td><td>File upload is accepted</td></tr>
+    <tr><td>5</td><td>Save or confirm upload</td><td>File is saved</td></tr>
+    <tr><td>6</td><td>Reopen attachment area</td><td>Uploaded file is listed</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-006">10.1.6 UAT-PROJ-006 - Project Review - Remove Attachment</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-006</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Remove Attachment</td></tr>
+    <tr><td>Objective</td><td>Verify that permitted users can remove an attachment from a project or task</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Authorized Project Member</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Attachment exists on selected project or task. User has remove permission</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open project or task attachment list</td><td>Attachment list opens</td></tr>
+    <tr><td>2</td><td>Select existing test attachment</td><td>Correct attachment selected</td></tr>
+    <tr><td>3</td><td>Choose remove or delete</td><td>Removal action initiated</td></tr>
+    <tr><td>4</td><td>Confirm removal if prompted</td><td>Attachment removed</td></tr>
+    <tr><td>5</td><td>Refresh or reopen list</td><td>Removed attachment no longer appears</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-007">10.1.7 UAT-PROJ-007 - Project Review - Add Comment</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-007</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Add Comment</td></tr>
+    <tr><td>Objective</td><td>Verify that comments can be added in project execution context</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Project Member</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has access to project review and comments</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Review</td><td>Review page opens</td></tr>
+    <tr><td>2</td><td>Select project, milestone, or task area</td><td>Correct context selected</td></tr>
+    <tr><td>3</td><td>Open Comments</td><td>Comment area opens</td></tr>
+    <tr><td>4</td><td>Enter comment</td><td>Comment text accepted</td></tr>
+    <tr><td>5</td><td>Save or post comment</td><td>Comment saved</td></tr>
+    <tr><td>6</td><td>Reopen record</td><td>Comment remains visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-008">10.1.8 UAT-PROJ-008 - Project Review - Update Task Status</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-008</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Update Task Status</td></tr>
+    <tr><td>Objective</td><td>Verify that task status can be updated from Project Review</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner or Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Project has at least one editable open task</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Review</td><td>Review page opens</td></tr>
+    <tr><td>2</td><td>Locate open task</td><td>Task available</td></tr>
+    <tr><td>3</td><td>Open task update controls</td><td>Status control visible</td></tr>
+    <tr><td>4</td><td>Change status to In Progress</td><td>Status accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Status saved</td></tr>
+    <tr><td>6</td><td>Reopen task</td><td>Updated status visible</td></tr>
+    <tr><td>7</td><td>Change status to Completed or Closed if allowed</td><td>Final status accepted</td></tr>
+    <tr><td>8</td><td>Save</td><td>Final status saved</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-009">10.1.9 UAT-PROJ-009 - Project Review - Update Task Target Date</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-009</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Update Task Target Date</td></tr>
+    <tr><td>Objective</td><td>Verify that task target dates can be updated and reflected in schedule views</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner or Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Editable task exists with target date field</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Review</td><td>Review page opens</td></tr>
+    <tr><td>2</td><td>Select editable task</td><td>Task opens</td></tr>
+    <tr><td>3</td><td>Change target date to future valid date</td><td>Date accepted</td></tr>
+    <tr><td>4</td><td>Save</td><td>Date saved</td></tr>
+    <tr><td>5</td><td>Reopen task</td><td>Updated date visible</td></tr>
+    <tr><td>6</td><td>Check schedule or indicators</td><td>Date reflected consistently</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-010">10.1.10 UAT-PROJ-010 - Project Review - Update Task Form Value Such As DMS Number</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-010</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Update Task Form Value Such As DMS Number</td></tr>
+    <tr><td>Objective</td><td>Verify that task form values can be entered and saved</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner or Project Member</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Task has a form field such as DMS number. User has edit permission</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Review</td><td>Review page opens</td></tr>
+    <tr><td>2</td><td>Select task with data-entry fields</td><td>Task opens</td></tr>
+    <tr><td>3</td><td>Enter or update DMS number</td><td>Value accepted</td></tr>
+    <tr><td>4</td><td>Save task</td><td>Value saved</td></tr>
+    <tr><td>5</td><td>Reopen task</td><td>Value remains visible</td></tr>
+    <tr><td>6</td><td>Review task details</td><td>Displayed value is correct</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-011">10.1.11 UAT-PROJ-011 - Project Review - Check Progress Bars And Percentages</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-011</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Check Progress Bars And Percentages</td></tr>
+    <tr><td>Objective</td><td>Verify that progress bars and percentages reflect task completion accurately</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Project has multiple tasks with different statuses</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Review</td><td>Progress values displayed</td></tr>
+    <tr><td>2</td><td>Record current progress</td><td>Baseline values captured</td></tr>
+    <tr><td>3</td><td>Complete or close one open task</td><td>Status updated</td></tr>
+    <tr><td>4</td><td>Save task</td><td>Change saved</td></tr>
+    <tr><td>5</td><td>Refresh Project Review</td><td>Values recalculated</td></tr>
+    <tr><td>6</td><td>Compare progress bars and percentages</td><td>Progress updated correctly and does not exceed 100%</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-012">10.1.12 UAT-PROJ-012 - Project Review - Close Task</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-012</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Close Task</td></tr>
+    <tr><td>Objective</td><td>Verify that a task can be closed when required work is complete</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner or Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Open task exists. Required form values and evidence are available</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Review</td><td>Review page opens</td></tr>
+    <tr><td>2</td><td>Select open task</td><td>Task opens</td></tr>
+    <tr><td>3</td><td>Complete required data-entry fields</td><td>Required data provided</td></tr>
+    <tr><td>4</td><td>Add final comment or attachment if required</td><td>Supporting evidence added</td></tr>
+    <tr><td>5</td><td>Set status to Closed or Completed</td><td>Close status accepted</td></tr>
+    <tr><td>6</td><td>Save</td><td>Task closes successfully</td></tr>
+    <tr><td>7</td><td>Refresh review page</td><td>Task remains closed</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-013">10.1.13 UAT-PROJ-013 - Project Review - Add Chat</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-013</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Review - Add Chat</td></tr>
+    <tr><td>Objective</td><td>Verify that a chat message can be added from Project Review</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Project Member</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Project chat is enabled. At least two users have project access</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Review</td><td>Review page opens</td></tr>
+    <tr><td>2</td><td>Locate project chat area</td><td>Chat area visible</td></tr>
+    <tr><td>3</td><td>Enter message</td><td>Message text accepted</td></tr>
+    <tr><td>4</td><td>Send message</td><td>Message posted</td></tr>
+    <tr><td>5</td><td>Open as another project user</td><td>Another user accesses project chat</td></tr>
+    <tr><td>6</td><td>Confirm message visibility</td><td>Message visible to authorized user</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-014">10.1.14 UAT-PROJ-014 - Project Configuration - Update Project Information</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-014</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Update Project Information</td></tr>
+    <tr><td>Objective</td><td>Verify that authorized users can update project information</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User has project configuration access. Existing project is available</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Projects</td><td>Project list opens</td></tr>
+    <tr><td>2</td><td>Select target project</td><td>Project opens</td></tr>
+    <tr><td>3</td><td>Open Configure or Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>4</td><td>Update editable project fields</td><td>Fields accept valid changes</td></tr>
+    <tr><td>5</td><td>Save changes</td><td>Data saved</td></tr>
+    <tr><td>6</td><td>Open project details and review</td><td>Updated values visible consistently</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-015">10.1.15 UAT-PROJ-015 - Project Configuration - Add Product Code</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-015</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Add Product Code</td></tr>
+    <tr><td>Objective</td><td>Verify that product codes can be added to a project</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Available product codes exist. User has configuration access</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Go to product code assignment section</td><td>Product area opens</td></tr>
+    <tr><td>3</td><td>Add an unassigned product code</td><td>Product code accepted</td></tr>
+    <tr><td>4</td><td>Save</td><td>Assignment saved</td></tr>
+    <tr><td>5</td><td>Reopen section</td><td>Added product code remains assigned</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-016">10.1.16 UAT-PROJ-016 - Project Configuration - Remove Product Code</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-016</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Remove Product Code</td></tr>
+    <tr><td>Objective</td><td>Verify that product codes can be removed from a project when allowed</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Project has at least two product codes or one removable test product code</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Go to product code assignment</td><td>Product code list opens</td></tr>
+    <tr><td>3</td><td>Select removable product code</td><td>Correct code selected</td></tr>
+    <tr><td>4</td><td>Remove selected code</td><td>Removal action accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Updated list saved</td></tr>
+    <tr><td>6</td><td>Reopen configuration</td><td>Removed code no longer appears</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-017">10.1.17 UAT-PROJ-017 - Project Configuration - Add Member</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-017</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Add Member</td></tr>
+    <tr><td>Objective</td><td>Verify that project members can be added</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Administrator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User account exists and is eligible for membership</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Go to Members</td><td>Member section opens</td></tr>
+    <tr><td>3</td><td>Add new member</td><td>Add member dialog opens</td></tr>
+    <tr><td>4</td><td>Assign role or responsibility if available</td><td>Role assigned</td></tr>
+    <tr><td>5</td><td>Save</td><td>Member added successfully</td></tr>
+    <tr><td>6</td><td>Confirm appearance in membership and member-centric view</td><td>Member visible correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-018">10.1.18 UAT-PROJ-018 - Project Configuration - Update Member</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-018</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Update Member</td></tr>
+    <tr><td>Objective</td><td>Verify that member role or responsibility can be updated</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Project has at least one editable member</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Go to Members</td><td>Member section opens</td></tr>
+    <tr><td>3</td><td>Select existing member</td><td>Member details open</td></tr>
+    <tr><td>4</td><td>Update role, responsibility, or assignment</td><td>Changes accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Member changes saved</td></tr>
+    <tr><td>6</td><td>Verify in review and member-centric view</td><td>Updated values visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-019">10.1.19 UAT-PROJ-019 - Project Configuration - Remove Member</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-019</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Remove Member</td></tr>
+    <tr><td>Objective</td><td>Verify that project members can be removed when allowed</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Administrator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Project has a removable member. Member does not own blocking open work, or reassignment rules are satisfied</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Go to Members</td><td>Member section opens</td></tr>
+    <tr><td>3</td><td>Select removable member</td><td>Member is selected</td></tr>
+    <tr><td>4</td><td>Remove member</td><td>Removal action is accepted</td></tr>
+    <tr><td>5</td><td>Confirm removal if prompted</td><td>Removal is confirmed</td></tr>
+    <tr><td>6</td><td>Save</td><td>Membership is updated</td></tr>
+    <tr><td>7</td><td>Verify member no longer appears</td><td>Member is removed or system shows valid blocking rule</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-020">10.1.20 UAT-PROJ-020 - Project Configuration - Add Notification</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-020</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Add Notification</td></tr>
+    <tr><td>Objective</td><td>Verify that project notifications can be added</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has notification configuration access. Recipient user exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Go to Notifications</td><td>Notification area opens</td></tr>
+    <tr><td>3</td><td>Add a notification rule or reminder</td><td>Entry form opens</td></tr>
+    <tr><td>4</td><td>Enter recipient, timing, trigger, message, and due details</td><td>Data is accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Notification is created</td></tr>
+    <tr><td>6</td><td>Verify it appears in configuration</td><td>Notification is visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-021">10.1.21 UAT-PROJ-021 - Project Configuration - Update Notification</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-021</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Update Notification</td></tr>
+    <tr><td>Objective</td><td>Verify that configured notifications can be updated</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Existing notification is configured</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Go to Notifications</td><td>Notification list opens</td></tr>
+    <tr><td>3</td><td>Select existing notification</td><td>Notification details open</td></tr>
+    <tr><td>4</td><td>Update recipient, timing, trigger, or message</td><td>Changes are accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Notification is updated</td></tr>
+    <tr><td>6</td><td>Reopen notification details</td><td>Updated values remain visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-022">10.1.22 UAT-PROJ-022 - Project Configuration - Remove Notification</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-022</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Remove Notification</td></tr>
+    <tr><td>Objective</td><td>Verify that project notifications can be removed</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Removable notification exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Go to Notifications</td><td>Notification list opens</td></tr>
+    <tr><td>3</td><td>Select existing notification</td><td>Notification is selected</td></tr>
+    <tr><td>4</td><td>Remove or delete notification</td><td>Removal action is triggered</td></tr>
+    <tr><td>5</td><td>Confirm if prompted</td><td>Notification is removed</td></tr>
+    <tr><td>6</td><td>Save</td><td>Updated configuration is saved</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-023">10.1.23 UAT-PROJ-023 - Project Configuration - Activate Project</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-023</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Activate Project</td></tr>
+    <tr><td>Objective</td><td>Verify that a deactivated or inactive project can be activated</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Administrator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Project exists in inactive state</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Locate lifecycle or activation controls</td><td>Activate control is visible</td></tr>
+    <tr><td>3</td><td>Select Activate</td><td>Activation is triggered</td></tr>
+    <tr><td>4</td><td>Confirm if prompted</td><td>Project is activated</td></tr>
+    <tr><td>5</td><td>Open Projects or Status Board</td><td>Project appears as active</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-024">10.1.24 UAT-PROJ-024 - Project Configuration - Deactivate Project</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-024</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Deactivate Project</td></tr>
+    <tr><td>Objective</td><td>Verify that an active project can be deactivated</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Administrator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Active project exists and user has permission</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Locate active or inactive controls</td><td>Deactivate control visible</td></tr>
+    <tr><td>3</td><td>Select Deactivate</td><td>Deactivation is triggered</td></tr>
+    <tr><td>4</td><td>Confirm if prompted</td><td>Project is deactivated</td></tr>
+    <tr><td>5</td><td>Review visibility in Projects and Status Board</td><td>Project is inactive, hidden, or marked according to rules</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-025">10.1.25 UAT-PROJ-025 - Project Configuration - Delete Project</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-025</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Delete Project</td></tr>
+    <tr><td>Objective</td><td>Verify that project deletion is available only to authorized users and behaves correctly</td></tr>
+    <tr><td>Primary Role</td><td>Administrator or Authorized Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Test project exists specifically for deletion</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open test project</td><td>Project opens</td></tr>
+    <tr><td>2</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>3</td><td>Select delete project</td><td>Delete action is available</td></tr>
+    <tr><td>4</td><td>Review confirmation message</td><td>Warning is displayed</td></tr>
+    <tr><td>5</td><td>Confirm deletion</td><td>Project is deleted or archived according to behavior</td></tr>
+    <tr><td>6</td><td>Search in Projects, View, and Status Board</td><td>Deleted project no longer appears in active lists</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-026">10.1.26 UAT-PROJ-026 - Project Configuration - Retrieve Latest Roadmap Structure</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-026</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Retrieve Latest Roadmap Structure</td></tr>
+    <tr><td>Objective</td><td>Verify that an existing project can retrieve changes from its source roadmap</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner and Template Manager</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Existing project uses a roadmap. User can update roadmap and configure project</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Roadmap</td><td>Roadmap list opens</td></tr>
+    <tr><td>2</td><td>Select roadmap used by project</td><td>Correct roadmap opens</td></tr>
+    <tr><td>3</td><td>Add or update milestone or task</td><td>Roadmap changes saved</td></tr>
+    <tr><td>4</td><td>Open related project</td><td>Project opens</td></tr>
+    <tr><td>5</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>6</td><td>Select Retrieve Latest Roadmap Structure</td><td>Differences detected</td></tr>
+    <tr><td>7</td><td>Review detected changes</td><td>Differences are visible</td></tr>
+    <tr><td>8</td><td>Apply updates</td><td>Selected changes applied</td></tr>
+    <tr><td>9</td><td>Open Project Review</td><td>Updated structure visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-027">10.1.27 UAT-PROJ-027 - Project Configuration - Insert Project Milestone</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-027</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Insert Project Milestone</td></tr>
+    <tr><td>Objective</td><td>Verify that an additional milestone can be inserted into a project</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has project configuration access. Project supports insertion</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Locate milestone controls</td><td>Insert milestone option visible</td></tr>
+    <tr><td>3</td><td>Select insert milestone</td><td>Entry form opens</td></tr>
+    <tr><td>4</td><td>Enter or select milestone details</td><td>Data accepted</td></tr>
+    <tr><td>5</td><td>Choose placement if available</td><td>Placement accepted</td></tr>
+    <tr><td>6</td><td>Save</td><td>Milestone inserted</td></tr>
+    <tr><td>7</td><td>Open Project Review</td><td>New milestone visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-028">10.1.28 UAT-PROJ-028 - Project Configuration - Arrange Milestones</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-028</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project Configuration - Arrange Milestones</td></tr>
+    <tr><td>Objective</td><td>Verify that project milestones can be reordered</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Project has at least three milestones and user has access</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Project Configuration</td><td>Configuration page opens</td></tr>
+    <tr><td>2</td><td>Locate milestone arrangement controls</td><td>Reorder controls visible</td></tr>
+    <tr><td>3</td><td>Move milestone before or after another milestone</td><td>New order accepted</td></tr>
+    <tr><td>4</td><td>Save</td><td>Order saved</td></tr>
+    <tr><td>5</td><td>Open Project Review and Status Board</td><td>New order reflected consistently</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-029">10.1.29 UAT-PROJ-029 - Project View - Read Project Information</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-029</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Project View - Read Project Information</td></tr>
+    <tr><td>Objective</td><td>Verify that users can inspect project information in a read-oriented project view</td></tr>
+    <tr><td>Primary Role</td><td>Viewer, Project Member, Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has visibility to at least one project</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open View or project view page</td><td>Project search or list opens</td></tr>
+    <tr><td>2</td><td>Locate project</td><td>Project is visible</td></tr>
+    <tr><td>3</td><td>Open project</td><td>Project details open</td></tr>
+    <tr><td>4</td><td>Review summary, schedule, ownership, progress, risk</td><td>Data displays correctly</td></tr>
+    <tr><td>5</td><td>Confirm edit controls hidden for read-only users</td><td>Unauthorized edit actions unavailable</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-030">10.1.30 UAT-PROJ-030 - Copy Project</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-030</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Copy Project</td></tr>
+    <tr><td>Objective</td><td>Verify that users can copy an existing project to create a similar new project</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Source project exists. User has permission to copy or create</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Projects</td><td>Project list opens</td></tr>
+    <tr><td>2</td><td>Select source project</td><td>Project selected</td></tr>
+    <tr><td>3</td><td>Choose Copy Project</td><td>Copy action starts</td></tr>
+    <tr><td>4</td><td>Review copied details</td><td>Source values prefilled</td></tr>
+    <tr><td>5</td><td>Update title, dates, owner, products, members</td><td>New values accepted</td></tr>
+    <tr><td>6</td><td>Save copied project</td><td>New project created</td></tr>
+    <tr><td>7</td><td>Open new project</td><td>Copied project is distinct and accessible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PROJ-031">10.1.31 UAT-PROJ-031 - Quick Edit Project</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PROJ-031</td></tr>
+    <tr><td>Module</td><td>Projects</td></tr>
+    <tr><td>Test Scenario</td><td>Quick Edit Project</td></tr>
+    <tr><td>Objective</td><td>Verify that common project fields can be updated quickly without full configuration</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Authorized User</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Project list or workspace provides quick edit action</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Projects</td><td>Project list opens</td></tr>
+    <tr><td>2</td><td>Locate target project</td><td>Target project visible</td></tr>
+    <tr><td>3</td><td>Select Quick Edit</td><td>Quick edit panel opens</td></tr>
+    <tr><td>4</td><td>Update available fields</td><td>Editable values accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Changes saved</td></tr>
+    <tr><td>6</td><td>Reopen project or list</td><td>Updated values visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-2">10.2 Status Board</div>
+
+  <h4 id="UAT-STAT-001">10.2.1 UAT-STAT-001 - Change Status At Project List Level</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-STAT-001</td></tr>
+    <tr><td>Module</td><td>Status Board</td></tr>
+    <tr><td>Test Scenario</td><td>Change Status At Project List Level</td></tr>
+    <tr><td>Objective</td><td>Verify that project-level status can be changed from Status Board</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Coordinator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Project appears in Status Board and user has status update permission</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Status Board</td><td>Status Board opens</td></tr>
+    <tr><td>2</td><td>Locate target project</td><td>Project is visible</td></tr>
+    <tr><td>3</td><td>Select current status</td><td>Status control opens</td></tr>
+    <tr><td>4</td><td>Choose new valid status</td><td>New status selected</td></tr>
+    <tr><td>5</td><td>Save or confirm</td><td>Status change saved</td></tr>
+    <tr><td>6</td><td>Refresh board</td><td>New status persists and displays correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-STAT-002">10.2.2 UAT-STAT-002 - Change Status At Milestone List Level</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-STAT-002</td></tr>
+    <tr><td>Module</td><td>Status Board</td></tr>
+    <tr><td>Test Scenario</td><td>Change Status At Milestone List Level</td></tr>
+    <tr><td>Objective</td><td>Verify that milestone-level status can be changed from Status Board</td></tr>
+    <tr><td>Primary Role</td><td>Project Owner or Coordinator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Project has milestones visible in Status Board</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Status Board</td><td>Board opens</td></tr>
+    <tr><td>2</td><td>Expand or select a project</td><td>Milestones are visible</td></tr>
+    <tr><td>3</td><td>Locate milestone list</td><td>Milestone list loads</td></tr>
+    <tr><td>4</td><td>Change milestone status</td><td>New status accepted</td></tr>
+    <tr><td>5</td><td>Save or confirm</td><td>Status saved</td></tr>
+    <tr><td>6</td><td>Review indicators</td><td>Milestone and project indicators update correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-STAT-003">10.2.3 UAT-STAT-003 - Change Status At Task List Level</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-STAT-003</td></tr>
+    <tr><td>Module</td><td>Status Board</td></tr>
+    <tr><td>Test Scenario</td><td>Change Status At Task List Level</td></tr>
+    <tr><td>Objective</td><td>Verify that task-level status can be changed from Status Board</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner, Project Member, or Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Project has task list visible in Status Board</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Status Board</td><td>Board opens</td></tr>
+    <tr><td>2</td><td>Expand target project and milestone</td><td>Tasks are visible</td></tr>
+    <tr><td>3</td><td>Locate a task</td><td>Task is available</td></tr>
+    <tr><td>4</td><td>Change task status</td><td>Status change accepted</td></tr>
+    <tr><td>5</td><td>Save or confirm</td><td>Task status saved</td></tr>
+    <tr><td>6</td><td>Open same task from Tasks or Project Review</td><td>Status is consistent across modules</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-3">10.3 Tasks</div>
+
+  <h4 id="UAT-TASK-001">10.3.1 UAT-TASK-001 - Update Task</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-TASK-001</td></tr>
+    <tr><td>Module</td><td>Tasks</td></tr>
+    <tr><td>Test Scenario</td><td>Update Task</td></tr>
+    <tr><td>Objective</td><td>Verify that a user can update assigned task details</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User has at least one assigned editable task</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Tasks</td><td>Task list opens</td></tr>
+    <tr><td>2</td><td>Select assigned task</td><td>Task details open</td></tr>
+    <tr><td>3</td><td>Review status, target date, required values</td><td>Fields visible</td></tr>
+    <tr><td>4</td><td>Update status</td><td>Status change accepted</td></tr>
+    <tr><td>5</td><td>Update target date if allowed</td><td>Date change accepted</td></tr>
+    <tr><td>6</td><td>Save</td><td>Changes saved</td></tr>
+    <tr><td>7</td><td>Reopen task</td><td>Updated values persist</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-TASK-002">10.3.2 UAT-TASK-002 - Update Task Data Entry</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-TASK-002</td></tr>
+    <tr><td>Module</td><td>Tasks</td></tr>
+    <tr><td>Test Scenario</td><td>Update Task Data Entry</td></tr>
+    <tr><td>Objective</td><td>Verify that task data-entry fields can be updated</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Task includes editable data-entry fields</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Tasks</td><td>Task list opens</td></tr>
+    <tr><td>2</td><td>Select task with form fields</td><td>Task details open</td></tr>
+    <tr><td>3</td><td>Enter DMS number or other value</td><td>Value accepted</td></tr>
+    <tr><td>4</td><td>Save</td><td>Value saved</td></tr>
+    <tr><td>5</td><td>Reopen task</td><td>Value persists</td></tr>
+    <tr><td>6</td><td>Check validation</td><td>Required rules enforced</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-TASK-003">10.3.3 UAT-TASK-003 - Add Task Attachment</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-TASK-003</td></tr>
+    <tr><td>Module</td><td>Tasks</td></tr>
+    <tr><td>Test Scenario</td><td>Add Task Attachment</td></tr>
+    <tr><td>Objective</td><td>Verify that a task attachment can be added</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner or Project Member</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has attachment permission and a test file</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Tasks</td><td>Task list opens</td></tr>
+    <tr><td>2</td><td>Select task</td><td>Task details open</td></tr>
+    <tr><td>3</td><td>Open Attachments</td><td>Attachment section opens</td></tr>
+    <tr><td>4</td><td>Upload test file</td><td>Upload accepted</td></tr>
+    <tr><td>5</td><td>Save or confirm</td><td>Attachment saved</td></tr>
+    <tr><td>6</td><td>Reopen attachments</td><td>Uploaded file visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-TASK-004">10.3.4 UAT-TASK-004 - View Task Attachment</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-TASK-004</td></tr>
+    <tr><td>Module</td><td>Tasks</td></tr>
+    <tr><td>Test Scenario</td><td>View Task Attachment</td></tr>
+    <tr><td>Objective</td><td>Verify that a user can view or download a task attachment</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner, Project Member, or Viewer</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Task has at least one attachment</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Tasks</td><td>Task list opens</td></tr>
+    <tr><td>2</td><td>Select task with attachment</td><td>Task details open</td></tr>
+    <tr><td>3</td><td>Open Attachments</td><td>Attachment list visible</td></tr>
+    <tr><td>4</td><td>Select view or download</td><td>File opens, downloads, or previews correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-TASK-005">10.3.5 UAT-TASK-005 - Remove Task Attachment</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-TASK-005</td></tr>
+    <tr><td>Module</td><td>Tasks</td></tr>
+    <tr><td>Test Scenario</td><td>Remove Task Attachment</td></tr>
+    <tr><td>Objective</td><td>Verify that a permitted user can remove a task attachment</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner or Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Task has removable attachment</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open task</td><td>Task details open</td></tr>
+    <tr><td>2</td><td>Open Attachments</td><td>Attachment list visible</td></tr>
+    <tr><td>3</td><td>Select test attachment</td><td>Target attachment selected</td></tr>
+    <tr><td>4</td><td>Remove or delete</td><td>Removal triggered</td></tr>
+    <tr><td>5</td><td>Confirm if prompted</td><td>Attachment removed</td></tr>
+    <tr><td>6</td><td>Reopen attachments</td><td>Removed attachment no longer visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-TASK-006">10.3.6 UAT-TASK-006 - Add Text Comment To Task</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-TASK-006</td></tr>
+    <tr><td>Module</td><td>Tasks</td></tr>
+    <tr><td>Test Scenario</td><td>Add Text Comment To Task</td></tr>
+    <tr><td>Objective</td><td>Verify that a plain text comment can be added to a task</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner or Project Member</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has task comment access</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Tasks</td><td>Task list opens</td></tr>
+    <tr><td>2</td><td>Select task</td><td>Task details open</td></tr>
+    <tr><td>3</td><td>Open Comments</td><td>Comment area opens</td></tr>
+    <tr><td>4</td><td>Enter plain text update</td><td>Comment text accepted</td></tr>
+    <tr><td>5</td><td>Save or post</td><td>Comment saved</td></tr>
+    <tr><td>6</td><td>Reopen task</td><td>Comment remains visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>	
+<h4 id="UAT-TASK-007">10.3.7 UAT-TASK-007 - Add Rich Text Comment To Task</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-TASK-007</td></tr>
+    <tr><td>Module</td><td>Tasks</td></tr>
+    <tr><td>Test Scenario</td><td>Add Rich Text Comment To Task</td></tr>
+    <tr><td>Objective</td><td>Verify that rich text comments can be added where supported</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner or Project Member</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Rich text editor is available</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open task</td><td>Task details open</td></tr>
+    <tr><td>2</td><td>Open Comments</td><td>Comment area opens</td></tr>
+    <tr><td>3</td><td>Enter formatted comment</td><td>Formatting is accepted</td></tr>
+    <tr><td>4</td><td>Save or post</td><td>Comment is saved</td></tr>
+    <tr><td>5</td><td>Reopen comment history</td><td>Formatting is preserved correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-TASK-008">10.3.8 UAT-TASK-008 - Manage Task</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-TASK-008</td></tr>
+    <tr><td>Module</td><td>Tasks</td></tr>
+    <tr><td>Test Scenario</td><td>Manage Task</td></tr>
+    <tr><td>Objective</td><td>Verify that task owners can manage all required task execution details</td></tr>
+    <tr><td>Primary Role</td><td>Task Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User has assigned task requiring updates</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Tasks</td><td>Task list opens</td></tr>
+    <tr><td>2</td><td>Select assigned task</td><td>Task details open</td></tr>
+    <tr><td>3</td><td>Review owner, due date, status, required values, comments, and attachments</td><td>All relevant data visible</td></tr>
+    <tr><td>4</td><td>Update incomplete values</td><td>Changes accepted</td></tr>
+    <tr><td>5</td><td>Add evidence or comments if needed</td><td>Supporting data saved</td></tr>
+    <tr><td>6</td><td>Save</td><td>Task changes saved</td></tr>
+    <tr><td>7</td><td>Close task if complete and allowed</td><td>Task reaches intended state</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-TASK-009">10.3.9 UAT-TASK-009 - View Task</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-TASK-009</td></tr>
+    <tr><td>Module</td><td>Tasks</td></tr>
+    <tr><td>Test Scenario</td><td>View Task</td></tr>
+    <tr><td>Objective</td><td>Verify that users can view task details according to access</td></tr>
+    <tr><td>Primary Role</td><td>Viewer, Project Member, Task Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has access to a project or task</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Tasks, Project Review, or notification link</td><td>Task list or task opens</td></tr>
+    <tr><td>2</td><td>Select task</td><td>Task detail opens</td></tr>
+    <tr><td>3</td><td>Review task details</td><td>Data displays correctly</td></tr>
+    <tr><td>4</td><td>Attempt edit only if role should allow</td><td>Access matches role permissions</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-4">10.4 View</div>
+
+  <h4 id="UAT-VIEW-001">10.4.1 UAT-VIEW-001 - Switch To Overview</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-VIEW-001</td></tr>
+    <tr><td>Module</td><td>View</td></tr>
+    <tr><td>Test Scenario</td><td>Switch To Overview</td></tr>
+    <tr><td>Objective</td><td>Verify that the Overview tab or section displays project summary information</td></tr>
+    <tr><td>Primary Role</td><td>Viewer, Project Owner, Project Member</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has access to View and at least one project</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open View</td><td>View page opens</td></tr>
+    <tr><td>2</td><td>Search for and select a project</td><td>Project opens</td></tr>
+    <tr><td>3</td><td>Open Overview</td><td>Overview tab loads</td></tr>
+    <tr><td>4</td><td>Review summary, status, health, and indicators</td><td>Data is accurate</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-VIEW-002">10.4.2 UAT-VIEW-002 - Switch To Schedule</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-VIEW-002</td></tr>
+    <tr><td>Module</td><td>View</td></tr>
+    <tr><td>Test Scenario</td><td>Switch To Schedule</td></tr>
+    <tr><td>Objective</td><td>Verify that the Schedule view displays timing and date-related information</td></tr>
+    <tr><td>Primary Role</td><td>Viewer or Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Project has milestone or task dates</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open View</td><td>View page opens</td></tr>
+    <tr><td>2</td><td>Select project</td><td>Project opens</td></tr>
+    <tr><td>3</td><td>Switch to Schedule</td><td>Schedule tab loads</td></tr>
+    <tr><td>4</td><td>Review dates, milestones, and tasks</td><td>Schedule data is correct</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-VIEW-003">10.4.3 UAT-VIEW-003 - Switch To Risk</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-VIEW-003</td></tr>
+    <tr><td>Module</td><td>View</td></tr>
+    <tr><td>Test Scenario</td><td>Switch To Risk</td></tr>
+    <tr><td>Objective</td><td>Verify that the Risk view displays blockers, delayed items, or risk indicators</td></tr>
+    <tr><td>Primary Role</td><td>Viewer or Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Project has at least one delayed, blocked, or risk-relevant item if possible</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open View</td><td>View page opens</td></tr>
+    <tr><td>2</td><td>Select project</td><td>Project opens</td></tr>
+    <tr><td>3</td><td>Switch to Risk</td><td>Risk tab loads</td></tr>
+    <tr><td>4</td><td>Review risk indicators and blockers</td><td>Risk data is accurate</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-VIEW-004">10.4.4 UAT-VIEW-004 - Switch To Ownership</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-VIEW-004</td></tr>
+    <tr><td>Module</td><td>View</td></tr>
+    <tr><td>Test Scenario</td><td>Switch To Ownership</td></tr>
+    <tr><td>Objective</td><td>Verify that the Ownership view displays member and responsibility information</td></tr>
+    <tr><td>Primary Role</td><td>Viewer or Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Project has assigned owner and members</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open View</td><td>View page opens</td></tr>
+    <tr><td>2</td><td>Select project</td><td>Project opens</td></tr>
+    <tr><td>3</td><td>Switch to Ownership</td><td>Ownership tab loads</td></tr>
+    <tr><td>4</td><td>Review owner, members, responsibilities, assignments</td><td>Data is correct</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-VIEW-005">10.4.5 UAT-VIEW-005 - Search Project</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-VIEW-005</td></tr>
+    <tr><td>Module</td><td>View</td></tr>
+    <tr><td>Test Scenario</td><td>Search Project</td></tr>
+    <tr><td>Objective</td><td>Verify that project search returns correct results</td></tr>
+    <tr><td>Primary Role</td><td>Any authorized user</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User has access to View and test projects exist</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open View</td><td>Search interface available</td></tr>
+    <tr><td>2</td><td>Search by project number or ID</td><td>Matching project returned</td></tr>
+    <tr><td>3</td><td>Search by title keyword</td><td>Relevant results shown</td></tr>
+    <tr><td>4</td><td>Search by owner, plant, product, or category if supported</td><td>Filtered results displayed</td></tr>
+    <tr><td>5</td><td>Select matching project</td><td>Correct project opens</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-5">10.5 Chats</div>
+
+  <h4 id="UAT-CHAT-001">10.5.1 UAT-CHAT-001 - Send Chat Message</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-CHAT-001</td></tr>
+    <tr><td>Module</td><td>Chats</td></tr>
+    <tr><td>Test Scenario</td><td>Send Chat Message</td></tr>
+    <tr><td>Objective</td><td>Verify that a user can send a chat message</td></tr>
+    <tr><td>Primary Role</td><td>Project Member or Project Owner</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Chat feature is available. User has access to conversation or project chat</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Chats or project chat</td><td>Chat opens</td></tr>
+    <tr><td>2</td><td>Select conversation or project context</td><td>Target chat selected</td></tr>
+    <tr><td>3</td><td>Type message</td><td>Message text accepted</td></tr>
+    <tr><td>4</td><td>Send message</td><td>Message posted</td></tr>
+    <tr><td>5</td><td>Refresh or revisit conversation</td><td>Message remains visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-CHAT-002">10.5.2 UAT-CHAT-002 - Receive Message With Two Or More Users</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-CHAT-002</td></tr>
+    <tr><td>Module</td><td>Chats</td></tr>
+    <tr><td>Test Scenario</td><td>Receive Message With Two Or More Users</td></tr>
+    <tr><td>Objective</td><td>Verify that chat messages are delivered between two or more authorized users</td></tr>
+    <tr><td>Primary Role</td><td>Project Members</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Two or more test users can access the same chat context</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>User A opens chat</td><td>Chat is accessible</td></tr>
+    <tr><td>2</td><td>User B opens same chat</td><td>Same conversation visible</td></tr>
+    <tr><td>3</td><td>User A sends message</td><td>Message sent successfully</td></tr>
+    <tr><td>4</td><td>User B confirms receipt</td><td>Message visible to User B</td></tr>
+    <tr><td>5</td><td>User B replies</td><td>Reply sent</td></tr>
+    <tr><td>6</td><td>User A confirms reply</td><td>Reply visible to User A</td></tr>
+    <tr><td>7</td><td>User C validates visibility if available</td><td>Authorized participants can view thread</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-6">10.6 Notifications</div>
+
+  <h4 id="UAT-NOTIF-001">10.6.1 UAT-NOTIF-001 - View Notifications</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-NOTIF-001</td></tr>
+    <tr><td>Module</td><td>Notifications</td></tr>
+    <tr><td>Test Scenario</td><td>View Notifications</td></tr>
+    <tr><td>Objective</td><td>Verify that users can view notifications and open related records</td></tr>
+    <tr><td>Primary Role</td><td>Any authorized user</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has active or unread notifications</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Notifications</td><td>Notification list opens</td></tr>
+    <tr><td>2</td><td>Review unread and active notifications</td><td>Notifications display correctly</td></tr>
+    <tr><td>3</td><td>Select notification linked to project or task</td><td>Related record opens</td></tr>
+    <tr><td>4</td><td>Return to Notifications</td><td>Notification list still accessible</td></tr>
+    <tr><td>5</td><td>Mark as read if available</td><td>Read state updates correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+<h4 id="UAT-NOTIF-002">10.6.2 UAT-NOTIF-002 - Switch Between Archived Hidden And Archived Only</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-NOTIF-002</td></tr>
+    <tr><td>Module</td><td>Notifications</td></tr>
+    <tr><td>Test Scenario</td><td>Switch Between Archived Hidden And Archived Only</td></tr>
+    <tr><td>Objective</td><td>Verify archive filtering in Notifications</td></tr>
+    <tr><td>Primary Role</td><td>Any authorized user</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has active and archived notifications or test data can be created</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Notifications</td><td>Notification list opens</td></tr>
+    <tr><td>2</td><td>Select Archived Hidden</td><td>Archived notifications are hidden</td></tr>
+    <tr><td>3</td><td>Validate results</td><td>Only active notifications shown</td></tr>
+    <tr><td>4</td><td>Select Archived Only</td><td>Only archived notifications shown</td></tr>
+    <tr><td>5</td><td>Validate results</td><td>Filter works correctly</td></tr>
+    <tr><td>6</td><td>Switch back if needed</td><td>Original filter state restored</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-NOTIF-003">10.6.3 UAT-NOTIF-003 - Switch Between Read Visible And Read Hidden</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-NOTIF-003</td></tr>
+    <tr><td>Module</td><td>Notifications</td></tr>
+    <tr><td>Test Scenario</td><td>Switch Between Read Visible And Read Hidden</td></tr>
+    <tr><td>Objective</td><td>Verify read or unread filtering in Notifications</td></tr>
+    <tr><td>Primary Role</td><td>Any authorized user</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has both read and unread notifications if possible</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Notifications</td><td>Notification list opens</td></tr>
+    <tr><td>2</td><td>Select Read Hidden</td><td>Read notifications hidden</td></tr>
+    <tr><td>3</td><td>Validate results</td><td>Only unread or current items shown</td></tr>
+    <tr><td>4</td><td>Select Read Visible</td><td>Read notifications displayed</td></tr>
+    <tr><td>5</td><td>Mark unread as read if available</td><td>Read state updated correctly</td></tr>
+    <tr><td>6</td><td>Retest filter behavior</td><td>Filter applies correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-7">10.7 Categories</div>
+
+  <h4 id="UAT-CAT-001">10.7.1 UAT-CAT-001 - Add Category</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-CAT-001</td></tr>
+    <tr><td>Module</td><td>Categories</td></tr>
+    <tr><td>Test Scenario</td><td>Add Category</td></tr>
+    <tr><td>Objective</td><td>Verify that a category can be added</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has Templates &gt; Categories access</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Categories</td><td>Category page opens</td></tr>
+    <tr><td>2</td><td>Select Add or New</td><td>Creation form opens</td></tr>
+    <tr><td>3</td><td>Enter category details</td><td>Data accepted</td></tr>
+    <tr><td>4</td><td>Save</td><td>Category created</td></tr>
+    <tr><td>5</td><td>Search for category</td><td>New category visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-CAT-002">10.7.2 UAT-CAT-002 - Update Category</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-CAT-002</td></tr>
+    <tr><td>Module</td><td>Categories</td></tr>
+    <tr><td>Test Scenario</td><td>Update Category</td></tr>
+    <tr><td>Objective</td><td>Verify that a category can be updated</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Existing editable category is available</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Categories</td><td>Category page opens</td></tr>
+    <tr><td>2</td><td>Search for category</td><td>Category located</td></tr>
+    <tr><td>3</td><td>Open edit mode</td><td>Edit screen opens</td></tr>
+    <tr><td>4</td><td>Change allowed fields</td><td>Changes accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Updates stored</td></tr>
+    <tr><td>6</td><td>Reopen category</td><td>Updated values remain visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-CAT-003">10.7.3 UAT-CAT-003 - View Category</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-CAT-003</td></tr>
+    <tr><td>Module</td><td>Categories</td></tr>
+    <tr><td>Test Scenario</td><td>View Category</td></tr>
+    <tr><td>Objective</td><td>Verify that a category can be viewed</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager, Administrator, or authorized viewer</td></tr>
+    <tr><td>Priority</td><td>Low</td></tr>
+    <tr><td>Preconditions</td><td>Category exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Categories</td><td>Category page opens</td></tr>
+    <tr><td>2</td><td>Search or filter for category</td><td>Category found</td></tr>
+    <tr><td>3</td><td>Open View or Display</td><td>Category details open</td></tr>
+    <tr><td>4</td><td>Review details</td><td>Data displays correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-8">10.8 Fields</div>
+
+  <h4 id="UAT-FIELD-001">10.8.1 UAT-FIELD-001 - Add Field</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-FIELD-001</td></tr>
+    <tr><td>Module</td><td>Fields</td></tr>
+    <tr><td>Test Scenario</td><td>Add Field</td></tr>
+    <tr><td>Objective</td><td>Verify that a reusable field can be added</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has Templates &gt; Fields access</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Fields</td><td>Field page opens</td></tr>
+    <tr><td>2</td><td>Select Add or New</td><td>Create form opens</td></tr>
+    <tr><td>3</td><td>Enter field setup</td><td>Data accepted</td></tr>
+    <tr><td>4</td><td>Save</td><td>Field created</td></tr>
+    <tr><td>5</td><td>Search for field</td><td>New field visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-FIELD-002">10.8.2 UAT-FIELD-002 - Update Field</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-FIELD-002</td></tr>
+    <tr><td>Module</td><td>Fields</td></tr>
+    <tr><td>Test Scenario</td><td>Update Field</td></tr>
+    <tr><td>Objective</td><td>Verify that a reusable field can be updated</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Existing editable field is available</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Fields</td><td>Field page opens</td></tr>
+    <tr><td>2</td><td>Search for field</td><td>Field located</td></tr>
+    <tr><td>3</td><td>Open edit mode</td><td>Edit page opens</td></tr>
+    <tr><td>4</td><td>Change allowed properties</td><td>Changes accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Updates stored</td></tr>
+    <tr><td>6</td><td>Reopen field</td><td>Updated values visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-FIELD-003">10.8.3 UAT-FIELD-003 - Delete Field</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-FIELD-003</td></tr>
+    <tr><td>Module</td><td>Fields</td></tr>
+    <tr><td>Test Scenario</td><td>Delete Field</td></tr>
+    <tr><td>Objective</td><td>Verify that field deletion is governed correctly</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Test field exists and is safe to remove</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Fields</td><td>Field page opens</td></tr>
+    <tr><td>2</td><td>Select test field</td><td>Field selected</td></tr>
+    <tr><td>3</td><td>Choose delete</td><td>Delete action triggered</td></tr>
+    <tr><td>4</td><td>Confirm deletion</td><td>Field removed if allowed</td></tr>
+    <tr><td>5</td><td>Search for deleted field</td><td>Field no longer visible</td></tr>
+    <tr><td>6</td><td>Attempt delete of in-use field if safe</td><td>System blocks unsafe deletion</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-FIELD-004">10.8.4 UAT-FIELD-004 - View Field</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-FIELD-004</td></tr>
+    <tr><td>Module</td><td>Fields</td></tr>
+    <tr><td>Test Scenario</td><td>View Field</td></tr>
+    <tr><td>Objective</td><td>Verify that field details can be viewed</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager, Administrator, or authorized viewer</td></tr>
+    <tr><td>Priority</td><td>Low</td></tr>
+    <tr><td>Preconditions</td><td>Field exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Fields</td><td>Field page opens</td></tr>
+    <tr><td>2</td><td>Search for field</td><td>Field found</td></tr>
+    <tr><td>3</td><td>Open View or Display</td><td>Field details open</td></tr>
+    <tr><td>4</td><td>Review details</td><td>Configuration displays correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-9">10.9 Forms</div>
+
+  <h4 id="UAT-FORM-001">10.9.1 UAT-FORM-001 - Add Form</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-FORM-001</td></tr>
+    <tr><td>Module</td><td>Forms</td></tr>
+    <tr><td>Test Scenario</td><td>Add Form</td></tr>
+    <tr><td>Objective</td><td>Verify that a form can be created with fields</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Reusable fields exist. User has Templates &gt; Forms access</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Forms</td><td>Forms page opens</td></tr>
+    <tr><td>2</td><td>Select Add or New</td><td>Create form opens</td></tr>
+    <tr><td>3</td><td>Enter form details</td><td>Data accepted</td></tr>
+    <tr><td>4</td><td>Add one or more fields</td><td>Fields added to form</td></tr>
+    <tr><td>5</td><td>Arrange fields if available</td><td>Order saved</td></tr>
+    <tr><td>6</td><td>Save</td><td>Form created</td></tr>
+    <tr><td>7</td><td>Search for form</td><td>Form visible and usable</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-FORM-002">10.9.2 UAT-FORM-002 - Update Form</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-FORM-002</td></tr>
+    <tr><td>Module</td><td>Forms</td></tr>
+    <tr><td>Test Scenario</td><td>Update Form</td></tr>
+    <tr><td>Objective</td><td>Verify that an existing form can be updated</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Editable form exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Forms</td><td>Forms page opens</td></tr>
+    <tr><td>2</td><td>Search for existing form</td><td>Form located</td></tr>
+    <tr><td>3</td><td>Open edit mode</td><td>Edit page opens</td></tr>
+    <tr><td>4</td><td>Update form details</td><td>Changes accepted</td></tr>
+    <tr><td>5</td><td>Add, remove, or reorder fields</td><td>Changes applied</td></tr>
+    <tr><td>6</td><td>Save</td><td>Form updates saved</td></tr>
+    <tr><td>7</td><td>Reopen form</td><td>Updated structure visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-FORM-003">10.9.3 UAT-FORM-003 - Delete Form</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-FORM-003</td></tr>
+    <tr><td>Module</td><td>Forms</td></tr>
+    <tr><td>Test Scenario</td><td>Delete Form</td></tr>
+    <tr><td>Objective</td><td>Verify that form deletion is controlled correctly</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Test form exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Forms</td><td>Forms page opens</td></tr>
+    <tr><td>2</td><td>Select test form</td><td>Form selected</td></tr>
+    <tr><td>3</td><td>Choose delete</td><td>Delete action triggered</td></tr>
+    <tr><td>4</td><td>Confirm if prompted</td><td>Form removed if allowed</td></tr>
+    <tr><td>5</td><td>Search for deleted form</td><td>Form no longer visible</td></tr>
+    <tr><td>6</td><td>Try to delete in-use form if safe</td><td>System blocks unsafe deletion</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-FORM-004">10.9.4 UAT-FORM-004 - View Form</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-FORM-004</td></tr>
+    <tr><td>Module</td><td>Forms</td></tr>
+    <tr><td>Test Scenario</td><td>View Form</td></tr>
+    <tr><td>Objective</td><td>Verify that users can view form configuration</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager, Administrator, or authorized viewer</td></tr>
+    <tr><td>Priority</td><td>Low</td></tr>
+    <tr><td>Preconditions</td><td>Form exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Forms</td><td>Forms page opens</td></tr>
+    <tr><td>2</td><td>Search for form</td><td>Form found</td></tr>
+    <tr><td>3</td><td>Open View or Display</td><td>Form details open</td></tr>
+    <tr><td>4</td><td>Review form structure</td><td>Data displays correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-FORM-005">10.9.5 UAT-FORM-005 - Copy Form</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-FORM-005</td></tr>
+    <tr><td>Module</td><td>Forms</td></tr>
+    <tr><td>Test Scenario</td><td>Copy Form</td></tr>
+    <tr><td>Objective</td><td>Verify that a form can be copied and adjusted</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Source form exists and user has copy or create permission</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Forms</td><td>Forms page opens</td></tr>
+    <tr><td>2</td><td>Select existing form</td><td>Form selected</td></tr>
+    <tr><td>3</td><td>Choose Copy</td><td>Copy action starts</td></tr>
+    <tr><td>4</td><td>Rename copied form</td><td>New name accepted</td></tr>
+    <tr><td>5</td><td>Adjust field list or ordering</td><td>Changes accepted</td></tr>
+    <tr><td>6</td><td>Save</td><td>Copied form created</td></tr>
+    <tr><td>7</td><td>Search for copied form</td><td>New form visible and distinct</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-10">10.10 Maturity</div>
+
+  <h4 id="UAT-MAT-001">10.10.1 UAT-MAT-001 - Add Maturity</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-MAT-001</td></tr>
+    <tr><td>Module</td><td>Maturity</td></tr>
+    <tr><td>Test Scenario</td><td>Add Maturity</td></tr>
+    <tr><td>Objective</td><td>Verify that a maturity level can be added</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has Templates &gt; Maturity access</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Maturity</td><td>Maturity page opens</td></tr>
+    <tr><td>2</td><td>Select Add or New</td><td>Entry form opens</td></tr>
+    <tr><td>3</td><td>Enter maturity details</td><td>Data accepted</td></tr>
+    <tr><td>4</td><td>Save</td><td>Record created</td></tr>
+    <tr><td>5</td><td>Search for maturity</td><td>Record visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-MAT-002">10.10.2 UAT-MAT-002 - Update Maturity</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-MAT-002</td></tr>
+    <tr><td>Module</td><td>Maturity</td></tr>
+    <tr><td>Test Scenario</td><td>Update Maturity</td></tr>
+    <tr><td>Objective</td><td>Verify that a maturity level can be updated</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Existing maturity record is available</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Maturity</td><td>Page opens</td></tr>
+    <tr><td>2</td><td>Search for maturity record</td><td>Record located</td></tr>
+    <tr><td>3</td><td>Open edit mode</td><td>Edit page opens</td></tr>
+    <tr><td>4</td><td>Change allowed fields</td><td>Changes accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Updates saved</td></tr>
+    <tr><td>6</td><td>Reopen record</td><td>Updated values visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-MAT-003">10.10.3 UAT-MAT-003 - View Maturity</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-MAT-003</td></tr>
+    <tr><td>Module</td><td>Maturity</td></tr>
+    <tr><td>Test Scenario</td><td>View Maturity</td></tr>
+    <tr><td>Objective</td><td>Verify that maturity details can be viewed</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager, Administrator, or authorized viewer</td></tr>
+    <tr><td>Priority</td><td>Low</td></tr>
+    <tr><td>Preconditions</td><td>Maturity record exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Maturity</td><td>Page opens</td></tr>
+    <tr><td>2</td><td>Search for maturity</td><td>Record found</td></tr>
+    <tr><td>3</td><td>Open View or Display</td><td>Details page opens</td></tr>
+    <tr><td>4</td><td>Review details</td><td>Record displays correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-11">10.11 Product Division</div>
+
+  <h4 id="UAT-PDIV-001">10.11.1 UAT-PDIV-001 - Add Product Division</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PDIV-001</td></tr>
+    <tr><td>Module</td><td>Product Division</td></tr>
+    <tr><td>Test Scenario</td><td>Add Product Division</td></tr>
+    <tr><td>Objective</td><td>Verify that a product division can be added</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>User has Templates &gt; Product Division access</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Product Division</td><td>Page opens</td></tr>
+    <tr><td>2</td><td>Select Add or New</td><td>Entry form opens</td></tr>
+    <tr><td>3</td><td>Enter division details</td><td>Data accepted</td></tr>
+    <tr><td>4</td><td>Save</td><td>Record created</td></tr>
+    <tr><td>5</td><td>Search for division</td><td>Record visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PDIV-002">10.11.2 UAT-PDIV-002 - Update Product Division</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PDIV-002</td></tr>
+    <tr><td>Module</td><td>Product Division</td></tr>
+    <tr><td>Test Scenario</td><td>Update Product Division</td></tr>
+    <tr><td>Objective</td><td>Verify that a product division can be updated</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Existing product division is available</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Product Division</td><td>Page opens</td></tr>
+    <tr><td>2</td><td>Search for product division</td><td>Record located</td></tr>
+    <tr><td>3</td><td>Open edit mode</td><td>Edit page opens</td></tr>
+    <tr><td>4</td><td>Change allowed fields</td><td>Changes accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Updates saved</td></tr>
+    <tr><td>6</td><td>Reopen record</td><td>Updated values visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PDIV-003">10.11.3 UAT-PDIV-003 - View Product Division</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PDIV-003</td></tr>
+    <tr><td>Module</td><td>Product Division</td></tr>
+    <tr><td>Test Scenario</td><td>View Product Division</td></tr>
+    <tr><td>Objective</td><td>Verify that product division details can be viewed</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager, Administrator, or authorized viewer</td></tr>
+    <tr><td>Priority</td><td>Low</td></tr>
+    <tr><td>Preconditions</td><td>Product division exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Product Division</td><td>Page opens</td></tr>
+    <tr><td>2</td><td>Search for record</td><td>Record found</td></tr>
+    <tr><td>3</td><td>Open View or Display</td><td>Details page opens</td></tr>
+    <tr><td>4</td><td>Review details</td><td>Record displays correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-12">10.12 Product Group</div>
+
+  <h4 id="UAT-PGRP-001">10.12.1 UAT-PGRP-001 - Add Product Group</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PGRP-001</td></tr>
+    <tr><td>Module</td><td>Product Group</td></tr>
+    <tr><td>Test Scenario</td><td>Add Product Group</td></tr>
+    <tr><td>Objective</td><td>Verify that a product group can be added</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Product division exists if required for mapping</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Product Group</td><td>Page opens</td></tr>
+    <tr><td>2</td><td>Select Add or New</td><td>Entry form opens</td></tr>
+    <tr><td>3</td><td>Enter group details</td><td>Data accepted</td></tr>
+    <tr><td>4</td><td>Save</td><td>Record created</td></tr>
+    <tr><td>5</td><td>Search for group</td><td>Record visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PGRP-002">10.12.2 UAT-PGRP-002 - Update Product Group</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PGRP-002</td></tr>
+    <tr><td>Module</td><td>Product Group</td></tr>
+    <tr><td>Test Scenario</td><td>Update Product Group</td></tr>
+    <tr><td>Objective</td><td>Verify that a product group can be updated</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Existing product group is available</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Product Group</td><td>Page opens</td></tr>
+    <tr><td>2</td><td>Search for group</td><td>Record located</td></tr>
+    <tr><td>3</td><td>Open edit mode</td><td>Edit page opens</td></tr>
+    <tr><td>4</td><td>Change allowed fields</td><td>Changes accepted</td></tr>
+    <tr><td>5</td><td>Save</td><td>Updates saved</td></tr>
+    <tr><td>6</td><td>Reopen record</td><td>Updated values visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-PGRP-003">10.12.3 UAT-PGRP-003 - View Product Group</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-PGRP-003</td></tr>
+    <tr><td>Module</td><td>Product Group</td></tr>
+    <tr><td>Test Scenario</td><td>View Product Group</td></tr>
+    <tr><td>Objective</td><td>Verify that product group details can be viewed</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager, Administrator, or authorized viewer</td></tr>
+    <tr><td>Priority</td><td>Low</td></tr>
+    <tr><td>Preconditions</td><td>Product group exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Product Group</td><td>Page opens</td></tr>
+    <tr><td>2</td><td>Search for record</td><td>Record found</td></tr>
+    <tr><td>3</td><td>Open View or Display</td><td>Details page opens</td></tr>
+    <tr><td>4</td><td>Review details</td><td>Record displays correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+<div class="page-break"></div>
+  <div class="section-banner" id="sec-10-13">10.13 Roadmap</div>
+
+  <h4 id="UAT-RMAP-001">10.13.1 UAT-RMAP-001 - Add Roadmap</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-RMAP-001</td></tr>
+    <tr><td>Module</td><td>Roadmap</td></tr>
+    <tr><td>Test Scenario</td><td>Add Roadmap</td></tr>
+    <tr><td>Objective</td><td>Verify that a roadmap can be created with milestones and tasks</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Categories, maturity, fields, and forms exist as needed</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Roadmap</td><td>Roadmap page opens</td></tr>
+    <tr><td>2</td><td>Select Add or New</td><td>Create form opens</td></tr>
+    <tr><td>3</td><td>Enter roadmap details</td><td>Data accepted</td></tr>
+    <tr><td>4</td><td>Add at least two milestones</td><td>Milestones added</td></tr>
+    <tr><td>5</td><td>Add at least one task under each milestone</td><td>Tasks added correctly</td></tr>
+    <tr><td>6</td><td>Attach forms or prerequisites if supported</td><td>Linkages accepted</td></tr>
+    <tr><td>7</td><td>Save</td><td>Roadmap created</td></tr>
+    <tr><td>8</td><td>Search for roadmap</td><td>Roadmap visible</td></tr>
+    <tr><td>9</td><td>Use roadmap in project registration if applicable</td><td>Roadmap available for use</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-RMAP-002">10.13.2 UAT-RMAP-002 - Update Roadmap</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-RMAP-002</td></tr>
+    <tr><td>Module</td><td>Roadmap</td></tr>
+    <tr><td>Test Scenario</td><td>Update Roadmap</td></tr>
+    <tr><td>Objective</td><td>Verify that roadmap details, milestones, tasks, forms, or prerequisites can be updated</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Existing roadmap is available</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Roadmap</td><td>Roadmap page opens</td></tr>
+    <tr><td>2</td><td>Search for roadmap</td><td>Roadmap found</td></tr>
+    <tr><td>3</td><td>Open edit mode</td><td>Edit page opens</td></tr>
+    <tr><td>4</td><td>Update roadmap details</td><td>Changes accepted</td></tr>
+    <tr><td>5</td><td>Add, edit, remove, or reorder milestone or task</td><td>Changes applied</td></tr>
+    <tr><td>6</td><td>Update linked forms or prerequisites</td><td>Link updates saved</td></tr>
+    <tr><td>7</td><td>Save</td><td>Roadmap update saved</td></tr>
+    <tr><td>8</td><td>Reopen roadmap</td><td>Updated structure visible</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-RMAP-003">10.13.3 UAT-RMAP-003 - View Roadmap</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-RMAP-003</td></tr>
+    <tr><td>Module</td><td>Roadmap</td></tr>
+    <tr><td>Test Scenario</td><td>View Roadmap</td></tr>
+    <tr><td>Objective</td><td>Verify that roadmap structure can be viewed</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager, Administrator, or authorized viewer</td></tr>
+    <tr><td>Priority</td><td>Low</td></tr>
+    <tr><td>Preconditions</td><td>Roadmap exists</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Roadmap</td><td>Page opens</td></tr>
+    <tr><td>2</td><td>Search for roadmap</td><td>Roadmap found</td></tr>
+    <tr><td>3</td><td>Open View or Display</td><td>Details page opens</td></tr>
+    <tr><td>4</td><td>Review milestones, tasks, forms, prerequisites, category, and maturity</td><td>Structure displays correctly</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-RMAP-004">10.13.4 UAT-RMAP-004 - Copy Roadmap</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-RMAP-004</td></tr>
+    <tr><td>Module</td><td>Roadmap</td></tr>
+    <tr><td>Test Scenario</td><td>Copy Roadmap</td></tr>
+    <tr><td>Objective</td><td>Verify that a roadmap can be copied and modified independently</td></tr>
+    <tr><td>Primary Role</td><td>Template Manager or Administrator</td></tr>
+    <tr><td>Priority</td><td>Medium</td></tr>
+    <tr><td>Preconditions</td><td>Source roadmap exists. User has copy or create permission</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Templates &gt; Roadmap</td><td>Page opens</td></tr>
+    <tr><td>2</td><td>Select existing roadmap</td><td>Roadmap selected</td></tr>
+    <tr><td>3</td><td>Choose Copy</td><td>Copy action starts</td></tr>
+    <tr><td>4</td><td>Rename copied roadmap</td><td>New name accepted</td></tr>
+    <tr><td>5</td><td>Adjust milestones, tasks, forms, or prerequisites</td><td>Changes accepted</td></tr>
+    <tr><td>6</td><td>Save</td><td>Copied roadmap created</td></tr>
+    <tr><td>7</td><td>Search for copied roadmap</td><td>New roadmap visible</td></tr>
+    <tr><td>8</td><td>Confirm source remains unchanged</td><td>Source roadmap preserved</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-14">10.14 Reports</div>
+
+  <h4 id="UAT-REP-001">10.14.1 UAT-REP-001 - Project Export</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-REP-001</td></tr>
+    <tr><td>Module</td><td>Reports</td></tr>
+    <tr><td>Test Scenario</td><td>Project Export</td></tr>
+    <tr><td>Objective</td><td>Verify that users can generate and export project records</td></tr>
+    <tr><td>Primary Role</td><td>Report Viewer, Project Owner, Administrator</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User has Reports &gt; Project Export access. Projects exist matching filter criteria</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Reports &gt; Project Export</td><td>Report page opens</td></tr>
+    <tr><td>2</td><td>Set filters</td><td>Filter values accepted</td></tr>
+    <tr><td>3</td><td>Run or generate report</td><td>Results displayed</td></tr>
+    <tr><td>4</td><td>Review on-screen data</td><td>Data matches filters</td></tr>
+    <tr><td>5</td><td>Export or download report</td><td>File generated successfully</td></tr>
+    <tr><td>6</td><td>Open exported file</td><td>File opens and data matches report</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-REP-002">10.14.2 UAT-REP-002 - Monitoring Matrix</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-REP-002</td></tr>
+    <tr><td>Module</td><td>Reports</td></tr>
+    <tr><td>Test Scenario</td><td>Monitoring Matrix</td></tr>
+    <tr><td>Objective</td><td>Verify that users can review projects in a milestone or task matrix</td></tr>
+    <tr><td>Primary Role</td><td>Report Viewer or Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User has Reports &gt; Monitoring Matrix access. Multiple projects exist with roadmap structures</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Reports &gt; Monitoring Matrix</td><td>Matrix page opens</td></tr>
+    <tr><td>2</td><td>Apply filters</td><td>Filter values accepted</td></tr>
+    <tr><td>3</td><td>Generate matrix</td><td>Matrix loads</td></tr>
+    <tr><td>4</td><td>Review project rows and milestone or task columns</td><td>Data displays correctly</td></tr>
+    <tr><td>5</td><td>Use frozen, pinned, or scrolling fields if available</td><td>Navigation works correctly</td></tr>
+    <tr><td>6</td><td>Export matrix if available</td><td>Export matches displayed data</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-REP-003">10.14.3 UAT-REP-003 - Project Comparison</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-REP-003</td></tr>
+    <tr><td>Module</td><td>Reports</td></tr>
+    <tr><td>Test Scenario</td><td>Project Comparison</td></tr>
+    <tr><td>Objective</td><td>Verify that users can compare projects side by side</td></tr>
+    <tr><td>Primary Role</td><td>Report Viewer or Project Owner</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>At least two comparable projects exist. User has Report access</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Open Reports &gt; Project Comparison</td><td>Comparison page opens</td></tr>
+    <tr><td>2</td><td>Select two or more projects</td><td>Projects selected</td></tr>
+    <tr><td>3</td><td>Run or load comparison</td><td>Comparison view loads</td></tr>
+    <tr><td>4</td><td>Compare schedules, milestones, status, progress, owner, and values</td><td>Differences are clear</td></tr>
+    <tr><td>5</td><td>Export or capture comparison if available</td><td>Evidence or export available</td></tr>
+    <tr><td>6</td><td>Validate access filtering</td><td>Only authorized projects shown</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+  <div class="section-banner" id="sec-10-15">10.15 Negative and Access Control Scenarios</div>
+
+  <h4 id="UAT-ACCESS-001">10.15.1 UAT-ACCESS-001 - Missing Menu For Unauthorized User</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-ACCESS-001</td></tr>
+    <tr><td>Module</td><td>Access Control</td></tr>
+    <tr><td>Test Scenario</td><td>Missing Menu For Unauthorized User</td></tr>
+    <tr><td>Objective</td><td>Verify that users without access do not see restricted menus</td></tr>
+    <tr><td>Primary Role</td><td>Any restricted user</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User lacks access to at least one controlled module</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Log in as restricted user</td><td>Login succeeds</td></tr>
+    <tr><td>2</td><td>Check navigation for Templates</td><td>Restricted menu hidden or disabled</td></tr>
+    <tr><td>3</td><td>Attempt direct navigation to restricted page if safe</td><td>Access denied</td></tr>
+    <tr><td>4</td><td>Repeat for Reports, Admin, or Project Configuration if relevant</td><td>Restrictions consistently enforced</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-ACCESS-002">10.15.2 UAT-ACCESS-002 - Unauthorized User Cannot Delete Project</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-ACCESS-002</td></tr>
+    <tr><td>Module</td><td>Access Control</td></tr>
+    <tr><td>Test Scenario</td><td>Unauthorized User Cannot Delete Project</td></tr>
+    <tr><td>Objective</td><td>Verify that project deletion is limited to authorized roles</td></tr>
+    <tr><td>Primary Role</td><td>Restricted project member or viewer</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User can view a project but should not delete it</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Log in as restricted user</td><td>Login succeeds</td></tr>
+    <tr><td>2</td><td>Open visible project</td><td>Project opens</td></tr>
+    <tr><td>3</td><td>Open project actions or configuration if visible</td><td>Restricted actions hidden or blocked</td></tr>
+    <tr><td>4</td><td>Look for delete action</td><td>Delete unavailable or disabled</td></tr>
+    <tr><td>5</td><td>Attempt delete only if safe and visible</td><td>System blocks action</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-ACCESS-003">10.15.3 UAT-ACCESS-003 - Unauthorized User Cannot Modify Templates</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-ACCESS-003</td></tr>
+    <tr><td>Module</td><td>Access Control</td></tr>
+    <tr><td>Test Scenario</td><td>Unauthorized User Cannot Modify Templates</td></tr>
+    <tr><td>Objective</td><td>Verify that template maintenance is restricted</td></tr>
+    <tr><td>Primary Role</td><td>Daily User or Project Member</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>User lacks template manager role</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Log in as daily user</td><td>Login succeeds</td></tr>
+    <tr><td>2</td><td>Attempt to open Templates</td><td>Access denied or hidden</td></tr>
+    <tr><td>3</td><td>Attempt to add or update template records if visible</td><td>Changes blocked</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <h4 id="UAT-ACCESS-004">10.15.4 UAT-ACCESS-004 - User Sees Only Authorized Projects</h4>
+  <table>
+    <tr><th>Field</th><th>Detail</th></tr>
+    <tr><td>Test Case ID</td><td>UAT-ACCESS-004</td></tr>
+    <tr><td>Module</td><td>Access Control</td></tr>
+    <tr><td>Test Scenario</td><td>User Sees Only Authorized Projects</td></tr>
+    <tr><td>Objective</td><td>Verify that project visibility respects plant, membership, or role scope</td></tr>
+    <tr><td>Primary Role</td><td>Daily User, Viewer, Project Member</td></tr>
+    <tr><td>Priority</td><td>High</td></tr>
+    <tr><td>Preconditions</td><td>Projects exist inside and outside user scope</td></tr>
+  </table>
+  <table>
+    <tr><th>Step No.</th><th>Test Step</th><th>Expected Result</th></tr>
+    <tr><td>1</td><td>Log in as test user</td><td>Login succeeds</td></tr>
+    <tr><td>2</td><td>Open Projects</td><td>Project list opens</td></tr>
+    <tr><td>3</td><td>Search for authorized project</td><td>Authorized project visible</td></tr>
+    <tr><td>4</td><td>Search for out-of-scope project</td><td>Out-of-scope project hidden or denied</td></tr>
+    <tr><td>5</td><td>Open View, Tasks, Status Board, or Reports as relevant</td><td>Visibility remains correctly restricted</td></tr>
+  </table>
+  <table>
+    <tr><th>Execution Field</th><th>Value</th></tr>
+    <tr><td>Tester</td><td></td></tr>
+    <tr><td>Execution Date</td><td></td></tr>
+    <tr><td>Result</td><td></td></tr>
+    <tr><td>Defect ID</td><td></td></tr>
+    <tr><td>Evidence Reference</td><td></td></tr>
+    <tr><td>Comments</td><td></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <h2 id="sec-11">11. Regression Checklist</h2>
+  <table>
+    <tr><th>No.</th><th>Area</th><th>Check</th><th>Result</th><th>Notes</th></tr>
+    <tr><td>11.1</td><td>Register</td><td>New project can be created</td><td></td><td></td></tr>
+    <tr><td>11.2</td><td>Register</td><td>Auto-start milestone works</td><td></td><td></td></tr>
+    <tr><td>11.3</td><td>Register</td><td>Create-only project can later be started</td><td></td><td></td></tr>
+    <tr><td>11.4</td><td>Projects</td><td>Project Review loads</td><td></td><td></td></tr>
+    <tr><td>11.5</td><td>Projects</td><td>Tasks update from Project Review</td><td></td><td></td></tr>
+    <tr><td>11.6</td><td>Projects</td><td>Attachments upload and remove</td><td></td><td></td></tr>
+    <tr><td>11.7</td><td>Projects</td><td>Comments save correctly</td><td></td><td></td></tr>
+    <tr><td>11.8</td><td>Projects</td><td>Project Configuration saves changes</td><td></td><td></td></tr>
+    <tr><td>11.9</td><td>Projects</td><td>Product codes can be maintained</td><td></td><td></td></tr>
+    <tr><td>11.10</td><td>Projects</td><td>Members can be maintained</td><td></td><td></td></tr>
+    <tr><td>11.11</td><td>Projects</td><td>Notifications can be maintained</td><td></td><td></td></tr>
+    <tr><td>11.12</td><td>Projects</td><td>Roadmap retrieval works</td><td></td><td></td></tr>
+    <tr><td>11.13</td><td>Status Board</td><td>Project status changes</td><td></td><td></td></tr>
+    <tr><td>11.14</td><td>Status Board</td><td>Milestone status changes</td><td></td><td></td></tr>
+    <tr><td>11.15</td><td>Status Board</td><td>Task status changes</td><td></td><td></td></tr>
+    <tr><td>11.16</td><td>Tasks</td><td>Task details update</td><td></td><td></td></tr>
+    <tr><td>11.17</td><td>Tasks</td><td>Task data entry saves</td><td></td><td></td></tr>
+    <tr><td>11.18</td><td>Tasks</td><td>Task comments and attachments work</td><td></td><td></td></tr>
+    <tr><td>11.19</td><td>View</td><td>Overview, Schedule, Risk, Ownership load</td><td></td><td></td></tr>
+    <tr><td>11.20</td><td>View</td><td>Project search works</td><td></td><td></td></tr>
+    <tr><td>11.21</td><td>Chats</td><td>Messages send and receive</td><td></td><td></td></tr>
+    <tr><td>11.22</td><td>Notifications</td><td>Notifications load and filters work</td><td></td><td></td></tr>
+    <tr><td>11.23</td><td>Templates</td><td>Categories maintenance works</td><td></td><td></td></tr>
+    <tr><td>11.24</td><td>Templates</td><td>Fields maintenance works</td><td></td><td></td></tr>
+    <tr><td>11.25</td><td>Templates</td><td>Forms maintenance works</td><td></td><td></td></tr>
+    <tr><td>11.26</td><td>Templates</td><td>Maturity maintenance works</td><td></td><td></td></tr>
+    <tr><td>11.27</td><td>Templates</td><td>Product Division maintenance works</td><td></td><td></td></tr>
+    <tr><td>11.28</td><td>Templates</td><td>Product Group maintenance works</td><td></td><td></td></tr>
+    <tr><td>11.29</td><td>Templates</td><td>Roadmap maintenance works</td><td></td><td></td></tr>
+    <tr><td>11.30</td><td>Reports</td><td>Project Export works</td><td></td><td></td></tr>
+    <tr><td>11.31</td><td>Reports</td><td>Monitoring Matrix works</td><td></td><td></td></tr>
+    <tr><td>11.32</td><td>Reports</td><td>Project Comparison works</td><td></td><td></td></tr>
+    <tr><td>11.33</td><td>Access</td><td>Unauthorized users are blocked</td><td></td><td></td></tr>
+  </table>
+
+  <h2 id="sec-12">12. UAT Sign-Off</h2>
+  <table>
+    <tr><th>Role</th><th>Name</th><th>Signature</th><th>Date</th><th>Overall Result</th><th>Notes</th></tr>
+    <tr><td>Business Owner</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Project Owner Representative</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Template Manager Representative</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Administrator Representative</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>QA Lead</td><td></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h2 id="sec-13">13. Defect Log</h2>
+  <table>
+    <tr>
+      <th>Defect ID</th>
+      <th>Scenario ID</th>
+      <th>Summary</th>
+      <th>Steps To Reproduce</th>
+      <th>Expected Result</th>
+      <th>Actual Result</th>
+      <th>Severity</th>
+      <th>Priority</th>
+      <th>Owner</th>
+      <th>Status</th>
+      <th>Retest Result</th>
+      <th>Notes</th>
+    </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <h2 id="sec-14">14. Appendices</h2>
+
+  <h3>14.1 Suggested UAT Execution Order</h3>
+  <ol>
+    <li>Validate access and test data setup</li>
+    <li>Validate template setup records</li>
+    <li>Register projects using both start paths</li>
+    <li>Validate Project Review, tasks, comments, chats, and progress</li>
+    <li>Validate Project Configuration changes</li>
+    <li>Validate Status Board changes</li>
+    <li>Validate Tasks and View workflows</li>
+    <li>Validate Notifications and Chats with multiple users</li>
+    <li>Validate Reports</li>
+    <li>Execute access control scenarios</li>
+    <li>Complete regression checklist</li>
+    <li>Review defects and obtain sign-off</li>
+  </ol>
+
+  <h3>14.2 Evidence Naming Convention</h3>
+  <p>Use:</p>
+  <p><code>&lt;ScenarioID&gt;_&lt;TesterInitials&gt;_&lt;YYYYMMDD&gt;_&lt;ShortDescription&gt;</code></p>
+  <p>Examples:</p>
+  <ul>
+    <li><code>UAT-PROJ-001_CL_20260528_AutoStartMilestone.png</code></li>
+    <li><code>UAT-REP-001_CL_20260528_ProjectExport.xlsx</code></li>
+    <li><code>UAT-CHAT-002_CL_20260528_TwoUserMessage.png</code></li>
+  </ul>
+
+  <h3>14.3 Severity Guidance</h3>
+  <table>
+    <tr><th>Severity</th><th>Definition</th></tr>
+    <tr><td>Critical</td><td>Core workflow blocked and no workaround exists</td></tr>
+    <tr><td>High</td><td>Major workflow issue with significant impact</td></tr>
+    <tr><td>Medium</td><td>Functional issue with workaround</td></tr>
+    <tr><td>Low</td><td>Cosmetic or minor usability issue</td></tr>
+  </table>
+
+  <h3>14.4 Priority Guidance</h3>
+  <table>
+    <tr><th>Priority</th><th>Definition</th></tr>
+    <tr><td>High</td><td>Must be executed and required for release confidence</td></tr>
+    <tr><td>Medium</td><td>Important business coverage</td></tr>
+    <tr><td>Low</td><td>Supporting validation if time permits</td></tr>
+  </table>
+
+  <h3>14.5 Common UAT Notes</h3>
+  <ul>
+    <li>Confirm role, plant scope, and membership before raising an access defect</li>
+    <li>Do not treat missing access as a defect until setup is verified</li>
+    <li>Use comments for traceable decisions and chat for discussion</li>
+    <li>Attach evidence to the most specific record possible</li>
+    <li>Do not delete shared setup data unless it is test-only</li>
+    <li>Use controlled roadmap or project data for update and retrieval testing</li>
+  </ul>
+
+  <div class="back-top"><a href="#top">Back to top</a></div>
+
+</div>
+</body>
+</html>  

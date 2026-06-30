@@ -1,0 +1,39 @@
+<div class="modal fade" id="notificationEditorModal" tabindex="-1" aria-labelledby="notificationEditorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <form class="modal-content" id="notificationEditorForm">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationEditorModalLabel">Notification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="notificationEditorId" name="notificationSysId">
+                <div class="mb-3">
+                    <label class="form-label" for="notificationEditorTitle">Title</label>
+                    <input type="text" class="form-control" id="notificationEditorTitle" name="title" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="notificationEditorMessage">Message</label>
+                    <textarea class="form-control" id="notificationEditorMessage" name="message" rows="4" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="notificationEditorRecipients">Recipients</label>
+                    <input type="text" class="form-control" id="notificationEditorRecipients" name="recipients" placeholder="User(s) / group(s)">
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="notificationEditorWhen">When</label>
+                        <input type="datetime-local" class="form-control" id="notificationEditorWhen" name="when" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="notificationEditorExpiry">Ends</label>
+                        <input type="datetime-local" class="form-control" id="notificationEditorExpiry" name="endswhen">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="notificationEditorSubmitBtn">Save notification</button>
+            </div>
+        </form>
+    </div>
+</div>

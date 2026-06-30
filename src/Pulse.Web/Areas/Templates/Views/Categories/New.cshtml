@@ -1,0 +1,99 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "New Category";
+    ViewBag.TitleIcon = "bi bi-plus-circle";
+    ViewBag.SubTitle = "Create a category that teams can use to classify projects in a consistent way.";
+    ViewBag.ContentHeaderChips = new[] { "Project classification", "Portfolio grouping", "Reporting consistency" };
+    ViewBag.ContentHeaderAsideLabel = "New category";
+    ViewBag.ContentHeaderAsideTitle = "Define the label that projects will use for shared portfolio classification.";
+    ViewBag.ContentHeaderAsideBody = "A well-structured category makes downstream sorting, filtering, and reporting clearer for every team.";
+    ViewBag.IsActiveTemplatesCategories = "menu-open";
+    ViewBag.IsActiveTemplatesCategoriesNew = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+
+<form id="categoryForm" class="needs-validation" novalidate="">
+    
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        New Category
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Create new category</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="Code" class="form-label">Category Code<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Code" name="Code" placeholder="Enter Valid Category Code" required="">
+                            <div class="invalid-feedback">Please provide a valid category code.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">Category Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Enter Category Name" required="">
+                            <div class="invalid-feedback">Please provide a category name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Description" class="form-label">Category Description</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="Description" name="Description" placeholder="Enter Category Description">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "Categories", new { area = "Templates" })" class="btn btn-default">Cancel</a> <button class="btn btn-success">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+
+
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="~/Areas/Templates/Scripts/categories/new.js"></script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        ////(() => {
+        ////    'use strict';
+
+        ////    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        ////    const forms = document.querySelectorAll('.needs-validation');
+
+        ////    // Loop over them and prevent submission
+        ////    Array.from(forms).forEach((form) => {
+        ////        form.addEventListener(
+        ////            'submit',
+        ////            (event) => {
+        ////                if (!form.checkValidity()) {
+        ////                    event.preventDefault();
+        ////                    event.stopPropagation();
+        ////                }
+
+        ////                form.classList.add('was-validated');
+        ////            },
+        ////            false,
+        ////        );
+        ////    });
+        ////})();
+    </script>
+}

@@ -1,0 +1,54 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Reports";
+    ViewBag.TitleIcon = "bi bi-bar-chart-line-fill";
+    ViewBag.SubTitle = "Analyze module availability, usage, and access-right coverage across Pulse.";
+    ViewBag.ContentHeaderChips = new[] { "Permission coverage", "Access insight", "Catalog usage" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Measure how access rights are being used.";
+    ViewBag.ContentHeaderAsideBody = "Reporting helps confirm whether the access catalog is complete, actively used, and aligned with the permissions users actually need.";
+    ViewBag.IsActiveAdminModules = "menu-open";
+    ViewBag.IsActiveAdminModulesReports = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+
+
+<div id="moduleList" class="row">
+
+
+
+    <!--begin::Col-->
+    <div id="containerAdd" class="col-lg-4 col-md-6 col-12">
+        <button id="btnAdd" type="button"
+                class="btn btn-default w-100"
+                style="height: 100%;">
+            <h1><i class="bi bi-plus-circle-fill" style="font-size:80pt"></i></h1>
+            <h5>Add new module</h5>
+        </button>
+    </div>
+    <!--end::Col-->
+</div>
+
+
+@section scripts{
+
+    <script src="~/Areas/Admin/Scripts/modules/reports.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#btnAdd').on('click', function (e) {
+                window.location.href = "@Url.Action("New", "Modules", new { area = "Admin" })";
+            });
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+

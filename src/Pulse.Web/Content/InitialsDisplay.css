@@ -1,0 +1,37 @@
+﻿.initials-stack {
+    --circle-size: 64px; /* Try changing this to 32px, 48px, 80px, etc. */
+    height: var(--circle-size);
+}
+
+
+
+
+.initial-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--circle-size);
+    height: var(--circle-size);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: #FFC107;
+    color: #03234b;
+    font-weight: bold;
+    font-size: calc(var(--circle-size) * 0.45);
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    position: relative;
+    margin-left: calc(var(--circle-size) * -0.5);
+    z-index: 1;
+    transition: z-index 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+    .initial-circle:first-child {
+        margin-left: 0;
+    }
+
+    .initial-circle:hover {
+        z-index: 10;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }

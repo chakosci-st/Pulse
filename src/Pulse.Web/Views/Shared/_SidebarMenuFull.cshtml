@@ -1,0 +1,419 @@
+﻿<ul class="nav sidebar-menu flex-column"
+    data-lte-toggle="treeview"
+    role="navigation"
+    aria-label="Main navigation"
+    data-accordion="false"
+    id="navigation">
+    <li class="nav-item active">
+        <a href="/" class="nav-link @ViewBag.IsActiveDashboard">
+            <i class="nav-icon text-lg bi bi-speedometer h3"></i>
+            <p class="text-lg">Dashboard</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="/" class="nav-link @ViewBag.IsActiveRegisterProject">
+            <i class="nav-icon bi bi-journal-plus h3"></i>
+            <p>Register</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="/" class="nav-link @ViewBag.IsActiveProjects">
+            <i class="nav-icon bi bi-columns-gap h3"></i>
+            <p>Projects</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="/" class="nav-link  @ViewBag.IsActiveTasks">
+            <i class="nav-icon bi bi-ui-checks h3"></i>
+            <p>Tasks</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("ViewProjects", "Home", new { area = "" })" class="nav-link  @ViewBag.IsActiveView">
+            <i class="nav-icon bi bi-binoculars-fill h3"></i>
+            <p>View</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="/" class="nav-link  @ViewBag.IsActiveProducts">
+            <i class="nav-icon bi bi-box-seam-fill h3"></i>
+            <p>Products</p>
+        </a>
+    </li>
+    <li class="nav-header">TEMPLATES</li>
+
+    <li class="nav-item @ViewBag.IsActiveTemplatesCalendars">
+        <a href="#" class="nav-link @ViewBag.IsActiveTemplatesCalendars">
+            <i class="nav-icon bi bi-calendar3 h3"></i>
+            <p>
+                Calendar
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Reports", "ProductionCalendars", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesCalendarsReports">
+                    <i class="nav-icon bi bi-book"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "ProductionCalendars", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesCalendarsAll">
+                    <i class="nav-icon bi bi-card-list"></i>
+                    <p>All Calendars</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("New", "ProductionCalendars", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesCalendarsNew">
+                    <i class="nav-icon bi bi-plus-circle"></i>
+                    <p>New Calendar</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item @ViewBag.IsActiveTemplatesCategories">
+        <a href="#" class="nav-link  @ViewBag.IsActiveTemplatesCategories">
+            <i class="nav-icon bi bi-circle-square h3"></i>
+            <p>
+                Categories
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Reports", "Categories", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesCategoriesReports">
+                    <i class="nav-icon bi bi-book"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Categories", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesCategoriesAll">
+                    <i class="nav-icon bi bi-card-list"></i>
+                    <p>All Categories</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("New", "Categories", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesCategoriesNew">
+                    <i class="nav-icon bi bi-plus-circle"></i>
+                    <p>New Category</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link @ViewBag.IsActiveFields">
+            <i class="nav-icon bi bi-code-square h3"></i>
+            <p>
+                Fields
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="./widgets/small-box.html" class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./widgets/small-box.html" class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>All Fields</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./widgets/info-box.html" class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>New Field</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="nav-item">
+        <a href="#" class="nav-link @ViewBag.IsActiveTemplatesMaturityLevels">
+            <i class="nav-icon bi bi-clock-history h3 @ViewBag.IsActiveTemplatesMaturityLevels"></i>
+            <p>
+                Maturity
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Reports", "MaturityLevels", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesMaturityLevelsReports">
+                    <i class="nav-icon bi bi-book"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "MaturityLevels", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesMaturityLevelsAll">
+                    <i class="nav-icon bi bi-card-list"></i>
+                    <p>All Maturity Levels</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("New", "MaturityLevels", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesMaturityLevelsNew">
+                    <i class="nav-icon bi bi-plus-circle"></i>
+                    <p>New Maturity Level</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item  @ViewBag.IsActiveTemplatesPlants">
+        <a href="#" class="nav-link @ViewBag.IsActiveTemplatesPlants">
+            <i class="nav-icon bi bi-building h3"></i>
+            <p>
+                Plants
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Reports", "Plants", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesPlantsReports">
+                    <i class="nav-icon bi bi-book"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Plants", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesPlantsAll">
+                    <i class="nav-icon bi bi-card-list"></i>
+                    <p>All Plants</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("New", "Plants", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesPlantsNew">
+                    <i class="nav-icon bi bi-plus-circle"></i>
+                    <p>New Plant</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+
+
+    <li class="nav-item">
+        <a href="#" class="nav-link @ViewBag.IsActivePlants">
+            <i class="nav-icon bi bi-motherboard-fill h3"></i>
+            <p>
+                Project Template
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="./widgets/small-box.html" class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./widgets/small-box.html" class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>All Project Templates</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./widgets/info-box.html" class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>New Project Template</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+
+
+
+
+    <li class="nav-item @ViewBag.IsActiveTemplatesProductDivisions">
+        <a href="#" class="nav-link @ViewBag.IsActiveTemplatesProductDivisions">
+            <i class="nav-icon bi bi-layers-half h3"></i>
+            <p>
+                Product Divisions
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Reports", "ProductDivisions", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductDivisionsReports">
+                    <i class="nav-icon bi bi-book"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "ProductDivisions", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductDivisionsAll">
+                    <i class="nav-icon bi bi-card-list"></i>
+                    <p>All Product Divisions</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("New", "ProductDivisions", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductDivisionsNew">
+                    <i class="nav-icon bi bi-plus-circle"></i>
+                    <p>New Product Division</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item @ViewBag.IsActiveTemplatesProductGroups">
+        <a href="#" class="nav-link @ViewBag.IsActiveTemplatesProductGroups">
+            <i class="nav-icon bi bi-node-plus-fill h3"></i>
+            <p>
+                Product Groups
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Reports", "ProductGroups", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductGroupsReports">
+                    <i class="nav-icon bi bi-book"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "ProductGroups", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductGroupsAll">
+                    <i class="nav-icon bi bi-card-list"></i>
+                    <p>All Product Groups</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("New", "ProductGroups", new { area = "Templates" })" class="nav-link @ViewBag.IsActiveTemplatesProductGroupsNew">
+                    <i class="nav-icon bi bi-plus-circle"></i>
+                    <p>New Product Groups</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+
+    <li class="nav-header">ADMINISTRATION</li>
+    <li class="nav-item">
+        <a href="#" class="nav-link @ViewBag.IsActiveAdminModules">
+            <i class="nav-icon bi bi-puzzle h3 @ViewBag.IsActiveAdminModules"></i>
+            <p>
+                Modules
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Reports", "Modules", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminModulesReports">
+                    <i class="nav-icon bi bi-book"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Modules", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminModulesAll">
+                    <i class="nav-icon bi bi-card-list"></i>
+                    <p>All Modules</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("New", "Modules", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminModulesNew">
+                    <i class="nav-icon bi bi-plus-circle"></i>
+                    <p>New Module</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link @ViewBag.IsActiveAdminUserGroups">
+            <i class="nav-icon bi bi-people-fill h3 @ViewBag.IsActiveAdminUserGroups"></i>
+            <p>
+                User Groups
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Reports", "UserGroups", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUserGroupsReports">
+                    <i class="nav-icon bi bi-book"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "UserGroups", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUserGroupsAll">
+                    <i class="nav-icon bi bi-card-list"></i>
+                    <p>All User Groups</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("New", "UserGroups", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUserGroupsNew">
+                    <i class="nav-icon bi bi-plus-circle"></i>
+                    <p>New User Group</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link @ViewBag.IsActiveAdminUsers">
+            <i class="nav-icon bi bi-person-fill h3 @ViewBag.IsActiveAdminUsers"></i>
+            <p>
+                Users
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Reports", "Users", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUsersReports">
+                    <i class="nav-icon bi bi-book"></i>
+                    <p>Reports</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Users", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUsersAll">
+                    <i class="nav-icon bi bi-card-list"></i>
+                    <p>All Users</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("New", "Users", new { area = "Admin" })" class="nav-link @ViewBag.IsActiveAdminUsersNew">
+                    <i class="nav-icon bi bi-plus-circle"></i>
+                    <p>New User</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+ 
+    <li class="nav-header">REPORTS</li>
+    <li class="nav-item">
+        <a href="@Url.Action("Guide", "Home", new { area = "" })" class="nav-link  @ViewBag.IsActiveFAQ">
+            <i class="nav-icon bi bi-question-circle-fill h3"></i>
+            <p>FAQ</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="@Url.Action("UserGuide", "Home", new { area = "" })" class="nav-link  @ViewBag.IsActiveUserGuide">
+            <i class="nav-icon bi bi-journal-bookmark-fill h3"></i>
+            <p>User Guide</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link">
+            <i class="nav-icon bi bi-file-earmark-bar-graph-fill h3  @ViewBag.IsActiveReports"></i>
+            <p>
+                Reports
+                <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="@Url.Action("Report1", "Home", new { area = "" })" class="nav-link @ViewBag.IsActiveReport1">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Project Export</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Report2", "Home", new { area = "" })" class="nav-link @ViewBag.IsActiveReport2">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Monitoring Matrix</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Report3", "Home", new { area = "" })" class="nav-link @ViewBag.IsActiveReport3">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Project Comparison</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>

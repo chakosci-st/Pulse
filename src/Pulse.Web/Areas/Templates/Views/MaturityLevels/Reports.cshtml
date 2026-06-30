@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Reports";
+    ViewBag.TitleIcon = "bi bi-bar-chart-line-fill";
+    ViewBag.SubTitle = "Analyze maturity level usage and lifecycle progression coverage across manufacturing projects.";
+    ViewBag.ContentHeaderChips = new[] { "Lifecycle stages", "Manufacturing readiness", "Product maturity tracking" };
+    ViewBag.ContentHeaderAsideLabel = "Maturity insight";
+    ViewBag.ContentHeaderAsideTitle = "See how lifecycle stages are being used across the manufacturing portfolio.";
+    ViewBag.ContentHeaderAsideBody = "Maturity reporting helps reveal whether projects are using lifecycle stages consistently and at the right checkpoints.";
+    ViewBag.IsActiveTemplatesMaturityLevels = "menu-open";
+    ViewBag.IsActiveTemplatesMaturityLevelsReports = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+
+
+<div id="maturitylevelList" class="row">
+
+
+
+    <!--begin::Col-->
+    <div id="containerAdd" class="col-lg-4 col-md-6 col-12">
+        <button id="btnAdd" type="button"
+                class="btn btn-default w-100"
+                style="height: 100%;">
+            <h1><i class="bi bi-plus-circle-fill" style="font-size:80pt"></i></h1>
+            <h5>Add new maturity level</h5>
+        </button>
+    </div>
+    <!--end::Col-->
+</div>
+
+
+@section scripts{
+
+    <script src="~/Areas/Templates/Scripts/maturitylevels/reports.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#btnAdd').on('click', function (e) {
+                window.location.href = "@Url.Action("New", "MaturityLevels", new { area = "Templates" })";
+            });
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+

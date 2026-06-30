@@ -1,0 +1,67 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Display User";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review selected user details in read-only mode before editing or reconfiguring groups.";
+    ViewBag.ContentHeaderChips = new[] { "Read-only review", "Identity check", "Account status" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Inspect user details quickly.";
+    ViewBag.ContentHeaderAsideBody = "Use this page to validate account identity, contact data, and activity state before making changes.";
+    ViewBag.IsActiveAdminUsers = "menu-open";
+    ViewBag.IsActiveAdminUsersAll = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="mb-3">
+                    User Details
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Read-only information for the selected user</small>
+                </h5>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">User ID</label>
+                        <div id="userId" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Status</label>
+                        <div id="userStatus" class="form-control bg-light d-flex align-items-center">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">User Name</label>
+                        <div id="userName" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Email</label>
+                        <div id="email" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">First Name</label>
+                        <div id="firstName" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Last Name</label>
+                        <div id="lastName" class="form-control bg-light">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="m-0 float-end">
+                    <a href="@Url.Action("Index", "Users", new { area = "Admin" })" class="btn btn-default">Back to list</a>
+                    <a href="@Url.Action("Edit", "Users", new { area = "Admin", id = ViewBag.Id })" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Admin/Scripts/users/display.js"></script>
+}

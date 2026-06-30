@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Info Form (Dynamic Form Builder Demo)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@6.0.0-beta.2/dist/dropzone.min.css" />
+    <style>
+        .dynamic-field-wrapper {
+            margin-bottom: 1rem;
+        }
+
+        .form-actions {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <h2 class="mb-4">Employee Info Form</h2>
+        <form id="employeeForm"></form>
+        <div class="form-actions">
+            <button type="button" class="btn btn-success" id="submitBtn">
+                <i class="bi bi-check-circle"></i> Submit
+            </button>
+            <button type="button" class="btn btn-secondary" id="cancelBtn">
+                <i class="bi bi-x-circle"></i> Cancel
+            </button>
+        </div>
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dropzone@6.0.0-beta.2/dist/dropzone.min.js"></script>
+    <!-- Your modular dynamic field control and helpers -->
+    <script src="../scripts/locals/utils.js"></script>
+    <script src="../scripts/locals/rules-builder.js"></script>
+    <script src="../scripts/locals/dynamic-fields.js"></script>
+
+    <script>
+        // Set current user code for access control
+        window.currentUserCode = "*";
+
+        // Define Employee Info fields
+        const employeeFields = [
+            {
+                title: "Full Name",
+                type: "text",
+                name: "full_name",
+                isrequired: true,
+                placeholder: "Enter full name",
+                readAccess: "*",
+                writeAccess: "*",
+                minLength: 3
+            },
+            {
+                title: "Email",
+                type: "text",
+                name: "email",
+                isrequired: true,
+                placeholder: "Enter email address",
+                readAccess: "*",
+                writeAccess: "*",
+                validate: "/^\\S+@\\S+\\.\\S+$/.test(value)"
+            },
+            {
+                title: "Department",
+                type: "selection",
+                name: "department",
+                isrequired: true,
+                options: ["HR", "Engineering", "Sales", "Marketing"],
+                placeholder: "Select department",
+                readAccess: "*",
+                writeAccess: "*"
+            },
+            {
+                title: "Date of Joining",
+                type: "date",
+                name: "date_of_joining",
+                isrequired: true,
+                readAccess: "*",
+                writeAccess: "*"
+            },
+            {
+                title: "Is Active",
+                type: "checkbox",
+                name: "is_active",
+                isrequired: false,
+                readAccess: "*",
+                writeAccess: "*"
+            }
+        ];
+
+        // Render the form
+        $(document).ready(function () {
+            $('#employeeForm').dynamicField({
+                fields: employeeFields,
+                userCode: window.currentUserCode
+            });
+
+            // Handle Submit
+            $('#submitBtn').on('click', function () {
+                // Remove previous result
+                $('#result').empty();
+
+                // Get form values
+                const values = $('#employeeForm').dynamicFieldGetValues();
+
+                // Simple validation: check required fields
+                let missing = [];
+                employeeFields.forEach(f => {
+                    if (f.isrequired && (values[f.name] === "" || values[f.name] === undefined || values[f.name] === false)) {
+                        missing.push(f.title);
+                    }
+                });
+                if (missing.length > 0) {
+                    $('#result').html(
+                        `<div class="alert alert-danger">
+                            Please fill in the required fields: <strong>${missing.join(', ')}</strong>
+                        </div>`
+                    );
+                    return;
+                }
+
+                // Show result as JSON
+                $('#result').html(
+                    `<div class="alert alert-success">
+                        <strong>Form submitted successfully!</strong>
+                        <pre class="mt-2 bg-light p-2">${JSON.stringify(values, null, 2)}</pre>
+                    </div>`
+                );
+            });
+
+            // Handle Cancel
+            $('#cancelBtn').on('click', function () {
+                if (confirm("Are you sure you want to cancel? All data will be cleared.")) {
+                    $('#employeeForm').empty();
+                    $('#result').empty();
+                    // Re-render the form
+                    $('#employeeForm').dynamicField({
+                        fields: employeeFields,
+                        userCode: window.currentUserCode
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

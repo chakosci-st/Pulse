@@ -1,0 +1,168 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Users";
+    ViewBag.TitleIcon = "bi bi-person-badge-fill";
+    ViewBag.SubTitle = "Review and maintain user accounts, including access status and group assignment readiness.";
+    ViewBag.ContentHeaderChips = new[] { "User directory", "Account lifecycle", "Access readiness" };
+    ViewBag.ContentHeaderAsideLabel = "What this controls";
+    ViewBag.ContentHeaderAsideTitle = "Maintain the user directory used by Pulse.";
+    ViewBag.ContentHeaderAsideBody = "Use this list to inspect user account health, open detailed maintenance, and move quickly to configuration actions.";
+    ViewBag.IsActiveAdminUsers = "menu-open";
+    ViewBag.IsActiveAdminUsersAll = "active";
+    ViewBag.SelectedMenu = "Admin";
+}
+
+@section Styles {
+    <style>
+        .table-filter-toolbar {
+            display: grid;
+            grid-template-columns: minmax(180px, max-content) minmax(180px, 220px) minmax(220px, 260px) minmax(300px, 1fr);
+            gap: 0.85rem;
+            align-items: stretch;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fbfd 0%, #eef6f9 100%);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+        }
+
+            .table-filter-toolbar > * {
+                min-width: 0;
+            }
+
+            .table-filter-toolbar .table-filter-toolbar__item {
+                display: flex;
+                align-items: stretch;
+                min-width: 0;
+            }
+
+                .table-filter-toolbar .table-filter-toolbar__item .btn,
+                .table-filter-toolbar .table-filter-toolbar__item .form-select,
+                .table-filter-toolbar .table-filter-toolbar__item .form-control {
+                    width: 100%;
+                }
+
+            .table-filter-toolbar .card-tools-usersTable-length,
+            .table-filter-toolbar .card-tools-usersTable-filter,
+            .table-filter-toolbar .toolbar-search {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .table-filter-toolbar .dt-length,
+            .table-filter-toolbar .dt-search {
+                width: 100%;
+                margin: 0;
+            }
+
+                .table-filter-toolbar .dt-length label,
+                .table-filter-toolbar .dt-search label {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    min-height: 46px;
+                    margin: 0;
+                    gap: 0.65rem;
+                    color: #475569;
+                    font-size: 0.88rem;
+                    font-weight: 600;
+                }
+
+                .table-filter-toolbar .dt-length select,
+                .table-filter-toolbar .dt-search input {
+                    width: 100%;
+                    min-width: 0;
+                    min-height: 46px;
+                    margin: 0;
+                    border-radius: 0.8rem;
+                    border: 1px solid #cbd5e1;
+                    background: #ffffff;
+                    color: #0f172a;
+                    box-shadow: none;
+                }
+
+                    .table-filter-toolbar .dt-search input::placeholder {
+                        color: #94a3b8;
+                    }
+
+        .user-row-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+            transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.08s ease;
+        }
+
+            .user-row-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+                background: #f9fafb;
+            }
+
+        @@media (max-width: 991px) {
+            .table-filter-toolbar {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+                .table-filter-toolbar .toolbar-search {
+                    grid-column: span 2;
+                }
+        }
+
+        @@media (max-width: 767px) {
+            .table-filter-toolbar {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+                .table-filter-toolbar .toolbar-search {
+                    grid-column: auto;
+                }
+        }
+    </style>
+}
+
+<div class="table-filter-toolbar">
+    <div class="table-filter-toolbar__item">
+        <a href="/Admin/users/new" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> New User
+        </a>
+    </div>
+    <div class="table-filter-toolbar__item">
+        <select class="form-select" id="isActiveFilter">
+            <option value="">All</option>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+        </select>
+    </div>
+    <div class="table-filter-toolbar__item">
+        <span class="card-tools-usersTable-length"></span>
+    </div>
+    <div class="table-filter-toolbar__item toolbar-search">
+        <span class="card-tools-usersTable-filter"></span>
+    </div>
+</div>
+
+<div class="card-body p-0">
+    <table id="usersTable" class="display" style="width:100%;">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<div class="card-footer clearfix">
+    <div class="card-tools-usersTable-size" style="float:left"></div>
+    <div class="card-tools-usersTable-pagination float-end"></div>
+</div>
+
+@section scripts{
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+ 
+    <script src="~/Areas/Admin/Scripts/users/index.js"></script>
+}

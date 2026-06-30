@@ -1,0 +1,459 @@
+﻿@using Pulse.Web.Helpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Operations";
+    ViewBag.TitleIcon = "bi bi-buildings-fill";
+    ViewBag.SubTitle = "Manage plant master data and production calendars from the operational capability surface.";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+    ViewBag.SelectedMenu = "Operations";
+    ViewBag.IsActiveOperations = "active";
+}
+
+
+
+
+<style>
+    :root {
+        --bg: #f4f7fb;
+        --card-bg: #ffffff;
+        --primary: #0052cc;
+        --primary-soft: #e3edff;
+        --accent: #ffb547;
+        --text-main: #1a1f36;
+        --text-muted: #6c7393;
+        --border-soft: #dde3f0;
+        --radius-lg: 18px;
+        --radius-pill: 999px;
+        --shadow-soft: 0 14px 30px rgba(15, 35, 52, 0.08);
+        --transition-fast: 0.18s ease-out;
+    }
+
+ 
+ 
+
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+        gap: 16px;
+    }
+
+    .title-block h1 {
+        font-size: 2rem;
+        letter-spacing: -0.02em;
+    }
+
+    .title-block p {
+        margin-top: 4px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .content-card {
+        background: rgba(255, 255, 255, 0.97);
+        border-radius: 22px;
+        padding: 18px 20px 24px;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(177, 193, 224, 0.5);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    .section-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    .section-meta {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .admin-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+    }
+
+    .admin-card {
+        background: var(--card-bg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-soft);
+        padding: 16px 16px 14px;
+        box-shadow: 0 8px 18px rgba(6, 32, 83, 0.06);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+        .admin-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at top right, rgba(0, 82, 204, 0.08), transparent 55%);
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .admin-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 32px rgba(6, 25, 56, 0.18);
+            border-color: rgba(0, 82, 204, 0.35);
+            background: #ffffff;
+        }
+
+            .admin-card:hover::before {
+                opacity: 1;
+            }
+
+    .admin-meta {
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        letter-spacing: 0.09em;
+        font-weight: 600;
+    }
+
+    .admin-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+        .admin-title h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+    .admin-tag {
+        font-size: 0.7rem;
+        padding: 3px 9px;
+        border-radius: var(--radius-pill);
+        background: #fff9ec;
+        border: 1px solid #ffe4b3;
+        color: #c27a00;
+    }
+
+    .admin-desc {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+    }
+
+    .admin-actions {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .admin-btn {
+        flex: 1 1 80px;
+        min-width: 80px;
+        text-align: center;
+        border-radius: var(--radius-pill);
+        border: 1px solid rgba(0, 82, 204, 0.1);
+        padding: 7px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--primary);
+        background: var(--primary-soft);
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+    }
+
+        .admin-btn span.icon {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+    .admin-btn--secondary {
+        background: #f4f6fc;
+        color: var(--text-main);
+    }
+
+    .admin-btn--ghost {
+        background: #ffffff;
+        color: var(--text-muted);
+    }
+
+    .admin-btn:hover {
+        background: #ffffff;
+        color: var(--primary);
+        box-shadow: 0 7px 16px rgba(0, 82, 204, 0.25);
+        transform: translateY(-1px);
+        border-color: rgba(0, 82, 204, 0.45);
+    }
+
+    .admin-footer {
+        margin-top: 6px;
+        font-size: 0.76rem;
+        color: var(--text-muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #1ecb6b;
+        margin-right: 4px;
+        display: inline-block;
+    }
+
+    @@media (max-width: 600px) {
+        .template-home-hero {
+            grid-template-columns: 1fr;
+            padding: 18px 16px;
+        }
+
+        .content-card {
+            padding: 14px 12px 18px;
+        }
+
+        .title-block h1 {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+
+@section Styles {
+    <style>
+        .operations-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+
+        .operations-hero {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.95fr);
+            gap: 1rem;
+            margin-bottom: 18px;
+            padding: 22px 24px;
+            border-radius: 24px;
+            border: 1px solid rgba(177, 193, 224, 0.55);
+            background: linear-gradient(135deg, #0f172a 0%, #14532d 52%, #f8fafc 100%);
+            box-shadow: 0 20px 42px rgba(15, 23, 42, 0.1);
+            color: #f8fafc;
+        }
+
+
+
+
+        .operations-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            color: #dcfce7;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .operations-hero h1 {
+            margin: 0.85rem 0 0.45rem;
+            font-size: clamp(1.95rem, 2.8vw, 2.65rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .operations-hero p {
+            margin: 0;
+            max-width: 700px;
+            
+            line-height: 1.68;
+        }
+
+        .operations-hero__panel {
+            padding: 1rem;
+            border-radius: 1.15rem;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.78);
+            color: #0f172a;
+        }
+
+        .operations-hero__panel-label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 0.75rem;
+        }
+
+        .operations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        .operations-card {
+            display: grid;
+            gap: 0.8rem;
+            padding: 1.15rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fbfd 100%);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+        }
+
+        .operations-card__icon {
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.9rem;
+            background: #ecfdf5;
+            color: #166534;
+            font-size: 1.2rem;
+        }
+
+        .operations-card h2 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .operations-card p {
+            margin: 0;
+            color: #475569;
+            line-height: 1.65;
+        }
+
+        .operations-card__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+        }
+
+        @@media (max-width: 992px) {
+            .operations-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+}
+<div class="page">
+    <section class="operations-hero" aria-label="Operations overview">
+        <div>
+            <span class="operations-hero__eyebrow"><i class="bi bi-diagram-3-fill"></i> Operational setup</span>
+            <h1>Operations.</h1>
+            <p>
+                Operations now owns plant and production-calendar workflows.
+                This area is the canonical entry point for manufacturing setup, schedule definitions,
+                and related operational master data.
+            </p>
+        </div>
+        <aside class="operations-hero__panel">
+            <div class="operations-hero__panel-label">Current scope</div>
+            <p class="mb-0">
+                Use Operations for plant records, production calendars, and other manufacturing setup capabilities
+                that support execution and reporting downstream.
+            </p>
+        </aside>
+    </section>
+
+    <main class="content-card">
+
+        <section class="admin-grid" aria-label="Template sections">
+
+
+            @if (AuthorizationHelper.IsInGroupsOrModules("", "PLANTVIEW"))
+            {
+                <!-- Plants -->
+                <article class="admin-card">
+                    <div class="admin-meta">Manufacturing</div>
+                    <div class="admin-title">
+                        <h3>Plants</h3>
+                        <span class="admin-tag">Sites</span>
+                    </div>
+                    <p class="admin-desc">
+                        Register manufacturing plants.
+                    </p>
+                    <div class="admin-actions">
+                        <a href="@Url.Action("Index", "Plants", new { area = "Operations" })" class="admin-btn admin-btn--secondary">
+                            <span class="icon">📋</span> <span>List</span>
+                        </a>
+
+                        @if (AuthorizationHelper.IsInGroupsOrModules("", "PLANTADD"))
+                        {
+                            <a href="@Url.Action("New", "Plants", new { area = "Operations" })" class="admin-btn">
+                                <span class="icon">➕</span> <span>Add</span>
+                            </a>
+                        }
+                        <a href="@Url.Action("Reports", "Plants", new { area = "Operations" })" class="admin-btn admin-btn--ghost">
+                            <span class="icon">📊</span> <span>Report</span>
+                        </a>
+                    </div>
+                    <div class="admin-footer">
+                        <span><span class="status-dot"></span>Active</span>
+                        <span>Global coverage</span>
+                    </div>
+                </article>
+            }
+
+
+            @if (AuthorizationHelper.IsInGroupsOrModules("", "CALNDRVIEW"))
+            {
+
+                <!-- Calendars -->
+                <article class="admin-card">
+                    <div class="admin-meta">Scheduling</div>
+                    <div class="admin-title">
+                        <h3>Calendars</h3>
+                        <span class="admin-tag">Working days &amp; holidays</span>
+                    </div>
+                    <p class="admin-desc">
+                        Maintain standard calendars for plants, product lines, and regions including shutdowns and holidays.
+                    </p>
+                    <div class="admin-actions">
+                        <a href="@Url.Action("Index", "ProductionCalendars", new { area = "Operations" })" class="admin-btn admin-btn--secondary">
+                            <span class="icon">📋</span> <span>List</span>
+                        </a>
+
+                        @if (AuthorizationHelper.IsInGroupsOrModules("", "CALNDRGEN"))
+                        {
+                            <a href="@Url.Action("New", "ProductionCalendars", new { area = "Operations" })" class="admin-btn">
+                                <span class="icon">➕</span> <span>Add</span>
+                            </a>
+                        }
+                        <a href="@Url.Action("Reports", "ProductionCalendars", new { area = "Operations" })" class="admin-btn admin-btn--ghost">
+                            <span class="icon">📊</span> <span>Report</span>
+                        </a>
+                    </div>
+                    <div class="admin-footer">
+                        <span><span class="status-dot"></span>Active</span>
+                        <span>Synced daily</span>
+                    </div>
+                </article>
+            }
+        </section>
+    </main>
+</div>

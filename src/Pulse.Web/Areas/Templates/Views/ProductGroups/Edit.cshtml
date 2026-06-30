@@ -1,0 +1,75 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Edit Product Group";
+    ViewBag.TitleIcon = "bi bi-pencil-square";
+    ViewBag.SubTitle = "Update this product group so related products stay organized within the right division.";
+    ViewBag.ContentHeaderChips = new[] { "Mid-level portfolio grouping", "Division alignment", "Shared product families" };
+    ViewBag.ContentHeaderAsideLabel = "Group maintenance";
+    ViewBag.ContentHeaderAsideTitle = "Keep the mid-level product structure aligned to the portfolio hierarchy.";
+    ViewBag.ContentHeaderAsideBody = "Group updates help preserve a clear bridge between top-level divisions and the detailed project landscape.";
+    ViewBag.IsActiveTemplatesProductGroups = "menu-open";
+    ViewBag.IsActiveTemplatesProductGroupsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+<form id="productgroupForm" class="needs-validation" novalidate="">
+    @Html.Hidden("TransactionKey")
+    
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        Update Product Group
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Update existing product group</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="Code" class="form-label">Product Group Code<span class="required-indicator sr-only"></span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Code" name="Code" required="" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">Product Group Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input class="form-control" id="Name" name="Name" placeholder="Enter Product Group Name" required="">
+                            <div class="invalid-feedback">Please provide a product group name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Description" class="form-label">Product Group Description</label>
+                        <div class="input-group has-validation">
+                            <input class="form-control" id="Description" name="Description" placeholder="Enter Product Group Description">
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <div id="isActive"></div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "ProductGroups", new { area = "Templates" })" class="btn btn-default">Cancel</a> <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/Scripts/locals/switch-button.js"></script>
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/productgroups/edit.js"></script>
+}

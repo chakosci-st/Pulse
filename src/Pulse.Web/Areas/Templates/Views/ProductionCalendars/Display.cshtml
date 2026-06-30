@@ -1,0 +1,123 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Production Calendar";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "";
+    ViewBag.IsActiveTemplatesProductionCalendars = "menu-open";
+    ViewBag.IsActiveTemplatesProductionCalendarsAll = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+@section Styles {
+    <link href="~/node_modules/datatables/media/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/Content/datatables-bs5-fix.css" rel="stylesheet" />
+
+    <link href="~/node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" />
+
+    <style>
+        /* Custom color for DataTables buttons using Bootstrap classes */
+        .btn-custom-dt {
+            background-color: #FFC107 !important;
+            color: #03234b !important;
+            border: none !important;
+            border-radius: 4px !important;
+            font-weight: bold;
+            margin-right: 5px;
+            transition: background 0.2s;
+        }
+
+            .btn-custom-dt:hover, .btn-custom-dt:focus {
+                background-color: #FFD54F !important;
+                color: #03234b !important;
+            }
+    </style>
+}
+<!--begin::Row-->
+<div class="row">
+    <div class="col ">
+        <div class="card card-danger shadow-lg">
+            <div class="card-header bg-primary-subtle">
+                <h3 class="card-title">
+                    Production Calendar: @ViewBag.Id
+                </h3>
+                <div class="card-tools">
+                    <span class="card-tools-productioncalendarTable-filter mx-2 float-end"></span>
+                    <span class="card-tools-productioncalendarTable-buttons mx-2 float-end"></span>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <table id="productioncalendarTable" class="display">
+                    <thead>
+                        <tr>
+                            <th>Fiscal Date</th>
+                            <th>WorkWeek</th>
+                            <th>Month</th>
+                            <th>Quarter</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+                <div class="card-tools-productioncalendarTable-size" style="float:left"></div>
+                <div class="  m-0 float-end">
+                    <a href="@Url.Action("Index", "ProductionCalendars", new { area = "Templates" })" class="btn btn-default">Done</a>
+                </div>
+            </div>
+            <!-- /.card-footer -->
+        </div>
+
+
+
+
+    </div>
+    <!-- /.col -->
+
+</div>
+<!--end::Row-->
+
+
+
+@section scripts{
+    <!-- datatables -->
+    <script src="~/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net/js/dataTables.min.js"></script>
+    <script src="~/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <!-- DataTables Buttons -->
+    <script src="~/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+
+    <script src="~/node_modules/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+    <!-- JSZip for Excel export -->
+    <script src="~/node_modules/jszip/dist/jszip.min.js"></script>
+    <!-- pdfMake for PDF export (must be before buttons.html5) -->
+    <script src="~/node_modules/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/node_modules/pdfmake/build/vfs_fonts.js"></script>
+    <!-- DataTables Buttons HTML5 and Print -->
+    <script src="~/node_modules/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/node_modules/datatables.net-buttons/js/buttons.print.min.js"></script>
+
+
+    <!-- jquery-validation -->
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+
+
+
+
+
+
+    <!-- local -->
+    <script src="~/Scripts/locals/switch-button.js"></script>
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Templates/Scripts/productioncalendars/display.js"></script>
+}

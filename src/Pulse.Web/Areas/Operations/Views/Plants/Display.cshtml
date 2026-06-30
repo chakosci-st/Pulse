@@ -1,0 +1,63 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Display Plant";
+    ViewBag.TitleIcon = "bi bi-eye-fill";
+    ViewBag.SubTitle = "Review this manufacturing site's details, ownership context, and template alignment.";
+    ViewBag.ContentHeaderChips = new[] { "Manufacturing sites", "Plant ownership", "Site-level template alignment" };
+    ViewBag.ContentHeaderAsideLabel = "Site review";
+    ViewBag.ContentHeaderAsideTitle = "Inspect the plant record before updating assignments, templates, or reporting relationships.";
+    ViewBag.ContentHeaderAsideBody = "This view keeps the site identity clear so related project, roadmap, and member data stay anchored to the right plant.";
+    ViewBag.IsActiveOperationsPlants = "menu-open";
+    ViewBag.IsActiveOperationsPlantsAll = "active";
+    ViewBag.SelectedMenu = "Operations";
+    ViewBag.IsActiveOperations = "active";
+}
+
+<div class="row">
+    <div class="col-lg-4 mb-4 mb-lg-0">
+        <div class="card shadow-lg h-100">
+            <div class="card-body text-center">
+                <img id="plantImage" src="" alt="Plant image" class="img-fluid rounded-4 mb-3" style="max-height: 220px; object-fit: cover; width: 100%;" onerror="this.style.display='none';" />
+                <div class="text-muted small">Plant code</div>
+                <div id="plantCode" class="fs-4 fw-semibold">-</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="mb-3">
+                    Plant Details
+                    <br />
+                    <small style="font-size:12pt; font-weight:normal">Read-only information for the selected plant</small>
+                </h5>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Plant Name</label>
+                        <div id="plantName" class="form-control bg-light">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Status</label>
+                        <div id="plantStatus" class="form-control bg-light d-flex align-items-center">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="m-0 float-end">
+                    <a href="@Url.Action("Index", "Plants", new { area = "Operations" })" class="btn btn-default">Back to list</a>
+                    <a href="@Url.Action("Overview", "Plants", new { area = "Operations", code = ViewBag.Id })" class="btn btn-primary">Open overview</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var id = '@ViewBag.Id';
+    </script>
+    <script src="~/Areas/Operations/Scripts/plants/display.js"></script>
+}
+

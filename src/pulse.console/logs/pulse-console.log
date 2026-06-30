@@ -1,0 +1,319 @@
+2026-04-27 09:17:25 INFO pulse_console Starting command=pending-tasks-summary
+2026-04-27 09:17:27 INFO pulse_console Loaded pending task summaries recipients=0 records=0 dry_run=True force=False
+2026-04-27 09:17:27 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 09:28:03 INFO pulse_console Starting command=pending-tasks-summary
+2026-04-27 09:28:04 INFO pulse_console Loaded pending task summaries recipients=0 records=0 dry_run=False force=False
+2026-04-27 09:28:04 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 09:28:48 INFO pulse_console Starting command=pending-tasks-summary
+2026-04-27 09:28:49 INFO pulse_console Loaded pending task summaries recipients=0 records=0 dry_run=False force=False
+2026-04-27 09:28:49 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 09:28:51 INFO pulse_console Starting command=notifications-table
+2026-04-27 09:28:52 ERROR pulse_console Command failed: DPY-1001: not connected to database
+Traceback (most recent call last):
+  File "C:\Source Code\Pulse.vscode\pulse.console\src\pulse_console\cli.py", line 45, in main
+    report = send_notification_emails(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Source Code\Pulse.vscode\pulse.console\src\pulse_console\services.py", line 346, in send_notification_emails
+    records = [_map_notification(row) for row in rows]
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Source Code\Pulse.vscode\pulse.console\src\pulse_console\services.py", line 467, in _map_notification
+    message=_to_optional_str(row.get("message")),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Source Code\Pulse.vscode\pulse.console\src\pulse_console\services.py", line 641, in _to_optional_str
+    text = str(value).strip()
+           ^^^^^^^^^^
+  File "C:\Source Code\Pulse.vscode\.venv\Lib\site-packages\oracledb\lob.py", line 108, in __str__
+    return self.read()
+           ^^^^^^^^^^^
+  File "C:\Source Code\Pulse.vscode\.venv\Lib\site-packages\oracledb\lob.py", line 170, in read
+    return self._impl.read(offset, amount)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "src\\oracledb\\impl/thin/lob.pyx", line 352, in oracledb.thin_impl.ThinLobImpl.read
+  File "src\\oracledb\\impl/thin/connection.pyx", line 116, in oracledb.thin_impl.BaseThinConnImpl._create_message
+  File "src\\oracledb\\impl/thin/connection.pyx", line 116, in oracledb.thin_impl.BaseThinConnImpl._create_message
+  File "src\\oracledb\\impl/thin/messages.pyx", line 85, in oracledb.thin_impl.Message._initialize
+  File "src\\oracledb\\impl/thin/packet.pyx", line 235, in oracledb.thin_impl.ReadBuffer._check_connected
+  File "C:\Source Code\Pulse.vscode\.venv\Lib\site-packages\oracledb\errors.py", line 195, in _raise_err
+    raise error.exc_type(error) from cause
+oracledb.exceptions.InterfaceError: DPY-1001: not connected to database
+2026-04-27 09:30:02 INFO pulse_console Starting command=notifications-table
+2026-04-27 09:30:04 ERROR pulse_console Command failed: DPY-1001: not connected to database
+Traceback (most recent call last):
+  File "C:\Source Code\Pulse.vscode\pulse.console\src\pulse_console\cli.py", line 45, in main
+    report = send_notification_emails(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Source Code\Pulse.vscode\pulse.console\src\pulse_console\services.py", line 346, in send_notification_emails
+    records = [_map_notification(row) for row in rows]
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Source Code\Pulse.vscode\pulse.console\src\pulse_console\services.py", line 467, in _map_notification
+    message=_to_optional_str(row.get("message")),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Source Code\Pulse.vscode\pulse.console\src\pulse_console\services.py", line 641, in _to_optional_str
+    text = str(value).strip()
+           ^^^^^^^^^^
+  File "C:\Source Code\Pulse.vscode\.venv\Lib\site-packages\oracledb\lob.py", line 108, in __str__
+    return self.read()
+           ^^^^^^^^^^^
+  File "C:\Source Code\Pulse.vscode\.venv\Lib\site-packages\oracledb\lob.py", line 170, in read
+    return self._impl.read(offset, amount)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "src\\oracledb\\impl/thin/lob.pyx", line 352, in oracledb.thin_impl.ThinLobImpl.read
+  File "src\\oracledb\\impl/thin/connection.pyx", line 116, in oracledb.thin_impl.BaseThinConnImpl._create_message
+  File "src\\oracledb\\impl/thin/connection.pyx", line 116, in oracledb.thin_impl.BaseThinConnImpl._create_message
+  File "src\\oracledb\\impl/thin/messages.pyx", line 85, in oracledb.thin_impl.Message._initialize
+  File "src\\oracledb\\impl/thin/packet.pyx", line 235, in oracledb.thin_impl.ReadBuffer._check_connected
+  File "C:\Source Code\Pulse.vscode\.venv\Lib\site-packages\oracledb\errors.py", line 195, in _raise_err
+    raise error.exc_type(error) from cause
+oracledb.exceptions.InterfaceError: DPY-1001: not connected to database
+2026-04-27 09:41:42 INFO pulse_console Starting command=notifications-table
+2026-04-27 09:41:43 INFO pulse_console Loaded notifications count=5 dry_run=True force=False include_expired=False
+2026-04-27 09:41:43 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 09:41:43 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 09:41:43 INFO pulse_console DRY RUN notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com
+2026-04-27 09:41:43 INFO pulse_console DRY RUN notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com
+2026-04-27 09:41:43 INFO pulse_console DRY RUN notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com
+2026-04-27 09:41:43 INFO pulse_console DRY RUN notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com
+2026-04-27 09:41:43 INFO pulse_console DRY RUN notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com
+2026-04-27 09:41:43 INFO pulse_console DRY RUN notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com
+2026-04-27 09:41:43 INFO pulse_console DRY RUN notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com
+2026-04-27 09:41:43 INFO pulse_console DRY RUN notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com
+2026-04-27 09:41:43 INFO pulse_console DRY RUN notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com
+2026-04-27 09:41:43 INFO pulse_console DONE attempted=9 sent=0 skipped=2
+2026-04-27 09:56:07 INFO pulse_console Starting command=notifications-table
+2026-04-27 09:56:09 INFO pulse_console Loaded notifications count=1 dry_run=True force=False include_expired=False
+2026-04-27 09:56:09 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 09:56:09 INFO pulse_console DONE attempted=0 sent=0 skipped=1
+2026-04-27 09:58:58 INFO pulse_console Starting command=pending-tasks-summary
+2026-04-27 09:58:59 INFO pulse_console Loaded pending task summaries recipients=0 records=0 dry_run=False force=False
+2026-04-27 09:58:59 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 09:59:00 INFO pulse_console Starting command=notifications-table
+2026-04-27 09:59:02 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 09:59:02 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 09:59:02 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 09:59:03 INFO pulse_console SENT notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com
+2026-04-27 09:59:04 INFO pulse_console SENT notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com
+2026-04-27 09:59:05 INFO pulse_console SENT notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com
+2026-04-27 09:59:06 INFO pulse_console SENT notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com
+2026-04-27 09:59:06 INFO pulse_console SENT notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com
+2026-04-27 09:59:07 INFO pulse_console SENT notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com
+2026-04-27 09:59:08 INFO pulse_console SENT notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com
+2026-04-27 09:59:08 INFO pulse_console SENT notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com
+2026-04-27 09:59:09 INFO pulse_console SENT notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com
+2026-04-27 09:59:09 INFO pulse_console DONE attempted=9 sent=9 skipped=2
+2026-04-27 10:00:03 INFO pulse_console Starting command=notifications-table
+2026-04-27 10:00:04 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 10:00:04 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 10:00:04 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 10:00:04 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:00:04 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:00:04 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:00:04 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:00:04 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:00:04 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:00:04 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:00:04 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:00:04 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:00:04 INFO pulse_console DONE attempted=9 sent=0 skipped=11
+2026-04-27 10:08:23 INFO pulse_console Starting command=pending-tasks-summary
+2026-04-27 10:08:24 INFO pulse_console Loaded pending task summaries recipients=0 records=0 dry_run=False force=False
+2026-04-27 10:08:24 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 10:08:25 INFO pulse_console Starting command=notifications-table
+2026-04-27 10:08:26 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 10:08:26 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 10:08:26 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 10:08:26 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:08:26 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:08:26 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:08:26 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:08:26 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:08:26 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:08:26 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:08:26 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:08:26 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:08:26 INFO pulse_console DONE attempted=9 sent=0 skipped=11
+2026-04-27 10:30:02 INFO pulse_console Starting command=notifications-table
+2026-04-27 10:30:04 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 10:30:04 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 10:30:04 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 10:30:04 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:30:04 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:30:04 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:30:04 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:30:04 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:30:04 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:30:04 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:30:04 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:30:04 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:30:04 INFO pulse_console DONE attempted=9 sent=0 skipped=11
+2026-04-27 10:39:02 INFO pulse_console Starting command=milestone-ready-notifications
+2026-04-27 10:39:03 INFO pulse_console Loaded milestone-ready notifications count=0 dry_run=True force=False
+2026-04-27 10:39:03 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 10:41:51 INFO pulse_console Starting command=pending-tasks-summary
+2026-04-27 10:41:52 INFO pulse_console Loaded pending task summaries recipients=3 records=15 dry_run=False force=False
+2026-04-27 10:41:54 INFO pulse_console SENT pending-tasks-summary recipient=charles.legaspi@st.com tasks=5
+2026-04-27 10:41:54 INFO pulse_console SENT pending-tasks-summary recipient=eduardo.calinao@st.com tasks=5
+2026-04-27 10:41:55 INFO pulse_console SENT pending-tasks-summary recipient=marlon.ariola@st.com tasks=5
+2026-04-27 10:41:55 INFO pulse_console DONE attempted=3 sent=3 skipped=0
+2026-04-27 10:41:56 INFO pulse_console Starting command=notifications-table
+2026-04-27 10:41:58 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 10:41:58 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 10:41:58 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 10:41:58 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:41:58 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:41:58 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:41:58 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:41:58 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:41:58 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:41:58 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 10:41:58 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 10:41:58 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 10:41:58 INFO pulse_console DONE attempted=9 sent=0 skipped=11
+2026-04-27 11:00:03 INFO pulse_console Starting command=milestone-ready-notifications
+2026-04-27 11:00:03 INFO pulse_console Starting command=notifications-table
+2026-04-27 11:00:04 INFO pulse_console Loaded milestone-ready notifications count=0 dry_run=False force=False
+2026-04-27 11:00:04 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 11:00:04 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 11:00:04 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 11:00:04 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 11:00:04 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 11:00:04 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 11:00:04 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 11:00:04 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 11:00:04 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 11:00:04 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 11:00:04 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 11:00:04 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 11:00:04 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 11:00:04 INFO pulse_console DONE attempted=9 sent=0 skipped=11
+2026-04-27 11:30:03 INFO pulse_console Starting command=milestone-ready-notifications
+2026-04-27 11:30:03 INFO pulse_console Starting command=notifications-table
+2026-04-27 11:30:04 INFO pulse_console Loaded milestone-ready notifications count=0 dry_run=False force=False
+2026-04-27 11:30:04 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 11:30:05 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 11:30:05 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 11:30:05 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 11:30:05 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 11:30:05 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 11:30:05 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 11:30:05 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 11:30:05 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 11:30:05 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 11:30:05 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 11:30:05 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 11:30:05 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 11:30:05 INFO pulse_console DONE attempted=9 sent=0 skipped=11
+2026-04-27 12:00:09 INFO pulse_console Starting command=notifications-table
+2026-04-27 12:00:09 INFO pulse_console Starting command=milestone-ready-notifications
+2026-04-27 12:00:10 INFO pulse_console Loaded milestone-ready notifications count=0 dry_run=False force=False
+2026-04-27 12:00:10 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 12:00:11 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 12:00:11 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 12:00:11 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 12:00:11 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 12:00:11 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 12:00:11 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 12:00:11 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 12:00:11 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 12:00:11 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 12:00:11 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 12:00:11 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 12:00:11 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 12:00:11 INFO pulse_console DONE attempted=9 sent=0 skipped=11
+2026-04-27 12:30:07 INFO pulse_console Starting command=notifications-table
+ications
+2026-04-27 12:30:09 INFO pulse_console Loaded milestone-ready notifications count=0 dry_run=False force=False
+2026-04-27 12:30:09 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 12:30:09 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 12:30:09 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 12:30:09 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 12:30:09 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 12:30:09 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 12:30:09 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 12:30:09 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 12:30:09 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 12:30:09 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 12:30:09 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 12:30:09 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 12:30:09 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 12:30:09 INFO pulse_console DONE attempted=9 sent=0 skipped=11
+2026-04-27 13:00:05 INFO pulse_console Starting command=notifications-table
+2026-04-27 13:00:05 INFO pulse_console Starting command=milestone-ready-notifications
+2026-04-27 13:00:06 INFO pulse_console Loaded milestone-ready notifications count=0 dry_run=False force=False
+2026-04-27 13:00:06 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 13:00:06 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 13:00:06 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 13:00:06 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 13:00:06 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 13:00:06 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 13:00:06 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 13:00:06 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 13:00:06 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 13:00:06 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 13:00:06 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 13:00:06 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 13:00:06 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 13:00:06 INFO pulse_console DONE attempted=9 sent=0 skipped=11
+2026-04-27 13:30:23 INFO pulse_console Starting command=notifications-table
+2026-04-27 13:30:23 INFO pulse_console Starting command=milestone-ready-notifications
+2026-04-27 13:30:24 INFO pulse_console Loaded milestone-ready notifications count=0 dry_run=False force=False
+2026-04-27 13:30:24 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 13:30:25 INFO pulse_console Loaded notifications count=5 dry_run=False force=False include_expired=False
+2026-04-27 13:30:25 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 13:30:25 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 13:30:25 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 13:30:25 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 13:30:25 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 13:30:25 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 13:30:25 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 13:30:25 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 13:30:25 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 13:30:25 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 13:30:25 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 13:30:25 INFO pulse_console DONE attempted=9 sent=0 skipped=11
+2026-04-27 14:00:05 INFO pulse_console Starting command=milestone-ready-notifications
+2026-04-27 14:00:05 INFO pulse_console Starting command=notifications-table
+2026-04-27 14:00:06 INFO pulse_console Loaded milestone-ready notifications count=0 dry_run=False force=False
+2026-04-27 14:00:06 INFO pulse_console DONE attempted=0 sent=0 skipped=0
+2026-04-27 14:00:08 INFO pulse_console Loaded notifications count=23 dry_run=False force=False include_expired=False
+2026-04-27 14:00:08 WARNING pulse_console SKIP notifications-table notification=4FF71009DB0B0E65E06340655B0A96A9 reason=no-recipients
+2026-04-27 14:00:08 WARNING pulse_console SKIP notifications-table notification=500E5C63F50454C7E06340655B0A32E8 reason=no-recipients
+2026-04-27 14:00:08 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 14:00:08 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 14:00:08 INFO pulse_console SKIP notifications-table notification=5048677127AA59DAE06340655B0A471C recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 14:00:08 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 14:00:08 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 14:00:08 INFO pulse_console SKIP notifications-table notification=5060DEF148AD22E8E06340655B0A5EB7 recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 14:00:08 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=eduardo.calinao@st.com reason=already-delivered
+2026-04-27 14:00:08 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=charles.legaspi@st.com reason=already-delivered
+2026-04-27 14:00:08 INFO pulse_console SKIP notifications-table notification=5060DF2AA54322EAE06340655B0A986A recipient=marlon.ariola@st.com reason=already-delivered
+2026-04-27 14:00:10 INFO pulse_console SENT notifications-table notification=506BAD5022112EFDE06340655B0A90D8 recipient=eduardo.calinao@st.com
+2026-04-27 14:00:10 INFO pulse_console SENT notifications-table notification=506BAD5022112EFDE06340655B0A90D8 recipient=charles.legaspi@st.com
+2026-04-27 14:00:11 INFO pulse_console SENT notifications-table notification=506BAD5022112EFDE06340655B0A90D8 recipient=marlon.ariola@st.com
+2026-04-27 14:00:11 INFO pulse_console SENT notifications-table notification=506BADB8B8742EFBE06340655B0A5458 recipient=eduardo.calinao@st.com
+2026-04-27 14:00:12 INFO pulse_console SENT notifications-table notification=506BADB8B8742EFBE06340655B0A5458 recipient=charles.legaspi@st.com
+2026-04-27 14:00:12 INFO pulse_console SENT notifications-table notification=506BADB8B8742EFBE06340655B0A5458 recipient=marlon.ariola@st.com
+2026-04-27 14:00:13 INFO pulse_console SENT notifications-table notification=506BAE33AA582F00E06340655B0A7236 recipient=eduardo.calinao@st.com
+2026-04-27 14:00:13 INFO pulse_console SENT notifications-table notification=506BAE33AA582F00E06340655B0A7236 recipient=charles.legaspi@st.com
+2026-04-27 14:00:13 INFO pulse_console SENT notifications-table notification=506BAE33AA582F00E06340655B0A7236 recipient=marlon.ariola@st.com
+2026-04-27 14:00:14 INFO pulse_console SENT notifications-table notification=506BAE86EDD32F03E06340655B0A2C8D recipient=eduardo.calinao@st.com
+2026-04-27 14:00:14 INFO pulse_console SENT notifications-table notification=506BAE86EDD32F03E06340655B0A2C8D recipient=charles.legaspi@st.com
+2026-04-27 14:00:15 INFO pulse_console SENT notifications-table notification=506BAE86EDD32F03E06340655B0A2C8D recipient=marlon.ariola@st.com
+2026-04-27 14:00:15 INFO pulse_console SENT notifications-table notification=506AE25DE8B12EF3E06340655B0A9F05 recipient=eduardo.calinao@st.com
+2026-04-27 14:00:16 INFO pulse_console SENT notifications-table notification=506AE25DE8B12EF3E06340655B0A9F05 recipient=charles.legaspi@st.com
+2026-04-27 14:00:16 INFO pulse_console SENT notifications-table notification=506AE25DE8B12EF3E06340655B0A9F05 recipient=marlon.ariola@st.com
+2026-04-27 14:00:17 INFO pulse_console SENT notifications-table notification=506BB0CA921A2EF8E06340655B0AF909 recipient=eduardo.calinao@st.com
+2026-04-27 14:00:18 INFO pulse_console SENT notifications-table notification=506BB0CA921A2EF8E06340655B0AF909 recipient=charles.legaspi@st.com
+2026-04-27 14:00:18 INFO pulse_console SENT notifications-table notification=506BB0CA921A2EF8E06340655B0AF909 recipient=marlon.ariola@st.com
+2026-04-27 14:00:19 INFO pulse_console SENT notifications-table notification=506BB13495672EF6E06340655B0A2D76 recipient=eduardo.calinao@st.com
+2026-04-27 14:00:19 INFO pulse_console SENT notifications-table notification=506BB13495672EF6E06340655B0A2D76 recipient=charles.legaspi@st.com
+2026-04-27 14:00:20 INFO pulse_console SENT notifications-table notification=506BB13495672EF6E06340655B0A2D76 recipient=marlon.ariola@st.com
+2026-04-27 14:00:20 INFO pulse_console SENT notifications-table notification=506BB1E7EC9E2EEFE06340655B0AA1B9 recipient=eduardo.calinao@st.com
+2026-04-27 14:00:21 INFO pulse_console SENT notifications-table notification=506BB1E7EC9E2EEFE06340655B0AA1B9 recipient=charles.legaspi@st.com
+2026-04-27 14:00:21 INFO pulse_console SENT notifications-table notification=506BB1E7EC9E2EEFE06340655B0AA1B9 recipient=marlon.ariola@st.com
+2026-04-27 14:00:23 INFO pulse_console SENT notifications-table notification=506BB23A27CC2EEDE06340655B0A172B recipient=eduardo.calinao@st.com
+2026-04-27 14:00:23 INFO pulse_console SENT notifications-table notification=506BB23A27CC2EEDE06340655B0A172B recipient=charles.legaspi@st.com
+2026-04-27 14:00:24 INFO pulse_console SENT notifications-table notification=506BB23A27CC2EEDE06340655B0A172B recipient=marlon.ariola@st.com
+2026-04-27 14:00:24 INFO pulse_console SENT notifications-table notification=506BB29307DA2F05E06340655B0AA7E9 recipient=eduardo.calinao@st.com
+2026-04-27 14:00:24 INFO pulse_console SENT notifications-table notification=506BB29307DA2F05E06340655B0AA7E9 recipient=charles.legaspi@st.com
+2026-04-27 14:00:25 INFO pulse_console SENT notifications-table notification=506BB29307DA2F05E06340655B0AA7E9 recipient=marlon.ariola@st.com
+2026-04-27 14:00:26 INFO pulse_console SENT notifications-table notification=506BAD5022162EFDE06340655B0A90D8 recipient=eduardo.calinao@st.com

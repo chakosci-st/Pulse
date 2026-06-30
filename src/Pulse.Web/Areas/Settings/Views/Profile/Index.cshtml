@@ -1,0 +1,903 @@
+@model Pulse.Web.Areas.Settings.Models.ProfileViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = Model.User;
+    ViewBag.IsActiveSettings = "active";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+@section Styles {
+    <style>
+        .help-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.95fr);
+            gap: 1rem;
+            padding: 1.35rem 1.4rem;
+            border: 1px solid rgba(191, 219, 254, 0.9);
+            border-radius: 1.25rem;
+            background:
+                radial-gradient(circle at top right, rgba(59, 130, 246, 0.16), transparent 34%),
+                linear-gradient(135deg, #f8fbff 0%, #eef6ff 52%, #f8fafc 100%);
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08);
+        }
+
+        .help-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.32rem 0.72rem;
+            border-radius: 999px;
+            font-size: 0.73rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1d4ed8;
+            background: rgba(219, 234, 254, 0.95);
+            border: 1px solid rgba(147, 197, 253, 0.9);
+            margin-bottom: 0.85rem;
+        }
+
+        .help-hero__title {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            margin: 0;
+            color: #0f172a;
+            font-size: clamp(1.35rem, 2vw, 1.95rem);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        .help-hero__title-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1d4ed8;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.55);
+            flex: 0 0 auto;
+            overflow: hidden;
+        }
+
+        .help-hero__title-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .help-hero__copy {
+            max-width: 64ch;
+            margin: 0.8rem 0 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .help-hero__links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+        }
+
+        .help-chip-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.08);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #0f172a;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .help-chip-link:hover {
+            color: #0f172a;
+            border-color: rgba(96, 165, 250, 0.45);
+            background: rgba(219, 234, 254, 0.92);
+            transform: translateY(-1px);
+        }
+
+        .help-hero__panel {
+            display: grid;
+            gap: 0.8rem;
+            align-content: start;
+        }
+
+        .help-hero__stat {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            box-shadow: 0 12px 28px rgba(148, 163, 184, 0.16);
+        }
+
+        .help-hero__stat-label {
+            display: block;
+            margin-bottom: 0.28rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .help-hero__stat strong {
+            display: block;
+            font-size: 0.96rem;
+            color: #0f172a;
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(0, 2.1fr);
+            gap: 1.25rem;
+            margin-top: 1.25rem;
+        }
+
+        .help-sidebar-card,
+        .help-section-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            background: #fff;
+            box-shadow: 0 1rem 2rem rgba(15, 23, 42, 0.05);
+        }
+
+        .help-sidebar-card {
+            position: sticky;
+            top: 1rem;
+        }
+
+        .help-sidebar-card .card-body,
+        .help-section-card .card-body {
+            padding: 1.25rem;
+        }
+
+        .help-sidebar-title,
+        .help-section-title {
+            font-size: 0.86rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 0.95rem;
+        }
+
+        .help-nav {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .help-nav a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.8rem 0.9rem;
+            border-radius: 0.8rem;
+            text-decoration: none;
+            color: #0f172a;
+            background: #f8fafc;
+            border: 1px solid transparent;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .help-nav a:hover {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .help-mini-note {
+            margin-top: 1rem;
+            padding: 0.9rem;
+            border-radius: 0.85rem;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 0.84rem;
+        }
+
+        .help-content {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .help-section-card h2 {
+            margin-bottom: 0.4rem;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .help-section-card > .card-body > p {
+            color: #64748b;
+            font-size: 0.94rem;
+            margin-bottom: 1rem;
+        }
+
+        .help-callout-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .help-callout {
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.9rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .help-callout i {
+            font-size: 1.2rem;
+            color: #0f766e;
+        }
+
+        .help-callout h3 {
+            margin-top: 0.7rem;
+            margin-bottom: 0.45rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .help-callout p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+
+        .profile-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border-radius: 999px;
+            padding: 0.38rem 0.78rem;
+            font-weight: 700;
+            font-size: 0.82rem;
+            margin-right: 0.45rem;
+            margin-top: 0.45rem;
+        }
+
+        .profile-status-pill.is-active {
+            background: #e9f9ef;
+            color: #1f7a39;
+        }
+
+        .profile-status-pill.is-inactive {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .profile-summary-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #1d4ed8;
+            background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+            box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.4);
+            overflow: hidden;
+        }
+
+        .profile-summary-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-sidebar-name {
+            margin-top: 0.9rem;
+            margin-bottom: 0.2rem;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .profile-sidebar-meta {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .profile-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .profile-detail {
+            padding: 0.95rem 1rem;
+            border-radius: 0.9rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .profile-detail label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .profile-detail div,
+        .profile-detail a {
+            color: #0f172a;
+            font-size: 0.95rem;
+            word-break: break-word;
+            text-decoration: none;
+        }
+
+        .profile-tag-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+        }
+
+        .profile-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.68rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .profile-activity-list {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .profile-activity-item {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            gap: 0.9rem;
+            align-items: start;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.95rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .profile-activity-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #1d4ed8;
+            background: #dbeafe;
+            font-size: 1rem;
+        }
+
+        .profile-activity-item h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .profile-activity-item p {
+            margin: 0.35rem 0 0;
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        .profile-activity-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.6rem;
+        }
+
+        .profile-activity-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: #475569;
+            background: #f1f5f9;
+            border-radius: 999px;
+            padding: 0.32rem 0.6rem;
+        }
+
+        .profile-activity-time {
+            font-size: 0.8rem;
+            color: #64748b;
+            white-space: nowrap;
+        }
+
+        .profile-activity-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-top: 0.75rem;
+            color: #1d4ed8;
+            font-size: 0.86rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .profile-activity-link:hover {
+            color: #1e40af;
+            text-decoration: none;
+        }
+
+        .profile-empty-state {
+            padding: 1rem;
+            border-radius: 0.95rem;
+            border: 1px dashed #cbd5e1;
+            background: #f8fafc;
+            color: #64748b;
+        }
+
+        .profile-photo-panel {
+            margin-top: 1.1rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .profile-photo-panel h3 {
+            margin: 0 0 0.35rem;
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .profile-photo-panel p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .profile-photo-form {
+            margin-top: 0.9rem;
+            display: grid;
+            gap: 0.65rem;
+        }
+
+        .profile-photo-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            align-items: center;
+        }
+
+        .profile-photo-inline-form {
+            margin: 0;
+        }
+
+        .profile-photo-feedback {
+            margin-top: 1rem;
+            padding: 0.85rem 0.95rem;
+            border-radius: 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .profile-photo-feedback.is-success {
+            background: #e9f9ef;
+            color: #1f7a39;
+            border: 1px solid #bbf7d0;
+        }
+
+        .profile-photo-feedback.is-error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        @@media (max-width: 991.98px) {
+            .help-hero,
+            .help-grid,
+            .profile-detail-grid,
+            .help-callout-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .help-sidebar-card {
+                position: static;
+            }
+
+            .profile-activity-item {
+                grid-template-columns: auto minmax(0, 1fr);
+            }
+
+            .profile-activity-time {
+                grid-column: 2;
+            }
+        }
+
+        @@media (max-width: 575.98px) {
+            .help-hero {
+                padding: 1.1rem;
+            }
+
+            .help-hero__title {
+                align-items: flex-start;
+            }
+
+            .help-hero__title-icon {
+                width: 48px;
+                height: 48px;
+            }
+        }
+       
+    </style>
+}
+
+<section class="help-hero">
+    <div>
+        <span class="help-hero__eyebrow">
+            <i class="bi bi-person-badge"></i>
+            Profile Center
+        </span>
+        <h1 class="help-hero__title">
+            <span class="help-hero__title-icon">
+                @if (Model.HasPhoto)
+                {
+                    <img src="@Model.PhotoUrl" alt="@Model.FullName" />
+                }
+                else
+                {
+                    @Model.Initials
+                }
+            </span>
+            <span>
+                @Model.FullName
+                <small class="d-block mt-2" style="font-size:0.95rem;color:#64748b;font-weight:600;">@(!string.IsNullOrWhiteSpace(user.UserName) ? user.UserName : user.UserId)</small>
+            </span>
+        </h1>
+        <p class="help-hero__copy">
+            Review identity details, access groups, current workload, and the latest updates reaching this user in a single place.
+        </p>
+        <div>
+            <span class="profile-status-pill @(user.IsActive == 1 ? "is-active" : "is-inactive")">
+                <i class="bi @(user.IsActive == 1 ? "bi-check-circle-fill" : "bi-pause-circle-fill")"></i>
+                @(user.IsActive == 1 ? "Active" : "Inactive")
+            </span>
+            @if (user.Registered)
+            {
+                <span class="profile-status-pill is-active">
+                    <i class="bi bi-shield-check"></i>
+                    Registered
+                </span>
+            }
+        </div>
+        <div class="help-hero__links">
+            <a class="help-chip-link" href="#profile-overview">
+                <i class="bi bi-graph-up"></i>
+                Overview
+            </a>
+            <a class="help-chip-link" href="#profile-details">
+                <i class="bi bi-card-text"></i>
+                Details
+            </a>
+            <a class="help-chip-link" href="#profile-access">
+                <i class="bi bi-people"></i>
+                Access Groups
+            </a>
+            <a class="help-chip-link" href="#profile-activity">
+                <i class="bi bi-clock-history"></i>
+                Recent Activity
+            </a>
+            @if (!string.IsNullOrWhiteSpace(user.Email))
+            {
+                <a class="help-chip-link" href="mailto:@user.Email">
+                    <i class="bi bi-envelope"></i>
+                    Contact
+                </a>
+            }
+        </div>
+    </div>
+    <div class="help-hero__panel">
+        <div class="help-hero__stat">
+            <span class="help-hero__stat-label">Employee ID</span>
+            <strong>@user.UserId</strong>
+        </div>
+        <div class="help-hero__stat">
+            <span class="help-hero__stat-label">Pending Tasks</span>
+            <strong>@Model.PendingTaskCount active assignments</strong>
+        </div>
+        <div class="help-hero__stat">
+            <span class="help-hero__stat-label">Notifications</span>
+            <strong>@Model.UnreadNotificationCount unread of @Model.ActiveNotificationCount active</strong>
+        </div>
+    </div>
+</section>
+
+<section class="help-grid">
+    <aside class="help-sidebar-card card">
+        <div class="card-body">
+            <div class="help-sidebar-title">Profile Snapshot</div>
+            <div class="profile-summary-avatar">
+                @if (Model.HasPhoto)
+                {
+                    <img src="@Model.PhotoUrl" alt="@Model.FullName" />
+                }
+                else
+                {
+                    @Model.Initials
+                }
+            </div>
+            <div class="profile-sidebar-name">@Model.FullName</div>
+            <div class="profile-sidebar-meta">@(!string.IsNullOrWhiteSpace(user.Email) ? user.Email : "No email address on record")</div>
+            <div class="profile-sidebar-meta mt-1">@Model.UserGroups.Count access group@(Model.UserGroups.Count == 1 ? string.Empty : "s")</div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.PhotoStatusMessage))
+            {
+                <div class="profile-photo-feedback is-success">@Model.PhotoStatusMessage</div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.PhotoErrorMessage))
+            {
+                <div class="profile-photo-feedback is-error">@Model.PhotoErrorMessage</div>
+            }
+
+            @if (Model.CanEditPhoto)
+            {
+                <div class="profile-photo-panel">
+                    <h3>Profile Photo</h3>
+                    <p>Upload a JPG, PNG, or GIF image and Pulse will center-crop and resize it to a square JPEG at <strong>App_Data/UserProfile/@(user.UserId).jpg</strong>.</p>
+                    @using (Html.BeginForm("UploadPhoto", "Profile", new { area = "Settings" }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "profile-photo-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="file" name="photo" accept="image/jpeg,image/png,image/gif" class="form-control" />
+                        <div class="profile-photo-actions">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="bi bi-upload"></i>
+                                Upload photo
+                            </button>
+                            @if (Model.HasPhoto)
+                            {
+                                <a href="@Model.PhotoUrl" target="_blank" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-image"></i>
+                                    Preview current
+                                </a>
+                                using (Html.BeginForm("RemovePhoto", "Profile", new { area = "Settings" }, FormMethod.Post, new { @class = "profile-photo-inline-form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                        Reset photo
+                                    </button>
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+            }
+
+            <nav class="help-nav mt-4">
+                <a href="#profile-overview">
+                    <span>Overview</span>
+                    <i class="bi bi-arrow-right-short"></i>
+                </a>
+                <a href="#profile-details">
+                    <span>Identity Details</span>
+                    <i class="bi bi-arrow-right-short"></i>
+                </a>
+                <a href="#profile-access">
+                    <span>Access Groups</span>
+                    <i class="bi bi-arrow-right-short"></i>
+                </a>
+                <a href="#profile-activity">
+                    <span>Recent Activity</span>
+                    <i class="bi bi-arrow-right-short"></i>
+                </a>
+            </nav>
+
+            <div class="help-mini-note">
+                Latest activity is powered by the user's active notifications so the profile stays aligned with the same updates they see across Pulse.
+            </div>
+        </div>
+    </aside>
+
+    <div class="help-content">
+        <section id="profile-overview" class="help-section-card card">
+            <div class="card-body">
+                <div class="help-section-title">Overview</div>
+                <h2>Workload and account summary</h2>
+                <p>A quick read on assignments, access footprint, and the update volume currently attached to this user.</p>
+
+                <div class="help-callout-grid">
+                    <article class="help-callout">
+                        <i class="bi bi-list-task"></i>
+                        <h3>@Model.PendingTaskCount Pending Tasks</h3>
+                        <p>Assignments still open across not started, ongoing, or held work.</p>
+                    </article>
+                    <article class="help-callout">
+                        <i class="bi bi-check2-square"></i>
+                        <h3>@Model.CompletedTaskCount Completed Tasks</h3>
+                        <p>Assignments already marked completed for this user.</p>
+                    </article>
+                    <article class="help-callout">
+                        <i class="bi bi-briefcase"></i>
+                        <h3>@Model.OwnedProjectCount Projects Owned</h3>
+                        <p>Projects where this user is currently recorded as the project owner.</p>
+                    </article>
+                    <article class="help-callout">
+                        <i class="bi bi-people"></i>
+                        <h3>@Model.MemberProjectCount Projects as Member</h3>
+                        <p>Distinct projects where this user participates as part of the assigned project team.</p>
+                    </article>
+                    <article class="help-callout">
+                        <i class="bi bi-bell"></i>
+                        <h3>@Model.ActiveNotificationCount Active Notifications</h3>
+                        <p>Current updates available to the user across project, plant, and system scopes.</p>
+                    </article>
+                    <article class="help-callout">
+                        <i class="bi bi-diagram-3"></i>
+                        <h3>@Model.UserGroups.Count Access Groups</h3>
+                        <p>Distinct user groups currently granting visibility or permissions.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="profile-details" class="help-section-card card">
+            <div class="card-body">
+                <div class="help-section-title">Identity Details</div>
+                <h2>Profile details and audit trail</h2>
+                <p>Core identity data together with account creation and modification metadata.</p>
+
+                <div class="profile-detail-grid">
+                    <div class="profile-detail">
+                        <label>First Name</label>
+                        <div>@(!string.IsNullOrWhiteSpace(user.FirstName) ? user.FirstName : "-")</div>
+                    </div>
+                    <div class="profile-detail">
+                        <label>Last Name</label>
+                        <div>@(!string.IsNullOrWhiteSpace(user.LastName) ? user.LastName : "-")</div>
+                    </div>
+                    <div class="profile-detail">
+                        <label>Username</label>
+                        <div>@(!string.IsNullOrWhiteSpace(user.UserName) ? user.UserName : "-")</div>
+                    </div>
+                    <div class="profile-detail">
+                        <label>Email</label>
+                        @if (!string.IsNullOrWhiteSpace(user.Email))
+                        {
+                            <a href="mailto:@user.Email">@user.Email</a>
+                        }
+                        else
+                        {
+                            <div>-</div>
+                        }
+                    </div>
+                    <div class="profile-detail">
+                        <label>Created By</label>
+                        <div>@(!string.IsNullOrWhiteSpace(user.CreatedBy) ? user.CreatedBy : "-")</div>
+                    </div>
+                    <div class="profile-detail">
+                        <label>Created Date</label>
+                        <div>@(user.CreatedDate == default(DateTime) ? "-" : user.CreatedDate.ToString("dd MMM yyyy hh:mm tt"))</div>
+                    </div>
+                    <div class="profile-detail">
+                        <label>Modified By</label>
+                        <div>@(!string.IsNullOrWhiteSpace(user.ModifiedBy) ? user.ModifiedBy : "-")</div>
+                    </div>
+                    <div class="profile-detail">
+                        <label>Modified Date</label>
+                        <div>@(user.ModifiedDate.HasValue ? user.ModifiedDate.Value.ToString("dd MMM yyyy hh:mm tt") : "-")</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="profile-access" class="help-section-card card">
+            <div class="card-body">
+                <div class="help-section-title">Access</div>
+                <h2>Assigned user groups</h2>
+                <p>Current membership list used to determine shared access and permissions.</p>
+
+                @if (Model.UserGroups.Any())
+                {
+                    <div class="profile-tag-grid">
+                        @foreach (var groupName in Model.UserGroups)
+                        {
+                            <span class="profile-tag">
+                                <i class="bi bi-people-fill"></i>
+                                @groupName
+                            </span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="profile-empty-state">No user groups assigned.</div>
+                }
+            </div>
+        </section>
+
+        <section id="profile-activity" class="help-section-card card">
+            <div class="card-body">
+                <div class="help-section-title">Recent Activity</div>
+                <h2>Latest updates for this user</h2>
+                <p>Most recent active notifications surfaced to this user, ordered by latest notification date.</p>
+
+                @if (Model.RecentActivities.Any())
+                {
+                    <div class="profile-activity-list">
+                        @foreach (var activity in Model.RecentActivities)
+                        {
+                            <article class="profile-activity-item">
+                                <span class="profile-activity-icon">
+                                    <i class="bi @(activity.IsUnread ? "bi-bell-fill" : "bi-clock-history")"></i>
+                                </span>
+                                <div>
+                                    <h3>@activity.Title</h3>
+                                    @if (!string.IsNullOrWhiteSpace(activity.Message))
+                                    {
+                                        <p>@activity.Message</p>
+                                    }
+                                    <div class="profile-activity-meta">
+                                        <span>
+                                            <i class="bi bi-diagram-3"></i>
+                                            @activity.Context
+                                        </span>
+                                        @if (!string.IsNullOrWhiteSpace(activity.CreatedBy))
+                                        {
+                                            <span>
+                                                <i class="bi bi-person"></i>
+                                                @activity.CreatedBy
+                                            </span>
+                                        }
+                                        @if (activity.IsUnread)
+                                        {
+                                            <span>
+                                                <i class="bi bi-dot"></i>
+                                                Unread
+                                            </span>
+                                        }
+                                    </div>
+                                    @if (!string.IsNullOrWhiteSpace(activity.TargetUrl))
+                                    {
+                                        <a class="profile-activity-link" href="@activity.TargetUrl">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                            @(!string.IsNullOrWhiteSpace(activity.TargetLabel) ? activity.TargetLabel : "Open context")
+                                        </a>
+                                    }
+                                </div>
+                                <div class="profile-activity-time">@activity.OccurredAt.ToString("dd MMM yyyy hh:mm tt")</div>
+                            </article>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="profile-empty-state">No recent activity is available for this user.</div>
+                }
+            </div>
+        </section>
+    </div>
+</section>

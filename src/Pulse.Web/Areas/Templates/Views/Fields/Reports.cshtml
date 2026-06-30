@@ -1,0 +1,57 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Field Reports";
+    ViewBag.TitleIcon = "bi bi-bar-chart-line-fill";
+    ViewBag.SubTitle = "Monitor field usage by type and active status to keep reusable input templates healthy.";
+    ViewBag.ContentHeaderChips = new[] { "Field governance", "Type distribution", "Usage visibility" };
+    ViewBag.ContentHeaderAsideLabel = "Field insight";
+    ViewBag.ContentHeaderAsideTitle = "Understand how field templates are distributed and reused.";
+    ViewBag.ContentHeaderAsideBody = "These summaries help spot overused field types, stale templates, and candidates for consolidation.";
+    ViewBag.IsActiveTemplatesFields = "menu-open";
+    ViewBag.IsActiveTemplatesFieldsReports = "active";
+    ViewBag.SelectedMenu = "Templates";
+    ViewBag.IsActiveTemplates = "active";
+}
+
+<div class="row g-4 mb-4" id="fieldReportSummary">
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="card shadow-lg h-100">
+            <div class="card-body">
+                <div class="text-muted">Total Fields</div>
+                <h3 id="totalFields" class="mb-0">0</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="card shadow-lg h-100">
+            <div class="card-body">
+                <div class="text-muted">Active Fields</div>
+                <h3 id="activeFields" class="mb-0">0</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="card shadow-lg h-100">
+            <div class="card-body">
+                <div class="text-muted">Inactive Fields</div>
+                <h3 id="inactiveFields" class="mb-0">0</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-lg">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Type Distribution</h5>
+            <a href="@Url.Action("New", "Fields", new { area = "Templates" })" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle"></i> New Field
+            </a>
+        </div>
+        <div id="fieldTypeGrid" class="row g-3"></div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Templates/Scripts/fields/reports.js"></script>
+}

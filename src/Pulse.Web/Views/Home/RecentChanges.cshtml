@@ -1,0 +1,641 @@
+@{
+    ViewBag.Title = ViewBag.Title ?? "Recent Changes";
+    ViewBag.TitleIcon = ViewBag.TitleIcon ?? "bi bi-clock-history";
+    ViewBag.SubTitle = ViewBag.SubTitle ?? "Curated highlights for the latest Pulse updates.";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+}
+
+<script id="pulse-recent-changes-data" type="application/json">
+{
+  "version": "2026.04",
+  "releaseDate": "Apr 25, 2026",
+  "snapshotLabel": "Pulse Release Highlights - Apr 25, 2026",
+    "trackedItems": 11,
+  "groups": 4,
+  "highlights": [
+    {
+      "category": "platform",
+      "label": "Platform",
+      "accent": "#0f766e",
+      "time": "Access-aware search",
+      "title": "Home search now respects module visibility and plant-scoped project access",
+      "path": "Pulse.Web\\Controllers\\HomeController.cs",
+      "summary": "Global search now surfaces only the template and admin modules the signed-in user can view, while project results remain limited to accessible plants, projects, milestones, and tasks."
+    },
+    {
+      "category": "platform",
+      "label": "Platform",
+      "accent": "#0f766e",
+      "time": "Search results",
+      "title": "Project and task matches now land on the safer project details workspace",
+      "path": "Pulse.Api\\Controllers\\ProjectsController.cs",
+      "summary": "Search result links now route through project details so plant-level viewers can open matching records without being pushed into member-only overview flows."
+    },
+    {
+      "category": "reporting",
+      "label": "Reporting",
+      "accent": "#1d4ed8",
+      "time": "Matrix workspace",
+      "title": "Monitoring Matrix gained a modern workspace layout and selectable frozen fields",
+      "path": "Pulse.Web\\Views\\Home\\Report2.cshtml",
+      "summary": "Report2 now presents a more polished review surface and lets users choose which project fields remain pinned while scrolling across milestone and task columns."
+    },
+    {
+      "category": "reporting",
+      "label": "Reporting",
+      "accent": "#1d4ed8",
+      "time": "Freeze controls",
+      "title": "Sticky column behavior is now driven by user selection instead of hard-coded offsets",
+      "path": "Pulse.Web\\Scripts\\home\\report2.js",
+      "summary": "The monitoring matrix recalculates sticky offsets dynamically from the chosen freeze set, which makes the report more flexible for different review patterns."
+    },
+    {
+      "category": "calendar",
+      "label": "Calendar",
+      "accent": "#c2410c",
+      "time": "Reports refresh",
+      "title": "Production Calendar Reports now uses a calendar-only workspace with generated year selection",
+      "path": "Pulse.Web\\Areas\\Templates\\Views\\ProductionCalendars\\Reports.cshtml",
+      "summary": "The reports surface now mirrors the curated calendar experience, starts from generated years, and focuses the page on grouped fiscal calendar browsing instead of legacy tiles."
+    },
+    {
+      "category": "calendar",
+      "label": "Calendar",
+      "accent": "#c2410c",
+      "time": "Layout density",
+      "title": "Display and New calendar workspaces were compacted to keep full weeks visible",
+      "path": "Pulse.Web\\Areas\\Templates\\Views\\ProductionCalendars\\Display.cshtml",
+      "summary": "The production calendar views now favor tighter spacing, smaller labels, and responsive month grids so full weekday rows stay visible without relying on wide horizontal scroll regions."
+    },
+    {
+      "category": "workflow",
+      "label": "Workflow",
+      "accent": "#7c3aed",
+      "time": "Generation flow",
+      "title": "New calendar generation now includes clearer preview logic and save feedback",
+      "path": "Pulse.Web\\Areas\\Templates\\Scripts\\productioncalendars\\new.js",
+      "summary": "The calendar generator now reflects the week-52 rollover rule in preview, gives users better validation feedback, and shows clearer save progress when a new calendar is created."
+    },
+    {
+      "category": "workflow",
+      "label": "Workflow",
+      "accent": "#7c3aed",
+      "time": "Editing experience",
+      "title": "Forms and Roadmaps editing surfaces were refreshed for a more consistent template workflow",
+      "path": "Pulse.Web\\Areas\\Templates\\Views\\Roadmaps\\Edit.cshtml",
+      "summary": "Recent template work also improved the editing surfaces for roadmap and form maintenance so they feel more aligned with the rest of the modernized Pulse workspace theme."
+        },
+        {
+            "category": "workflow",
+            "label": "Workflow",
+            "accent": "#7c3aed",
+            "time": "Project workspaces",
+            "title": "Project Review and Details now support richer member-centric task walkthroughs",
+            "path": "Pulse.Web\\Areas\\Projects\\Scripts\\projects\\review.js",
+            "summary": "The project workspaces now support member-centric task views with swimlane organization, inline read-only form details, collapse controls, avatar fallbacks, and cleaner task search for review-driven walkthroughs."
+        },
+        {
+            "category": "platform",
+            "label": "Platform",
+            "accent": "#0f766e",
+            "time": "Sticky navigation",
+            "title": "Sticky workspace menus now stay aligned while scrolling, resizing, and toggling the sidebar",
+            "path": "Pulse.Web\\Scripts\\locals\\sticky-menu.js",
+            "summary": "Shared sticky menu behavior is now centralized so editor sidebars keep moving with the page and remain aligned to their columns across roadmap, form, plant, user-group, and project configuration screens."
+        },
+        {
+            "category": "reporting",
+            "label": "Reporting",
+            "accent": "#1d4ed8",
+            "time": "Project comparison",
+            "title": "Report3 now renders task form data with the same read-only detail view used in project details",
+            "path": "Pulse.Web\\Scripts\\home\\report3.js",
+            "summary": "Project comparison cards now render task form submissions through the shared read-only dynamic field pipeline, which keeps Report3 form output consistent with the project details workspace."
+    }
+  ]
+}
+</script>
+
+@section Styles {
+    <style>
+        .recent-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .recent-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1.25rem;
+            background:
+                radial-gradient(circle at top right, rgba(59, 130, 246, 0.14), transparent 30%),
+                radial-gradient(circle at 85% 18%, rgba(15, 118, 110, 0.14), transparent 26%),
+                linear-gradient(135deg, #f8fbfd 0%, #eef6f9 52%, #f8fafc 100%);
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08);
+        }
+
+        .recent-hero__main,
+        .recent-hero__side {
+            padding: 1.2rem 1.25rem;
+            border-radius: 1rem;
+        }
+
+        .recent-hero__main {
+            background: rgba(255, 255, 255, 0.74);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+        }
+
+        .recent-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.78rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1d4ed8;
+            background: rgba(219, 234, 254, 0.95);
+            border: 1px solid rgba(147, 197, 253, 0.9);
+        }
+
+        .recent-title {
+            margin: 0.9rem 0 0;
+            color: #0f172a;
+            font-size: clamp(1.9rem, 3vw, 3.2rem);
+            line-height: 0.95;
+            letter-spacing: -0.05em;
+            font-weight: 800;
+        }
+
+        .recent-lede {
+            max-width: 62ch;
+            margin: 0.85rem 0 0;
+            color: #475569;
+            font-size: 0.96rem;
+            line-height: 1.7;
+        }
+
+        .recent-band {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin-top: 1rem;
+        }
+
+        .recent-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 46px;
+            padding: 0 0.95rem;
+            border-radius: 1rem;
+            background: #ffffff;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            color: #475569;
+            font-size: 0.84rem;
+            font-weight: 600;
+        }
+
+        .recent-pill strong {
+            color: #0f172a;
+            font-size: 0.92rem;
+            font-weight: 800;
+        }
+
+        .recent-hero__side {
+            display: grid;
+            gap: 0.8rem;
+            align-content: start;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+        }
+
+        .recent-stat {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8fbff 0%, #f8fafc 100%);
+            border: 1px solid rgba(219, 234, 254, 0.9);
+        }
+
+        .recent-stat__label {
+            margin: 0 0 0.25rem;
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .recent-stat__value {
+            margin: 0;
+            color: #0f172a;
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .recent-stat__note {
+            margin: 0.35rem 0 0;
+            color: #64748b;
+            font-size: 0.84rem;
+            line-height: 1.6;
+        }
+
+        .recent-content {
+            display: grid;
+            grid-template-columns: 280px minmax(0, 1fr);
+            gap: 1rem;
+        }
+
+        .recent-sidebar,
+        .recent-feed {
+            padding: 1.2rem;
+            border: 1px solid #dbe4ea;
+            border-radius: 1.15rem;
+            background: #ffffff;
+            box-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
+        }
+
+        .recent-section-title {
+            margin: 0 0 0.75rem;
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .recent-caption {
+            margin: 0 0 1rem;
+            color: #64748b;
+            font-size: 0.84rem;
+            line-height: 1.7;
+        }
+
+        .recent-filter-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+
+        .recent-filter-chip {
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: #ffffff;
+            color: #0f172a;
+            min-height: 40px;
+            padding: 0 0.9rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+        }
+
+        .recent-filter-chip:hover,
+        .recent-filter-chip:focus-visible {
+            transform: translateY(-1px);
+            border-color: rgba(59, 130, 246, 0.4);
+            outline: none;
+        }
+
+        .recent-filter-chip.is-active {
+            background: linear-gradient(135deg, #0f766e 0%, #0f172a 100%);
+            border-color: transparent;
+            color: #f8fafc;
+        }
+
+        .recent-legend {
+            display: grid;
+            gap: 0.75rem;
+            margin-top: 1.1rem;
+        }
+
+        .recent-legend-row {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            color: #64748b;
+            font-size: 0.83rem;
+        }
+
+        .recent-legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex: 0 0 auto;
+        }
+
+        .recent-legend-dot.platform { background: #0f766e; }
+        .recent-legend-dot.reporting { background: #1d4ed8; }
+        .recent-legend-dot.calendar { background: #c2410c; }
+        .recent-legend-dot.workflow { background: #7c3aed; }
+
+        .recent-toolbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .recent-toolbar__copy {
+            max-width: 60ch;
+            color: #64748b;
+            font-size: 0.84rem;
+            line-height: 1.7;
+        }
+
+        .recent-snapshot {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.7rem 0.9rem;
+            border-radius: 1rem;
+            background: rgba(219, 234, 254, 0.9);
+            color: #1d4ed8;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .recent-cards {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .recent-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            border: 1px solid rgba(226, 232, 240, 0.92);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.92));
+            padding: 1rem 1rem 1rem 1.25rem;
+            display: grid;
+            gap: 0.7rem;
+            opacity: 0;
+            transform: translateY(12px);
+            animation: recent-rise 0.45s ease forwards;
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
+        }
+
+        .recent-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--recent-accent, #0f766e);
+        }
+
+        .recent-card__meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            align-items: center;
+        }
+
+        .recent-tag,
+        .recent-time {
+            display: inline-flex;
+            align-items: center;
+            min-height: 28px;
+            padding: 0 0.7rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .recent-tag {
+            background: rgba(219, 234, 254, 0.95);
+            color: #1d4ed8;
+        }
+
+        .recent-time {
+            background: rgba(148, 163, 184, 0.12);
+            color: #64748b;
+        }
+
+        .recent-card__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .recent-card__path {
+            font-family: Consolas, "Cascadia Mono", monospace;
+            color: #64748b;
+            font-size: 0.76rem;
+            word-break: break-word;
+        }
+
+        .recent-card__summary {
+            margin: 0;
+            color: #475569;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .recent-empty {
+            display: none;
+            padding: 1.8rem 1rem;
+            border-radius: 1rem;
+            border: 1px dashed #cbd5e1;
+            background: #f8fafc;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .recent-footnote {
+            margin-top: 1rem;
+            color: #64748b;
+            font-size: 0.8rem;
+            line-height: 1.7;
+        }
+
+        @@keyframes recent-rise {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@media (max-width: 991.98px) {
+            .recent-hero,
+            .recent-content {
+                grid-template-columns: 1fr;
+            }
+
+            .recent-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @@media (max-width: 767.98px) {
+            .recent-hero__main,
+            .recent-hero__side,
+            .recent-sidebar,
+            .recent-feed {
+                padding: 1rem;
+            }
+
+            .recent-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+}
+
+<div class="recent-shell">
+    <section class="recent-hero" aria-label="Recent changes overview">
+        <article class="recent-hero__main">
+            <span class="recent-eyebrow"><i class="bi bi-lightning-charge"></i>Pulse Workspace Updates</span>
+            <h1 class="recent-title">Recent Changes</h1>
+            <p class="recent-lede">
+                A curated release summary for the latest Pulse changes. This view translates recent platform, reporting,
+                and calendar work into a cleaner narrative that is easier to scan than raw file activity or scattered commit notes.
+            </p>
+            <div class="recent-band">
+                <div class="recent-pill"><strong id="recentTrackedItems">0</strong> tracked items</div>
+                <div class="recent-pill"><strong id="recentGroups">0</strong> update groups</div>
+                <div class="recent-pill"><strong id="recentReleaseDate">--</strong> release snapshot</div>
+            </div>
+        </article>
+
+        <aside class="recent-hero__side">
+            <div class="recent-stat">
+                <p class="recent-stat__label">Release Window</p>
+                <p id="recentVersion" class="recent-stat__value">--</p>
+                <p class="recent-stat__note">This summary groups recent Pulse updates into a single release-style view.</p>
+            </div>
+            <div class="recent-stat">
+                <p class="recent-stat__label">Latest Activity</p>
+                <p class="recent-stat__value">Workspace Refresh</p>
+                <p class="recent-stat__note">Search, reporting, and production calendar work now share a more consistent presentation and access model.</p>
+            </div>
+            <div class="recent-stat">
+                <p class="recent-stat__label">Source</p>
+                <p class="recent-stat__value">Curated Notes</p>
+                <p class="recent-stat__note">Cards are rendered from a single JSON block in this view so future release summaries stay easy to maintain.</p>
+            </div>
+        </aside>
+    </section>
+
+    <section class="recent-content">
+        <aside class="recent-sidebar" aria-label="Recent change filters">
+            <h2 class="recent-section-title">Filter View</h2>
+            <p class="recent-caption">Use the category chips to focus on the parts of the latest Pulse release that matter most to your team.</p>
+            <div class="recent-filter-list" id="recentChangeFilters">
+                <button class="recent-filter-chip is-active" type="button" data-filter="all">All</button>
+                <button class="recent-filter-chip" type="button" data-filter="platform">Platform</button>
+                <button class="recent-filter-chip" type="button" data-filter="reporting">Reporting</button>
+                <button class="recent-filter-chip" type="button" data-filter="calendar">Calendar</button>
+                <button class="recent-filter-chip" type="button" data-filter="workflow">Workflow</button>
+            </div>
+
+            <div class="recent-legend">
+                <div class="recent-legend-row"><span class="recent-legend-dot platform"></span><span>Platform: search, access filtering, and shared behavior changes</span></div>
+                <div class="recent-legend-row"><span class="recent-legend-dot reporting"></span><span>Reporting: matrix, comparison, and workspace-level reporting improvements</span></div>
+                <div class="recent-legend-row"><span class="recent-legend-dot calendar"></span><span>Calendar: display, reports, and generation updates for production calendars</span></div>
+                <div class="recent-legend-row"><span class="recent-legend-dot workflow"></span><span>Workflow: editing, save feedback, and end-user flow improvements</span></div>
+            </div>
+        </aside>
+
+        <section class="recent-feed" aria-label="Recent changes feed">
+            <div class="recent-toolbar">
+                <div>
+                    <h2 class="recent-section-title">Release Highlights</h2>
+                    <p class="recent-toolbar__copy">These cards are curated release notes for the latest Pulse work and are generated from the structured data block at the top of this view.</p>
+                </div>
+                <div class="recent-snapshot" id="recentSnapshotLabel">Loading snapshot...</div>
+            </div>
+
+            <div class="recent-cards" id="recentChangeList"></div>
+            <div class="recent-empty" id="recentChangeEmptyState">No changes match the selected filter.</div>
+
+            <p class="recent-footnote">
+                To refresh this page later, update the JSON block at the top of the view. The counts, snapshot label,
+                and filterable release cards are all generated from that one source.
+            </p>
+        </section>
+    </section>
+</div>
+
+@section scripts {
+    <script>
+        (function () {
+            var dataElement = document.getElementById('pulse-recent-changes-data');
+            var releaseData = JSON.parse(dataElement.textContent || '{}');
+            var changes = Array.isArray(releaseData.highlights) ? releaseData.highlights : [];
+            var activeFilter = 'all';
+
+            var list = document.getElementById('recentChangeList');
+            var empty = document.getElementById('recentChangeEmptyState');
+            var filters = document.getElementById('recentChangeFilters');
+            var snapshotLabel = document.getElementById('recentSnapshotLabel');
+
+            document.getElementById('recentTrackedItems').textContent = releaseData.trackedItems || changes.length || 0;
+            document.getElementById('recentGroups').textContent = releaseData.groups || 0;
+            document.getElementById('recentReleaseDate').textContent = releaseData.releaseDate || '--';
+            document.getElementById('recentVersion').textContent = releaseData.version || '--';
+            snapshotLabel.textContent = releaseData.snapshotLabel || 'Release Highlights';
+
+            function escapeHtml(value) {
+                return String(value || '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/\"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function renderCards() {
+                var visibleChanges = changes.filter(function (item) {
+                    return activeFilter === 'all' || item.category === activeFilter;
+                });
+
+                list.innerHTML = '';
+
+                visibleChanges.forEach(function (item, index) {
+                    var article = document.createElement('article');
+                    article.className = 'recent-card';
+                    article.style.setProperty('--recent-accent', item.accent || '#0f766e');
+                    article.style.animationDelay = (index * 0.05) + 's';
+                    article.innerHTML = [
+                        '<div class="recent-card__meta">',
+                        '<span class="recent-tag">', escapeHtml(item.label), '</span>',
+                        '<span class="recent-time">', escapeHtml(item.time), '</span>',
+                        '</div>',
+                        '<h3 class="recent-card__title">', escapeHtml(item.title), '</h3>',
+                        '<div class="recent-card__path">', escapeHtml(item.path), '</div>',
+                        '<p class="recent-card__summary">', escapeHtml(item.summary), '</p>'
+                    ].join('');
+                    list.appendChild(article);
+                });
+
+                empty.style.display = visibleChanges.length ? 'none' : 'block';
+            }
+
+            filters.addEventListener('click', function (event) {
+                var trigger = event.target.closest('[data-filter]');
+                if (!trigger) {
+                    return;
+                }
+
+                activeFilter = trigger.getAttribute('data-filter') || 'all';
+                Array.prototype.slice.call(filters.querySelectorAll('.recent-filter-chip')).forEach(function (button) {
+                    button.classList.toggle('is-active', button === trigger);
+                });
+                renderCards();
+            });
+
+            renderCards();
+        })();
+    </script>
+}

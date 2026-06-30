@@ -1,0 +1,42 @@
+= Authentication and Authorization =
+
+== Authentication Modes ==
+Pulse uses split auth models by runtime surface:
+
+=== Web Authentication (Pulse.Web) ===
+* OWIN application cookie + forms/session behavior
+* Logged-in users can mint API JWT via web auth endpoint
+* JWT is attached by client script using an AJAX prefilter approach
+
+=== API Authentication (Pulse.Api) ===
+* JWT bearer token validation for API endpoints
+* Token settings are shared through '''Jwt:*''' configuration values
+
+== Authorization Model ==
+Authorization is claims-driven using module code claims (for example: module-specific VIEW/ADD/EDIT/DELETE).
+
+=== Enforcement Surfaces ===
+* MVC: Authorize filter for module claims
+* API: Authorize filter for module claims
+* UI helpers: claim-based visibility for links and actions
+
+== Membership-Scoped Access ==
+Access is not only claim-based; plant/project membership also gates behavior:
+* Active plant members can open project index and details for projects within plant scope.
+* Project members or owners can access deeper project mutation workflows (overview, review, quick edit, etc.).
+
+== Notable Authorization Patterns ==
+* Read/list/get routes should enforce matching '''*VIEW''' module.
+* Mutation routes should enforce matching add/edit/delete module.
+* Plant-specific user-group assignment uses plant editor permissions to avoid requiring global user-group admin rights.
+
+== Logout Pattern ==
+Logout should route through web auth controller action:
+# Sign out OWIN application cookie
+# Clear forms/session state
+# Redirect to configured SSO logout URL with target resource pointing back to app login
+
+== Related Pages ==
+* [[Web UI and Notifications]]
+* [[API Overview]]
+* [[Operations and Setup]]

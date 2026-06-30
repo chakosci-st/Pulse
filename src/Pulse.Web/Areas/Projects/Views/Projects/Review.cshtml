@@ -1,0 +1,2267 @@
+﻿
+@using Pulse.Web.Helpers
+@{
+    ViewBag.Title = "Project Review";
+    ViewBag.SubTitle = "Review project using a roadmap template and assign team members.";
+    ViewBag.TitleIcon = "bi bi-journal-plus";
+    ViewBag.ContentHeaderMode = "breadcrumbs-only";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.IsActiveProjects = "active";
+}
+
+
+@section styles
+{
+    <!-- Summernote -->
+    <link href="~/node_modules/summernote/dist/summernote-bs5.min.css" rel="stylesheet" />
+
+    <link href="~/Content/locals/stacked-userprofiles.css" rel="stylesheet" />
+
+    <link href="~/node_modules/dropzone/dist/min/dropzone.min.css" rel="stylesheet" />
+
+    <style>
+
+        .div-dashed {
+            border: none !important; /* remove default */
+            border-top: 1px dashed #e5e7eb !important; /* dashed line */
+            margin: 1em 0 !important; /* optional spacing */
+            padding-top: 1em !important;
+        }
+
+        hr.dashed {
+            border: none; /* remove default */
+            border-top: 1px dashed #e5e7eb; /* dashed line */
+            margin: 1em 0; /* optional spacing */
+        }
+
+
+        .card-glass {
+            border-radius: 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 55%), radial-gradient(circle at bottom right, rgba(16,185,129,0.12), transparent 55%), #0b1220;
+            color: #e5e7eb;
+        }
+
+            .card-glass .project-title {
+                font-size: 1.35rem;
+                font-weight: 600;
+            }
+
+        .project-chip {
+            font-size: 0.8rem;
+            border-radius: 999px;
+            padding: 0.18rem 0.75rem;
+            background-color: rgba(15,23,42,0.5);
+            border: 1px solid rgba(148,163,184,0.5);
+            color: #e5e7eb;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .project-meta-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9ca3af;
+        }
+
+        .project-meta-value {
+            font-size: 0.9rem;
+            color: #e5e7eb;
+        }
+
+        .project-workspace-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .project-workspace-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.85fr);
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            border-radius: 1.25rem;
+            background: radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 48%), radial-gradient(circle at bottom right, rgba(16,185,129,0.12), transparent 48%), #0b1220;
+            color: #e5e7eb;
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.16);
+        }
+
+        .project-workspace-hero__main,
+        .project-workspace-hero__side {
+            padding: 1.15rem 1.2rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            background: rgba(15, 23, 42, 0.24);
+        }
+
+        .project-workspace-hero__eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.78rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #93c5fd;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(96, 165, 250, 0.28);
+        }
+
+        .project-workspace-hero__title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 0.9rem 0 0;
+            color: #f8fafc;
+            font-size: clamp(1.55rem, 2.5vw, 2.4rem);
+            line-height: 1;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .project-workspace-hero__icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.26);
+            flex: 0 0 auto;
+        }
+
+        .project-workspace-hero .page-header__subtitle {
+            margin: 0.8rem 0 0;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            max-width: 62ch;
+        }
+
+        .project-workspace-hero__side {
+            display: grid;
+            gap: 0.85rem;
+            align-content: start;
+        }
+
+        .project-workspace-hero__note {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.16);
+        }
+
+        .project-workspace-hero__note-label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #94a3b8;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .project-workspace-hero__note strong {
+            color: #f8fafc;
+            font-size: 0.95rem;
+        }
+
+        .review-mode-toggle {
+            display: inline-flex;
+            width: 100%;
+            gap: 0.4rem;
+            padding: 0.4rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        .review-mode-toggle__button {
+            flex: 1 1 0;
+            border: 0;
+            border-radius: 999px;
+            padding: 0.55rem 0.9rem;
+            background: transparent;
+            color: #cbd5e1;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .review-mode-toggle__button.is-active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.92), rgba(37, 99, 235, 0.92));
+            color: #f8fafc;
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+        }
+
+        .review-mode-toggle__button:not(.is-active):hover {
+            background: rgba(59, 130, 246, 0.14);
+            color: #f8fafc;
+        }
+
+        /* Layout */
+        .layout-main-card {
+            border-radius: 1rem;
+            background-color: #f9fafb;
+            border: none;
+            box-shadow: 0 15px 45px rgba(15,23,42,0.35);
+            margin-top: 1.25rem;
+            overflow: hidden;
+        }
+
+        @@media (max-width: 991.98px) {
+            .project-workspace-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .left-panel {
+            border-right: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #eff6ff, #f9fafb);
+        }
+
+        .right-panel {
+            background: #ffffff;
+        }
+
+        .project-workspace-shell.review-mode-member .left-panel {
+            display: none;
+        }
+
+        .project-workspace-shell.review-mode-member .right-panel {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        .project-view-panel[hidden],
+        .member-centric-panel[hidden] {
+            display: none !important;
+        }
+
+        .member-centric-panel {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .member-focus-shell {
+            display: grid;
+            gap: 0.75rem;
+            padding: 1rem;
+            border: 1px solid #dbe5f0;
+            border-radius: 1rem;
+            background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+        }
+
+        .member-focus-shell__label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .member-task-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+            padding: 0.95rem 1rem;
+            border: 1px solid #dbe5f0;
+            border-radius: 1rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        }
+
+        .member-task-toolbar__copy {
+            display: grid;
+            gap: 0.2rem;
+        }
+
+        .member-task-toolbar__eyebrow {
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .member-task-toolbar__title {
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .member-task-search {
+            position: relative;
+            display: block;
+            flex: 1 1 320px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .member-task-toolbar__actions {
+            display: flex;
+            flex: 1 1 100%;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 0.65rem;
+        }
+
+        @@media (min-width: 992px) {
+            .member-task-toolbar__actions {
+                flex: 0 1 auto;
+                align-items: center;
+            }
+        }
+
+        .member-task-search i,
+        .member-task-search svg {
+            position: absolute;
+            top: 50%;
+            left: 0.95rem;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+            z-index: 2;
+            font-size: 0.82rem;
+        }
+
+        .member-task-search svg {
+            width: 0.82rem;
+            height: 0.82rem;
+        }
+
+        .member-task-search .form-control {
+            display: block;
+            width: 100%;
+            padding-left: 2.6rem;
+            border-radius: 999px;
+            border-color: #cbd5e1;
+            box-shadow: none;
+        }
+
+        .member-focus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .member-focus-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.85rem 0.95rem;
+            border-radius: 1rem;
+            border: 1px solid #d7e3f4;
+            background: #ffffff;
+            text-align: left;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+
+        .member-focus-chip:hover {
+            transform: translateY(-1px);
+            border-color: #93c5fd;
+            box-shadow: 0 12px 28px rgba(59, 130, 246, 0.12);
+        }
+
+        .member-focus-chip.is-active {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            box-shadow: 0 16px 34px rgba(37, 99, 235, 0.18);
+        }
+
+        .member-focus-avatar,
+        .owner-focus-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #1d4ed8;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+        }
+
+        .member-focus-avatar {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-focus-avatar__initials {
+            position: relative;
+            z-index: 1;
+            line-height: 1;
+        }
+
+        .member-focus-avatar__image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
+        }
+
+        .member-focus-copy {
+            display: grid;
+            min-width: 0;
+        }
+
+        .member-focus-name {
+            color: #0f172a;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .member-focus-count {
+            color: #64748b;
+            font-size: 0.78rem;
+        }
+
+        .member-swimlane {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(260px, 1fr);
+            grid-auto-rows: minmax(320px, 68vh);
+            gap: 1rem;
+            align-items: stretch;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 0.25rem;
+        }
+
+        @@media (max-width: 1199.98px) {
+            .member-swimlane {
+                grid-auto-columns: minmax(240px, 1fr);
+            }
+        }
+
+        .member-lane {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid #dbe5f0;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+            transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+            height: 100%;
+            min-height: 0;
+            overflow-x: hidden;
+        }
+
+        .member-lane.is-drop-target {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
+            transform: translateY(-1px);
+        }
+
+        .member-lane.is-lane-restricted {
+            opacity: 0.62;
+        }
+
+        .member-lane.is-lane-restricted .member-lane__body {
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+            border-radius: 0.75rem;
+            padding: 0.2rem;
+        }
+
+        .member-lane__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .member-lane__title-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            min-width: 0;
+        }
+
+        .member-lane__title {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: #0f172a;
+            font-weight: 800;
+        }
+
+        .member-lane__restriction-badge {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            border: 1px solid #fecaca;
+            background: #fff1f2;
+            color: #b91c1c;
+            border-radius: 999px;
+            padding: 0.15rem 0.5rem;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .member-lane__count {
+            min-width: 30px;
+            padding: 0.18rem 0.55rem;
+            border-radius: 999px;
+            background: #e2e8f0;
+            color: #334155;
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .member-lane__body {
+            flex: 1;
+            display: grid;
+            gap: 0.75rem;
+            align-content: start;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .member-task-card {
+            display: grid;
+            gap: 0.55rem;
+            padding: 0.9rem;
+            border-radius: 0.9rem;
+            border: 1px solid #dbe5f0;
+            background: #ffffff;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+            cursor: grab;
+            transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+        }
+
+        .member-task-card:hover {
+            transform: translateY(-1px);
+            border-color: #bfdbfe;
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.1);
+        }
+
+        .member-task-card__header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .member-task-card__header-main {
+            display: grid;
+            gap: 0.55rem;
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .member-task-card__header-actions {
+            display: grid;
+            justify-items: end;
+            gap: 0.45rem;
+            flex: 0 0 auto;
+        }
+
+        .member-task-card__body {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .member-task-card.is-dragging {
+            opacity: 0.62;
+            transform: rotate(1deg);
+            box-shadow: 0 20px 32px rgba(15, 23, 42, 0.16);
+        }
+
+        .member-task-card__title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .member-task-card__meta,
+        .member-task-card__dates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem 0.8rem;
+            color: #64748b;
+            font-size: 0.78rem;
+        }
+
+        .member-task-card__meta span,
+        .member-task-card__dates span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .member-task-card__pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            width: fit-content;
+            padding: 0.28rem 0.55rem;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .member-task-card__top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .member-task-card__drag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: #94a3b8;
+            font-size: 0.72rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .member-task-card__status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: #475569;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .member-task-card__footer {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.65rem;
+            margin-top: 0.2rem;
+        }
+
+        .member-task-card__actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 0.45rem;
+        }
+
+        .member-task-card__actions .btn {
+            border-radius: 999px;
+        }
+
+        .member-lane__empty {
+            min-height: 180px;
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+            border: 1px dashed #cbd5e1;
+            border-radius: 0.9rem;
+            color: #94a3b8;
+            font-size: 0.82rem;
+            text-align: center;
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        .activity-owner-actions {
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .owner-focus-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.18rem 0.45rem 0.18rem 0.2rem;
+            border: 1px solid #dbe5f0;
+            border-radius: 999px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 0.76rem;
+            line-height: 1;
+        }
+
+        .owner-focus-button:hover {
+            border-color: #93c5fd;
+            color: #1d4ed8;
+            background: #eff6ff;
+        }
+
+        .owner-focus-avatar {
+            width: 24px;
+            height: 24px;
+            font-size: 0.62rem;
+        }
+
+        .owner-focus-empty {
+            color: #94a3b8;
+        }
+
+        /* Left: Milestones list */
+        .milestone-item {
+            border-radius: 0.75rem;
+            padding: 0.7rem 0.85rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            border: 1px solid transparent;
+            background-color: #ffffff;
+            position: relative;
+        }
+
+            .milestone-item:hover {
+                border-color: #bfdbfe;
+                box-shadow: 0 4px 14px rgba(148,163,184,0.35);
+            }
+
+            .milestone-item.active {
+                border-color: #3b82f6;
+                background: linear-gradient(135deg, #eff6ff, #dbeafe);
+                box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+            }
+
+        .milestone-small-label {
+            font-size: 0.7rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .milestone-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .milestone-dates {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .milestone-summary {
+            font-size: 0.72rem;
+            color: #6b7280;
+            margin-top: 0.2rem;
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+            .milestone-summary span {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.15rem;
+            }
+
+        .badge-due {
+            font-size: 0.7rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .badge-due-ontime {
+            background-color: #ecfdf5;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-due-risk {
+            background-color: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fed7aa;
+        }
+
+        .badge-due-overdue {
+            background-color: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .badge-due-notstarted {
+            background-color: #6b7280;
+            color: #ffffff;
+            border: 1px solid #6b7280;
+        }
+
+        .badge-due-success {
+            background-color: #eff6ff;
+            color: #1d4ed8; /* blue text */
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Status chips for activities */
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.15rem 0.55rem;
+            font-size: 0.75rem;
+            border-radius: 999px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .status-ontrack {
+            background-color: rgba(16,185,129,0.1);
+            color: #047857;
+        }
+
+        .status-resched {
+            background-color: rgba(245,158,11,0.12);
+            color: #92400e;
+        }
+
+        .status-closed {
+            background-color: rgba(107,114,128,0.16);
+            color: #374151;
+        }
+
+        /* Right: Activities */
+        .activities-header {
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .activities-header-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .activities-header-sub {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .activity-card {
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            background-color: #ffffff;
+            transition: box-shadow 0.1s ease-in-out, transform 0.05s, border-color 0.1s;
+            scroll-margin-top: 80px; /* for scrollIntoView from tree */
+        }
+
+            .activity-card:hover {
+                box-shadow: 0 4px 15px rgba(148,163,184,0.3);
+                transform: translateY(-1px);
+                border-color: #bfdbfe;
+            }
+
+        .task-prerequisites {
+            margin-top: 0.45rem;
+            font-size: 0.78rem;
+            color: #6b7280;
+        }
+
+        .task-prerequisites small {
+            font-weight: 700;
+            color: #4b5563;
+            margin-right: 0.35rem;
+        }
+
+        .member-task-card .task-prerequisites {
+            margin-top: 0;
+        }
+
+        .member-task-card.is-collapsed .activity-collapse-toggle > * {
+            transform: rotate(-90deg);
+        }
+
+        .member-task-card.is-collapsed .member-task-card__body {
+            display: none;
+        }
+
+        .activity-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .activity-card-body {
+            margin-top: 0.75rem;
+        }
+
+        .activity-collapse-toggle {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 999px;
+            border: 1px solid #dbe3f0;
+            background: #f8fafc;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+        }
+
+        .activity-collapse-toggle:hover {
+            background: #e0ecff;
+            color: #1d4ed8;
+        }
+
+        .activity-collapse-toggle > * {
+            transition: transform 0.15s ease;
+        }
+
+        .activity-card.is-collapsed .activity-collapse-toggle > * {
+            transform: rotate(-90deg);
+        }
+
+        .activity-card.is-collapsed .activity-card-body {
+            display: none;
+        }
+
+        .activity-title {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .activity-meta {
+            font-size: 0.78rem;
+            color: #6b7280;
+        }
+
+        .activity-progress-text {
+            font-size: 0.78rem;
+            color: #374151;
+            white-space: nowrap;
+        }
+
+        .btn-pill-sm {
+            border-radius: 999px;
+            font-size: 0.78rem;
+            padding: 0.25rem 0.7rem;
+        }
+
+        /* Filters */
+        .filter-bar {
+            padding: 0.4rem 0;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px dashed #e5e7eb;
+        }
+
+        .filter-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .filter-select, .filter-search {
+            font-size: 0.78rem;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+
+        /* Nested sub-milestone / sub-task blocks */
+        .submilestone-block {
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            padding: 0.5rem 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .submilestone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.35rem;
+        }
+
+        .submilestone-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .submilestone-meta {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .subtasks-container {
+            padding-left: 0.7rem;
+            border-left: 2px solid #e5e7eb;
+            margin-top: 0.25rem;
+        }
+
+        .subtask-row {
+            padding: 0.35rem 0;
+            border-top: 1px dashed #e5e7eb;
+        }
+
+            .subtask-row:first-child {
+                border-top: none;
+            }
+
+        /* Task milestones badges */
+        .task-milestone-badge {
+            font-size: 0.72rem;
+            border-radius: 999px;
+            padding: 0.15rem 0.5rem;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            white-space: nowrap;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+            .empty-state i {
+                font-size: 1.6rem;
+                margin-bottom: 0.5rem;
+            }
+
+        /* Tree view */
+        .tree-card {
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            padding: 0.5rem 0.75rem 0.75rem;
+            margin-top: 0.5rem;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .tree-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 0.25rem;
+        }
+
+        .tree-ul {
+            list-style: none;
+            padding-left: 0.75rem;
+            margin-bottom: 0;
+        }
+
+            .tree-ul .tree-ul {
+                border-left: 1px solid #e5e7eb;
+                margin-left: 0.25rem;
+                padding-left: 0.75rem;
+            }
+
+        .tree-node {
+            font-size: 0.78rem;
+            padding: 0.15rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+        }
+
+            .tree-node i {
+                font-size: 0.7rem;
+                width: 14px;
+                text-align: center;
+            }
+
+            .tree-node span.label {
+                color: #374151;
+                white-space: nowrap;
+            }
+
+            .tree-node:hover span.label {
+                text-decoration: underline;
+                color: #1d4ed8;
+            }
+
+        /*  button icon */
+        .icon-btn {
+            color: #6c757d; /* change color as you like */
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+            .icon-btn:hover {
+                color: #000; /* hover color */
+                font-size: 0.9rem;
+            }
+
+            .icon-btn:focus {
+                box-shadow: none; /* remove Bootstrap focus outline */
+                font-size: 0.9rem;
+                outline: none;
+            }
+
+        .chip {
+            display: inline-block;
+            padding: 0.25em 0.75em;
+            border-radius: 1em;
+            background: #e9ecef;
+            margin-right: 0.5em;
+            font-size: 0.7em;
+        }
+
+        .chip-success {
+            background-color: rgba(107,114,128,0.16) !important;
+            color: #374151 !important;
+        }
+
+        .activity-card,
+        .member-task-card {
+            position: relative;
+        }
+
+        .node-refreshing {
+            filter: grayscale(0.35);
+        }
+
+        .node-refreshing > *:not(.node-refresh-overlay) {
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        .node-refresh-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.55);
+            border-radius: inherit;
+            z-index: 3;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+            .search-wrapper .search-icon {
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                pointer-events: none;
+                font-size: 0.8rem; /* adjust if needed */
+            }
+
+            /* Add padding so text doesn't overlap icon */
+            .search-wrapper .filter-search {
+                padding-left: 2rem; /* tune until it looks right */
+            }
+
+
+        .sidebar-panel {
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            padding: 0.5rem 0.75rem 0.5rem;
+            font-size: 0.8rem;
+            max-height: 230px;
+            overflow-y: auto;
+        }
+
+        .sidebar-panel-title {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #4b5563;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .sidebar-list {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+            .sidebar-list li {
+                padding: 0.25rem 0;
+                border-bottom: 1px dashed #e5e7eb;
+            }
+
+                .sidebar-list li:last-child {
+                    border-bottom: none;
+                }
+
+            .sidebar-list .meta {
+                font-size: 0.7rem;
+                color: #6b7280;
+            }
+
+        .no-underline,
+        .no-underline:hover,
+        .no-underline:focus {
+            text-decoration: none;
+        }
+
+        .side-section {
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            padding: 1rem;
+            height: 100%;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .side-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .side-section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .side-section-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+        }
+
+        .side-section-icon.attachments {
+            background: #e5edff;
+            color: #4338ca;
+        }
+
+        .side-section-icon.comments {
+            background: #dcfce7;
+            color: #047857;
+        }
+
+        .side-section-icon.notifications {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .side-section-copy {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-bottom: 0.75rem;
+        }
+
+        .side-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            color: #374151;
+            padding: 0.45rem 0.8rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        .attachment-list {
+            margin-top: 0.35rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.75rem 0.85rem;
+            border-radius: 0.9rem;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            font-size: 0.82rem;
+        }
+
+        .attachment-main {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 0;
+        }
+
+        .attachment-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.75rem;
+            background: #e5edff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #4338ca;
+            flex-shrink: 0;
+        }
+
+        .attachment-copy {
+            min-width: 0;
+        }
+
+        .attachment-name {
+            color: #111827;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .attachment-meta {
+            font-size: 0.72rem;
+            color: #6b7280;
+            margin-top: 0.15rem;
+        }
+
+        .attachment-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            justify-content: flex-end;
+        }
+
+        .attachment-actions .btn {
+            border-radius: 999px;
+            padding: 0.2rem 0.55rem;
+            font-size: 0.72rem;
+        }
+
+        .comment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 0.7rem;
+            align-items: flex-start;
+        }
+
+        .avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 999px;
+            background: #e5e7eb;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #4b5563;
+            flex-shrink: 0;
+        }
+
+        .comment-body {
+            background: #f9fafb;
+            border-radius: 0.9rem;
+            padding: 0.75rem 0.85rem;
+            border: 1px solid #e5e7eb;
+            flex: 1;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #111827;
+            font-size: 0.82rem;
+        }
+
+        .comment-time {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            white-space: nowrap;
+        }
+
+        .comment-context {
+            font-size: 0.7rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .comment-text {
+            color: #4b5563;
+            font-size: 0.82rem;
+            white-space: pre-wrap;
+        }
+
+        .comment-text-rich {
+            white-space: normal;
+            line-height: 1.45;
+        }
+
+        .comment-text-rich p {
+            margin-bottom: 0.35rem;
+        }
+
+        .project-richtext-readonly {
+            padding: 0.55rem 0.7rem;
+            border: 1px solid #dbe5f0;
+            border-radius: 0.75rem;
+            background: #ffffff;
+            color: #4b5563;
+            font-size: 0.82rem;
+        }
+
+        .project-richtext-readonly p:last-child {
+            margin-bottom: 0;
+        }
+
+        .comment-mode-pill {
+            display: inline-flex;
+            gap: 0.3rem;
+            padding: 0.25rem;
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+        }
+
+        .comment-mode-pill__btn {
+            border: 0;
+            border-radius: 999px;
+            padding: 0.3rem 0.75rem;
+            font-size: 0.75rem;
+            color: #64748b;
+            background: transparent;
+        }
+
+        .comment-mode-pill__btn.is-active {
+            background: #eef2ff;
+            color: #3730a3;
+            font-weight: 600;
+        }
+
+        .comment-entry {
+            width: 100%;
+        }
+
+        .comment-entry-plain input {
+            width: 100%;
+        }
+
+        .comment-entry-rich .note-editor.note-frame {
+            border: 1px solid #dbe5f0;
+            border-radius: 0.85rem;
+            background: #ffffff;
+        }
+
+        .side-empty-state {
+            border: 1px dashed #d1d5db;
+            border-radius: 0.9rem;
+            padding: 1rem 0.85rem;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.78rem;
+            background: #ffffff;
+        }
+
+        .support-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .support-card {
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            padding: 1rem;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .support-context-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 0.75rem;
+            align-items: center;
+            margin-bottom: 0.85rem;
+        }
+
+        .support-context-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 0;
+        }
+
+        .inline-dropzone {
+            border: 2px dashed #94a3b8;
+            border-radius: 1rem;
+            background: #f8fafc;
+            padding: 0.75rem;
+            min-height: 120px;
+            margin-bottom: 0.85rem;
+        }
+
+        .comments-count {
+            font-size: 0.78rem;
+            color: #6b7280;
+            margin-bottom: 0.75rem;
+        }
+
+        .comment-box {
+            display: flex;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.85rem;
+            background: #f9fafb;
+            border-radius: 1rem;
+            padding: 0.6rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .comment-box input,
+        .comment-box textarea {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.9rem;
+            background: transparent;
+            resize: none;
+        }
+
+        .comment-box .comment-entry {
+            flex: 1 1 280px;
+        }
+
+        .send-btn {
+            width: 2.2rem;
+            height: 2.2rem;
+            border-radius: 50%;
+            border: none;
+            background: #2563eb;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .support-bottom-row {
+            margin-top: 1rem;
+        }
+
+        @@media (max-width: 768px) {
+            .support-context-row {
+                grid-template-columns: 1fr;
+                gap: 0.35rem;
+            }
+        }
+
+        /* Default: limited height, scrollable */
+        .sidebar-panel {
+            max-height: 220px; /* adjust to your current design */
+            overflow-y: auto;
+            transition: max-height 0.2s ease;
+        }
+
+        /* When the container row has .sidebar-stretched, all panels grow */
+        #sidebarRow.sidebar-stretched .sidebar-panel {
+            max-height: none; /* or for safety: max-height: 80vh; */
+        }
+    </style>
+
+    <link href="~/Content/locals/floating-button-menu.css" rel="stylesheet" />
+}
+
+@section scripts{
+
+    <!-- Dependencies -->
+    <script src="~/node_modules/summernote/dist/summernote.js"></script>
+    <script src="~/node_modules/summernote/dist/summernote-bs5.min.js"></script>
+    <script src="~/node_modules/sortablejs/Sortable.min.js"></script>
+    <script src="~/node_modules/dropzone/dist/dropzone-min.js"></script>
+
+
+
+    <!-- local-dynamic-fields -->
+    <script src="~/Scripts/locals/utils.js"></script>
+    <script src="~/Scripts/locals/dynamic-fields.js"></script>
+
+
+    <script src="~/node_modules/dropzone/dist/min/dropzone.min.js"></script>
+
+    <!-- local-helpers -->
+    <script src="~/Areas/Projects/Scripts/helpers/projectdata.js"></script>
+
+
+    <script src="~/Scripts/locals/stacked-userprofiles.js"></script>
+    <script src="~/Scripts/locals/notification-manager.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/common-functions.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/projectmember.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/floating-buttons.js"></script>
+    <script src="~/Areas/Projects/Scripts/projects/review.js"></script>
+
+    <script>
+        window.projectNotificationPermissions = {
+            canAdd: @((ViewBag.CanManageProjectNotifications ?? false).ToString().ToLowerInvariant()),
+            canEdit: @((ViewBag.CanManageProjectNotifications ?? false).ToString().ToLowerInvariant()),
+            canDelete: @((ViewBag.CanManageProjectNotifications ?? false).ToString().ToLowerInvariant())
+        };
+
+        window.reviewMemberLanePermissions = {
+            hasAdvancedStatusModule: @(AuthorizationHelper.IsInGroupsOrModules("", "ADVCHSTAT").ToString().ToLowerInvariant())
+        };
+    </script>
+
+}
+
+
+
+<input id="projectNo" type="hidden" value="@ViewBag.ProjectNo" />
+<input id="projectName" type="hidden" />
+<input id="projectIcon" type="hidden" />
+<input id="projectColor" type="hidden" />
+
+<div class="project-workspace-shell">
+<section class="project-workspace-hero" aria-label="Project review overview">
+    <article class="project-workspace-hero__main">
+        <span class="project-workspace-hero__eyebrow"><i class="bi bi-ui-checks-grid"></i>Project Review</span>
+        <h1 class="project-workspace-hero__title">
+            <span class="project-workspace-hero__icon"><i id="headerIcon" class="bi bi-journal-plus"></i></span>
+            <span id="headerTitle">Project Review</span>
+        </h1>
+        <p class="page-header__subtitle">Review milestone execution, task readiness, ownership, and supporting project context from a single review workspace.</p>
+        <div id="chips"></div>
+    </article>
+    <aside class="project-workspace-hero__side">
+        <div id="subcontent"></div>
+        <div class="review-mode-toggle" role="group" aria-label="Review mode toggle">
+            <button type="button" id="btnReviewModeProject" class="review-mode-toggle__button is-active" data-review-mode="project" aria-pressed="true">
+                <i class="fas fa-diagram-project me-1"></i>Project-centric
+            </button>
+            <button type="button" id="btnReviewModeMember" class="review-mode-toggle__button" data-review-mode="member" aria-pressed="false">
+                <i class="fas fa-people-group me-1"></i>Member-centric
+            </button>
+        </div>
+        <div class="project-workspace-hero__note">
+            <span class="project-workspace-hero__note-label">Review Mode</span>
+            <strong id="reviewModeSummary">Track milestone health, manage task actions, and jump into your assigned work without leaving the page.</strong>
+        </div>
+    </aside>
+</section>
+
+<!-- Main split layout -->
+<div class="card layout-main-card">
+    <div class="row g-0">
+
+        <!-- Left panel: Milestones -->
+        <div class="project-milestones col-md-4 left-panel p-3">
+            <div class="project-milestones-header d-flex justify-content-between align-items-center mb-2">
+                <div>
+                    <div class="milestone-small-label">Milestones</div>
+                    <div class="fw-semibold" style="font-size: 0.9rem; color:#111827;">Project phases</div>
+                </div>
+                <span class="badge bg-indigo-100 text-primary" style="background-color:#e0ecff;color:#1d4ed8;">
+                    <i class="fas fa-flag-checkered me-1"></i><span id="active-milestone-count"></span> Active
+                </span>
+            </div>
+            <span id="loading-milestones" class="text-muted" style="font-size:0.8rem;">
+                <i class="fas fa-spinner fa-spin me-2"></i>Loading milestones...
+            </span>
+
+        </div>
+
+        <!-- Right panel: Activities for selected milestone -->
+        <div class="col-md-8 right-panel p-3">
+
+            <div id="projectCentricPanel" class="project-view-panel">
+
+            <!-- Activities Header -->
+            <div class="activities-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div>
+                    <div class="activities-header-sub">Selected milestone</div>
+                    <div class="activities-header-title" id="selectedMilestoneTitle">
+                        <i class="fas fa-flag-checkered text-primary"></i>
+                        Select Milestone...
+                    </div>
+                </div>
+                <div class="text-end">
+                    <div class="activities-header-sub">Milestone progress</div>
+                    <div class="fw-semibold" id="selectedMilestoneProgress">0%</div>
+                    <button type="button" id="btnToggleActivitiesCollapse" class="btn btn-outline-secondary btn-sm mt-2 me-2">
+                        <i class="fas fa-angle-up me-1"></i>Collapse Tasks
+                    </button>
+                    <button type="button" id="btnReviewManageMyTasks" class="btn btn-outline-dark btn-sm mt-2">
+                        <i class="bi bi-card-checklist me-1"></i>My Tasks
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-bar row g-2 align-items-center">
+                <div class="col-sm-4 col-12">
+                    <div class="filter-label">Status</div>
+                    <select id="filterStatus" class="form-select form-select-sm filter-select">
+                        <option value="">All statuses</option>
+                        <option value="Not Started">Not Started</option>
+                        <option value="Ongoing">Ongoing</option>
+                        <option value="Completed">Completed</option>
+                        <option value="On-Hold">On-Hold</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Archived">Archived</option>
+                    </select>
+                </div>
+                <div class="col-sm-4 col-12">
+                    <div class="filter-label">Owner</div>
+                    <select id="filterOwner" class="form-select form-select-sm filter-select">
+                        <option value="">All owners</option>
+                    </select>
+                </div>
+                <div class="col-sm-4 col-12">
+                    <div class="filter-label">Search</div>
+                    <div class="search-wrapper">
+                        <i class="fas fa-search search-icon text-gray-500"></i>
+                        <input type="text" id="filterSearch" class="form-control filter-search"
+                               placeholder="Activity name...">
+                    </div>
+                </div>
+            </div>
+            <div id="loading-tasks" class="text-muted" style="font-size:0.8rem;">
+                <i class="fas fa-spinner fa-spin me-2"></i>Loading tasks...
+            </div>
+
+            <!-- Activities container -->
+            <div id="activitiesContainer">
+
+
+
+            </div>
+            <!-- /activitiesContainer -->
+            <!-- Empty state placeholder -->
+            <div id="emptyState" class="empty-state d-none">
+                <i class="far fa-folder-open"></i>
+                <div>No activities match your filters.</div>
+            </div>
+            <div class="support-stack">
+                <div class="support-card">
+                    <div class="attachments-header">
+                        <div class="section-title">Attachments</div>
+                    </div>
+                    <div class="support-context-row">
+                        <label class="support-context-label" for="attachmentsTargetContext">Applies to</label>
+                        <select class="form-select form-select-sm" id="attachmentsTargetContext" name="targetContext"></select>
+                    </div>
+                    <form action="/upload" class="dropzone inline-dropzone" id="attachmentsDropzone">
+                        <input type="hidden" id="attachmentsContextId" name="contextId">
+                        <div class="dz-message" data-dz-message>
+                            <span>Drop files here or click to upload.</span>
+                        </div>
+                    </form>
+                    <div id="attachmentsList" class="attachment-list"></div>
+                </div>
+
+                <div class="support-card">
+                    <div class="section-title">Comments (<span id="comment-count">0</span>)</div>
+                    <div class="comments-count" id="comment-summary">Start the conversation for this project review.</div>
+                    <div class="support-context-row">
+                        <label class="support-context-label" for="commentTargetContext">Applies to</label>
+                        <select class="form-select form-select-sm" id="commentTargetContext" name="targetContext"></select>
+                    </div>
+                    <div id="commentsList" class="comment-list"></div>
+                    <form id="formAddComment" class="comment-box">
+                        <input type="hidden" id="commentContextId" name="contextId">
+                        <div class="comment-mode-pill" role="group" aria-label="Comment input mode">
+                            <button type="button" id="comment-mode-plain" class="comment-mode-pill__btn is-active" aria-pressed="true">Text</button>
+                            <button type="button" id="comment-mode-rich" class="comment-mode-pill__btn" aria-pressed="false">Rich text</button>
+                        </div>
+                        <div id="comment-entry-plain" class="comment-entry comment-entry-plain">
+                            <input type="text" name="commentText" placeholder="Write a comment..." required>
+                        </div>
+                        <div id="comment-entry-rich" class="comment-entry comment-entry-rich d-none">
+                            <textarea id="comment-input-rich"></textarea>
+                        </div>
+                        <button class="send-btn" type="submit" aria-label="Send comment">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="row g-2 support-bottom-row" id="sidebarRow">
+                    <div class="col-lg-4 col-12">
+                        <div class="side-section sidebar-panel">
+                            <div class="side-section-header">
+                                <div class="side-section-title">
+                                    <span class="side-section-icon notifications"><i class="bi bi-bell"></i></span>
+                                    <span>Notifications</span>
+                                </div>
+                                @if (AuthorizationHelper.IsInGroupsOrModules("", "NOTIFADD"))
+                                {
+                                    <button type="button" class="side-action-btn" onclick="window.PulseNotificationManager && window.PulseNotificationManager.open('projectSidebarNotifications')">
+                                        <i class="bi bi-plus-lg"></i>
+                                        <span>Add</span>
+                                    </button>
+                                }
+                            </div>
+                            <div class="side-section-copy">Scheduled reminders and project broadcasts.</div>
+                            <div id="notificationsEmpty" class="meta py-2">Loading notifications...</div>
+                            <div id="notificationsList"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-12">
+                        <div class="tree-card mt-0 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <div class="tree-title">
+                                    <i class="fas fa-sitemap me-1 text-primary"></i> Hierarchy view
+                                </div>
+                                <small class="text-muted" style="font-size:0.7rem;">Click to navigate</small>
+                            </div>
+                            <ul id="hierarchyTree" class="tree-ul mb-0">
+                                <!-- Filled by JS -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+
+            <div id="memberCentricPanel" class="member-centric-panel" hidden>
+                <div class="activities-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div>
+                        <div class="activities-header-sub">Selected teammate</div>
+                        <div class="activities-header-title" id="memberSelectionLabel">
+                            <i class="fas fa-user-group text-primary"></i>
+                            Select a team member...
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div class="activities-header-sub">Swimlane view</div>
+                        <div class="fw-semibold" id="memberSelectionMeta">Tasks grouped by status</div>
+                    </div>
+                </div>
+
+                <div class="member-focus-shell">
+                    <div class="member-focus-shell__label">Team members</div>
+                    <div id="memberFocusList" class="member-focus-grid"></div>
+                </div>
+
+                <div class="member-task-toolbar">
+                    <div class="member-task-toolbar__copy">
+                        <div class="member-task-toolbar__eyebrow">Task search</div>
+                        <div class="member-task-toolbar__title">Filter the selected member's tasks across all lanes.</div>
+                    </div>
+                    <div class="member-task-toolbar__actions">
+                        <div class="member-task-search">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="memberTaskSearch" class="form-control" placeholder="Search by task, milestone, owner, or status">
+                        </div>
+                        <button type="button" id="btnToggleMemberTasksCollapse" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-angle-up me-1"></i>Collapse All
+                        </button>
+                    </div>
+                </div>
+
+                <div id="memberSwimlane" class="member-swimlane"></div>
+
+                <div id="memberEmptyState" class="empty-state d-none">
+                    <i class="far fa-folder-open"></i>
+                    <div>No tasks are assigned to this member yet.</div>
+                </div>
+            </div>
+
+        </div> <!-- /right-panel -->
+    </div>
+
+
+</div>
+
+
+
+<!-- Floating Action Menu -->
+@Html.Partial("_FloatingMenu")
+
+<!-- Add Milestone Modal -->
+<div class="modal fade" id="milestoneModal" tabindex="-1" aria-labelledby="milestoneModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form class="modal-content" id="formAddMilestone">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa fa-flag me-2"></i>Add Milestone</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <label class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Start</label>
+                        <input type="date" name="start" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">End</label>
+                        <input type="date" name="end" class="form-control">
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-save me-1"></i>Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+
+<!-- Add Task Modal -->
+<div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <form class="modal-content" id="formAddTask">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa fa-list-check me-2"></i>Add Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="addTaskMilestoneId" name="milestoneId">
+                <div class="mb-2">
+                    <label class="form-label">Task name</label>
+                    <input type="text" class="form-control" name="taskName" required>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Owner</label>
+                        <input type="text" class="form-control" name="owner">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Start</label>
+                        <input type="date" class="form-control" name="start">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">End</label>
+                        <input type="date" class="form-control" name="end">
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Details</label>
+                    <textarea class="form-control" name="details" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-save me-1"></i>Save Task
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Notification Modal -->
+@Html.Partial("_NotificationModal")
+@Html.Partial("~/Views/Shared/_NotificationEditorModal.cshtml")
+
+<!-- Chat Modal -->
+@Html.Partial("_ChatModal")
+
+
+<!-- Modal: Update Activity / Sub-task -->
+<div class="modal fade" id="modalUpdateActivity" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form id="formUpdateActivity">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-pen-to-square me-2"></i>Update Activity
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" id="activityId" name="activityId">
+                    <input type="hidden" id="activityType" name="activityType">
+                    <input type="hidden" id="activityProjectNodeSysId" name="activityProjectNodeSysId">
+
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Activity / Sub-task</label>
+                            <input type="text" class="form-control" id="activityName" name="activityName" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Owner</label>
+                            <input type="text" class="form-control" id="activityOwner" name="activityOwner" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="activityStatus" name="activityStatus" disabled>
+                                <option value="Not Started">Not Started</option>
+                                <option value="Ongoing">Ongoing</option>
+                                <option value="Completed">Completed</option>
+                                <option value="On-Hold">On-Hold</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="Archived">Archived</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">% Complete</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="activityProgress" name="activityProgress"
+                                       readonly min="0" max="100" step="5">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Resched?</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="chkResched" disabled>
+                                <label class="form-check-label" for="chkResched">
+                                    Rescheduled
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="activityStart" name="activityStart">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="activityEnd" name="activityEnd">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Remarks / Reason for Resched</label>
+                        <textarea class="form-control" id="activityRemarks" name="activityRemarks" rows="3"
+                                  placeholder="Add notes, delay reason, or closure comments here..."></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Update Milestone / Sub-milestone -->
+<div class="modal fade" id="modalUpdateMilestone" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form id="formUpdateMilestone">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-pen-to-square me-2"></i>Update Milestone
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" id="nodeId" name="nodeId">
+                    <input type="hidden" id="nodeType" name="nodeType">
+                    <input type="hidden" id="projectNodeSysId" name="projectNodeSysId">
+
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Milestone / Sub-milestone</label>
+                            <input type="text" class="form-control" id="nodeName" name="nodeName" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Owner</label>
+                            <input type="text" class="form-control" id="nodeOwners" name="nodeOwners" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="nodeStatus" name="nodeStatus" disabled>
+                                <option value="Not Started">Not Started</option>
+                                <option value="Ongoing">Ongoing</option>
+                                <option value="Completed">Completed</option>
+                                <option value="On-Hold">On-Hold</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="Archived">Archived</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">% Complete</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="nodeProgress" name="nodeProgress"
+                                       readonly min="0" max="100" step="5">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Resched?</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="chkResched" disabled>
+                                <label class="form-check-label" for="chkResched">
+                                    Rescheduled
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="nodeStart" name="nodeStart">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="nodeEnd" name="nodeEnd">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Remarks / Reason for Resched</label>
+                        <textarea class="form-control" id="remarks" name="remarks" rows="3" required
+                                  placeholder="Add notes, delay reason, or closure comments here..."></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Unlock Milestone / Sub-milestone -->
+<div class="modal fade" id="modalUnlock" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form id="formUnlock">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-pen-to-square me-2"></i>Unlock Item
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" id="nodeId" name="nodeId">
+                    <input type="hidden" id="nodeType" name="nodeType">
+                    <input type="hidden" id="projectNodeSysId" name="projectNodeSysId">
+                    <input type="hidden" id="transactionKey" name="transactionKey">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Item</label>
+                            <input type="text" class="form-control" id="nodeName" name="nodeName" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Owner</label>
+                            <input type="text" class="form-control" id="nodeOwners" name="nodeOwners" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Reason for Unlock</label>
+                        <textarea class="form-control" id="reason" name="reason" rows="3" required
+                                  placeholder="Add comments here..."></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalUpdateForm" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form id="formUpdateForm">
+                <input type="hidden" id="form-nodeId" name="form-nodeId">
+                <input type="hidden" id="form-nodeType" name="form-nodeType">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-pen-to-square me-2"></i>Update <label id="form-activityName" name="form-activityName"></label>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="hdn-avatar-group-container" style="display:none"></div>
+
+<div id="container-render" style="display:none"></div>
+

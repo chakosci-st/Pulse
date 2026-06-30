@@ -1,0 +1,29 @@
+﻿
+<div class="modal fade" id="attachmentsModal" tabindex="-1" aria-labelledby="attachmentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <form action="/upload" class="modal-content dropzone" id="attachmentsDropzone">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-paperclip me-2"></i>Attachments</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="attachmentsContextId" name="contextId">
+                <div class="mb-3">
+                    <label class="form-label" for="attachmentsTargetContext">Applies to</label>
+                    <select class="form-select" id="attachmentsTargetContext" name="targetContext"></select>
+                </div>
+                <div class="dz-message" data-dz-message style="border:dashed 2px #6b7280;">
+                    <span>Drop files here or click to upload.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="attachmentsDoneBtn"
+                        class="btn btn-outline-secondary btn-sm"
+                        type="button"
+                        data-bs-dismiss="modal">
+                    Done
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

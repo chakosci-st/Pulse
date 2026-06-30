@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "Edit Plant";
+    ViewBag.TitleIcon = "bi bi-pencil-square";
+    ViewBag.SubTitle = "";
+    ViewBag.IsActivePlants = "menu-open";
+    ViewBag.IsActivePlantsAll = "active";
+}
+
+<form id="formNew" class="needs-validation" novalidate="">
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h5 class=" mb-3">
+                        Update Plant
+                        <br />
+                        <small style="font-size:12pt; font-weight:normal">Update existing plant</small>
+                    </h5>
+                    <div class="form-group mb-3">
+                        <label for="Code" class="form-label">Plant Code<span class="required-indicator sr-only"></span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Code" name="Code" required="" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="Name" class="form-label">Plant Name<span class="required-indicator sr-only"> (required)</span></label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="Name" name="Name" required="">
+                            <div class="invalid-feedback">Please provide a plant name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="siteImage" class="form-label">Banner Image</label>
+                        <div class="input-group mb-3">
+                            <input type="file" class="form-control" id="siteImage">
+                            <label class="input-group-text" for="siteImage">Upload</label>
+                        </div>
+                    </div>
+                    <img id="profileImage" src="/uploads/plant/P1C7.png" alt="Profile Image" style="width:150px;cursor:pointer;" onerror="this.style.display='none'; document.getElementById('fileUpload').style.display='block';" />
+
+
+
+
+                    <div class="form-group my-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span id="switch-label-offline" class="text-secondary">Offline</span>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="statusSwitch" checked>
+                            </div>
+                            <span id="switch-label-online" class="text-success fw-bold">Online</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <div class="  m-0 float-end">
+                        <a href="@Url.Action("Index", "Plants")" class="btn btn-default">Cancel</a> <button class="btn btn-success">Save</button>
+                    </div>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!--end::Row-->
+</form>
+
+
+@section scripts{
+    <script>
+        const switchInput = document.getElementById('statusSwitch');
+        const labelOnline = document.getElementById('switch-label-online');
+        const labelOffline = document.getElementById('switch-label-offline');
+
+        function updateLabels() {
+            if (switchInput.checked) {
+                labelOnline.classList.add('fw-bold', 'text-success');
+                labelOffline.classList.remove('fw-bold', 'text-danger');
+                labelOffline.classList.add('text-secondary');
+            } else {
+                labelOffline.classList.add('fw-bold', 'text-danger');
+                labelOnline.classList.remove('fw-bold', 'text-success');
+                labelOnline.classList.add('text-secondary');
+            }
+        }
+
+        switchInput.addEventListener('change', updateLabels);
+        //selected
+        //switchInput.checked = true;
+
+        updateLabels(); // Initialize on page load
+
+    </script>
+}

@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pulse-console"
+version = "0.1.0"
+description = "Console utilities for Pulse notifications and task summaries."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "oracledb>=2.5.1,<3.0.0",
+]
+
+[project.scripts]
+pulse-console = "pulse_console.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

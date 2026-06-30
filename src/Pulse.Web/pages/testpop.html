@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic Form Preview with Bootbox</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootbox.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootbox@5.5.2/dist/bootbox.min.js"></script>
+
+    <!-- html2canvas for rendering HTML to image -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="../Scripts/locals/utils.js"></script>
+    <script src="../Scripts/locals/dynamic-fields.js"></script>
+    <style>
+        .bootbox-form-container .dynamic-field-wrapper {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h2>Form Thumbnails</h2>
+        <div id="formThumbnails" class="row g-3"></div>
+    </div>
+    <!-- Hidden container for rendering form previews -->
+    <div id="hiddenFormPreview" style="position:absolute;left:-9999px;top:-9999px;"></div>
+
+    <script>
+        // Example form fields (replace with your actual window.formFields)
+        window.formFields = [
+            {
+                title: "Name",
+                type: "text",
+                name: "name",
+                isrequired: true,
+                readAccess: '*',
+                writeAccess: '*',
+                placeholder: "Enter your name"
+            },
+            {
+                title: "Email",
+                type: "text",
+                name: "email",
+                isrequired: true,
+                readAccess: '*',
+                writeAccess: '*',
+                placeholder: "Enter your email"
+            },
+            {
+                title: "Gender",
+                type: "selection",
+                readAccess: '*',
+                writeAccess: '*',
+                name: "gender",
+                options: ["Male", "Female", "Other"]
+            }
+        ];
+         
+        window.formsList = [
+            [
+                { title: "Full Name", type: "text", name: "full_name", isrequired: true, placeholder: "Enter your full name", readAccess: "*", writeAccess: "*" },
+                { title: "Email", type: "text", name: "email", isrequired: true, placeholder: "Enter your email", readAccess: "*", writeAccess: "*" },
+                { title: "Phone", type: "text", name: "phone", placeholder: "Enter your phone number", readAccess: "*", writeAccess: "*" },
+                { title: "Date of Birth", type: "date", name: "dob", readAccess: "*", writeAccess: "*" },
+                { title: "Gender", type: "selection", name: "gender", options: ["Male", "Female", "Other"], readAccess: "*", writeAccess: "*" },
+                { title: "Country", type: "selection", name: "country", options: ["USA", "Canada", "UK", "Australia", "Other"], readAccess: "*", writeAccess: "*" },
+                { title: "Subscribe to newsletter", type: "checkbox", name: "newsletter", readAccess: "*", writeAccess: "*" },
+                { title: "Bio", type: "textarea", name: "bio", placeholder: "Tell us about yourself", readAccess: "*", writeAccess: "*" }
+            ],
+            [
+                { title: "Project Name", type: "text", name: "project_name", isrequired: true, readAccess: "*", writeAccess: "*" },
+                { title: "Description", type: "textarea", name: "description", readAccess: "*", writeAccess: "*" },
+                { title: "Start Date", type: "date", name: "start_date", readAccess: "*", writeAccess: "*" },
+                { title: "End Date", type: "date", name: "end_date", readAccess: "*", writeAccess: "*" },
+                { title: "Status", type: "selection", name: "status", options: ["Planned", "In Progress", "Completed", "On Hold"], readAccess: "*", writeAccess: "*" },
+                { title: "Budget", type: "number", name: "budget", readAccess: "*", writeAccess: "*" },
+                { title: "Manager", type: "text", name: "manager", readAccess: "*", writeAccess: "*" },
+                { title: "Priority", type: "radio", name: "priority", options: ["Low", "Medium", "High"], readAccess: "*", writeAccess: "*" }
+            ],
+            [
+                { title: "Product Name", type: "text", name: "product_name", isrequired: true, readAccess: "*", writeAccess: "*" },
+                { title: "Category", type: "selection", name: "category", options: ["Electronics", "Books", "Clothing", "Home", "Other"], readAccess: "*", writeAccess: "*" },
+                { title: "Price", type: "number", name: "price", isrequired: true, readAccess: "*", writeAccess: "*" },
+                { title: "Available", type: "checkbox", name: "available", readAccess: "*", writeAccess: "*" },
+                { title: "Tags", type: "checkboxcollection", name: "tags", options: ["New", "Sale", "Popular", "Limited"], readAccess: "*", writeAccess: "*" },
+                { title: "Image", type: "file", name: "image", fileTypes: ".jpg,.png", fileMaxSize: 2, readAccess: "*", writeAccess: "*" },
+                { title: "Description", type: "textarea", name: "description", readAccess: "*", writeAccess: "*" }
+            ]
+        ];
+        window.currentUserCode = "*"; // For access control
+        // Utility to generate a thumbnail for a form
+        function generateFormThumbnail(formFields, callback) {
+            // Render the form in a hidden container
+            var $hidden = $('#hiddenFormPreview').empty();
+            $hidden.dynamicField({ fields: formFields, userCode: window.currentUserCode, showAccessBadges: false });
+            // Use html2canvas to render the form to an image
+            html2canvas($hidden[0], { backgroundColor: "#fff", scale: 0.5 }).then(function (canvas) {
+                var imgData = canvas.toDataURL("image/png");
+                callback(imgData);
+            });
+        }
+
+        // Render all thumbnails
+        function renderThumbnails() {
+            var $container = $('#formThumbnails').empty();
+            window.formsList.forEach(function (formFields, idx) {
+                generateFormThumbnail(formFields, function (imgData) {
+                    var $col = $(`
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <img src="${imgData}" class="card-img-top" style="object-fit:contain;max-height:100px;" alt="Form Thumbnail">
+                        <div class="card-body text-center">
+                            <button class="btn btn-primary preview-btn" data-idx="${idx}">Preview</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+                    $container.append($col);
+                });
+            });
+        }
+
+        // Show form in modal when thumbnail is clicked
+        $(document).on('click', '.preview-btn', function () {
+            var idx = $(this).data('idx');
+            var formFields = window.formsList[idx];
+            var $formContainer = $('<form class="bootbox-form-container"></form>');
+            $formContainer.dynamicField({ fields: formFields, userCode: window.currentUserCode });
+            bootbox.dialog({
+                title: "Form Preview",
+                message: $formContainer,
+                size: 'large',
+                buttons: {
+                    cancel: {
+                        label: "Close",
+                        className: 'btn-secondary'
+                    },
+                    submit: {
+                        label: "Submit",
+                        className: 'btn-primary',
+                        callback: function () {
+                            var values = $formContainer.dynamicFieldGetValues();
+                            bootbox.alert({
+                                title: "Form Values",
+                                message: `<pre>${JSON.stringify(values, null, 2)}</pre>`
+                            });
+                            return false;
+                        }
+                    }
+                }
+            });
+        });
+
+        // Initial render
+        $(function () {
+            renderThumbnails();
+        });
+    </script>
+</body>
+</html>
