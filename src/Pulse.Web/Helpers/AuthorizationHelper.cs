@@ -7,11 +7,28 @@ namespace Pulse.Web.Helpers
 {
     public static class AuthorizationHelper
     {
+        private const string SuperUserModuleCode = "SUPERUSER";
+
+        public static bool HasSuperUserModule(ClaimsPrincipal user)
+        {
+            var modulesClaim = user?.Claims.FirstOrDefault(c => c.Type == "modulecodes");
+            if (modulesClaim == null || string.IsNullOrWhiteSpace(modulesClaim.Value))
+                return false;
+
+            return modulesClaim.Value
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim())
+                .Any(x => string.Equals(x, SuperUserModuleCode, StringComparison.OrdinalIgnoreCase));
+        }
+
         public static bool IsInGroupsOrModules(string groupsCsv, string modulesCsv)
         {
             var user = HttpContext.Current?.User as ClaimsPrincipal;
             if (user == null || !user.Identity.IsAuthenticated)
                 return false;
+
+            if (HasSuperUserModule(user))
+                return true;
 
             var requiredGroups = (groupsCsv ?? string.Empty)
                 .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)

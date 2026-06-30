@@ -58,6 +58,13 @@ accessible_projects AS (SELECT projectno
                             SELECT projectno
                               FROM PROJECTS prj
                              WHERE EXISTS
+                                      (SELECT *
+                                         FROM USERGROUPMEMBERS ugm INNER JOIN USERGROUPACCESSRIGHTS ugar ON UGAR.USERGROUPID = ugm.USERGROUPID AND UGAR.MODULECODE = 'SUPERUSER'
+                                        WHERE userid = :loggeduser)
+                            UNION
+                            SELECT projectno
+                              FROM PROJECTS prj
+                             WHERE EXISTS
                                       (SELECT plantcode
                                          FROM plantmembers pm
                                         WHERE (:loggeduser IS NULL OR userid = :loggeduser) AND prj.plantcode = pm.plantcode))
@@ -119,8 +126,6 @@ project_list AS (
                  WHERE ap.projectno = prj.projectno
                ))
 ), 
-
-
 
 node_value AS (
     SELECT 
@@ -730,6 +735,14 @@ accessible_projects AS (SELECT projectno
                             SELECT projectno
                               FROM PROJECTMEMBERS
                              WHERE  :loggeduser IS NULL OR userid = :loggeduser
+                            UNION
+                            SELECT projectno
+                              FROM PROJECTS prj
+                             WHERE EXISTS
+                                      (SELECT *
+                                         FROM USERGROUPMEMBERS ugm INNER JOIN USERGROUPACCESSRIGHTS ugar ON UGAR.USERGROUPID = ugm.USERGROUPID AND UGAR.MODULECODE = 'SUPERUSER'
+                                        WHERE userid = :loggeduser)
+
                             UNION
                             SELECT projectno
                               FROM PROJECTS prj

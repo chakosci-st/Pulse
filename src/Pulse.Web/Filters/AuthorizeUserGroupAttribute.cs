@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using System.Net;
+using Pulse.Web.Helpers;
 
 namespace Pulse.Web.Filters
 {
@@ -29,6 +30,9 @@ namespace Pulse.Web.Filters
             var user = httpContext.User as ClaimsPrincipal;
             if (user == null || !user.Identity.IsAuthenticated)
                 return false;
+
+            if (AuthorizationHelper.HasSuperUserModule(user))
+                return true;
 
             // Parse required groups/modules from attribute
             var requiredGroups = (Groups ?? string.Empty)

@@ -12,6 +12,8 @@ namespace Pulse.Api.Filters
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class AuthorizeUserGroupAttribute : AuthorizeAttribute
     {
+        private const string SuperUserModuleCode = "SUPERUSER";
+
         public string Groups { get; set; }   // comma-separated
         public string Modules { get; set; }  // comma-separated
 
@@ -28,6 +30,9 @@ namespace Pulse.Api.Filters
             var principal = actionContext.ControllerContext.RequestContext.Principal as ClaimsPrincipal;
             if (principal == null || !principal.Identity.IsAuthenticated)
                 return false;
+
+            if (HasSuperUserModule(principal))
+                return true;
 
             // Parse required
             var requiredGroups = (Groups ?? string.Empty)
@@ -92,6 +97,18 @@ namespace Pulse.Api.Filters
 
             // Final rule: group OR module
             return groupAuthorized || moduleAuthorized;
+        }
+
+        private static bool HasSuperUserModule(ClaimsPrincipal principal)
+        {
+            var modulesClaim = principal.Claims.FirstOrDefault(c => c.Type == "modulecodes");
+            if (modulesClaim == null || string.IsNullOrWhiteSpace(modulesClaim.Value))
+                return false;
+
+            return modulesClaim.Value
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim())
+                .Any(x => string.Equals(x, SuperUserModuleCode, StringComparison.OrdinalIgnoreCase));
         }
 
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)

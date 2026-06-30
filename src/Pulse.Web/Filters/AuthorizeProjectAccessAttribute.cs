@@ -6,6 +6,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using Pulse.Web.Helpers;
 
 namespace Pulse.Web.Filters
 {
@@ -33,6 +34,11 @@ namespace Pulse.Web.Filters
             if (user == null || !user.Identity.IsAuthenticated)
             {
                 return false;
+            }
+
+            if (AuthorizationHelper.HasSuperUserModule(user))
+            {
+                return true;
             }
 
             var loggedUserId = user.Claims.FirstOrDefault(c => c.Type == "employeeid")?.Value;

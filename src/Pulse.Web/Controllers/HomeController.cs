@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using Pulse.SharedUtilities.Helpers;
+using Pulse.Web.Helpers;
 
 namespace Pulse.Web.Controllers
 { 
@@ -25,14 +26,17 @@ namespace Pulse.Web.Controllers
 
         private IReadOnlyList<SearchModuleEntry> BuildSearchModules()
         {
-            var moduleCodes = ((User as ClaimsPrincipal)?.Claims.FirstOrDefault(c => c.Type == "modulecodes")?.Value ?? string.Empty)
+            var user = User as ClaimsPrincipal;
+            var moduleCodes = (user?.Claims.FirstOrDefault(c => c.Type == "modulecodes")?.Value ?? string.Empty)
                 .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(code => code.Trim())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
+            var isSuperUser = AuthorizationHelper.HasSuperUserModule(user);
+
             bool HasModule(params string[] requiredCodes)
             {
-                return requiredCodes.Any(code => moduleCodes.Contains(code));
+                return isSuperUser || requiredCodes.Any(code => moduleCodes.Contains(code));
             }
 
             var modules = new List<SearchModuleEntry>
