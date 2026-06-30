@@ -19,6 +19,8 @@ namespace Pulse.Api.Controllers
     [RoutePrefix("api/ProjectTasks")]
     public class ProjectTasksController : ApiController
     {
+        private const string SuperUserModuleCode = "SUPERUSER";
+
         private readonly IProjectTaskService _projecttaskService;
         private readonly IProjectService _projectService;
         private readonly IProjectRepository _projectRepository;
@@ -35,6 +37,11 @@ namespace Pulse.Api.Controllers
 
         private async Task<bool> CanManageProjectAsync(string loggedUserId, string projectNo)
         {
+            if (HasSuperUserModule())
+            {
+                return true;
+            }
+
             if (string.IsNullOrWhiteSpace(loggedUserId) || string.IsNullOrWhiteSpace(projectNo))
             {
                 return false;
@@ -62,11 +69,24 @@ namespace Pulse.Api.Controllers
 
         private bool HasAdvancedStatusModule()
         {
+            return HasModuleCode("ADVCHSTAT");
+        }
+
+        private bool HasSuperUserModule()
+        {
+            return HasModuleCode(SuperUserModuleCode, false);
+        }
+
+        private bool HasModuleCode(string moduleCode, bool includeSuperUser = true)
+        {
             var rawModules = User.Identity.GetClaim("modulecodes") ?? string.Empty;
-            return rawModules
+            var moduleCodes = rawModules
                 .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(module => module.Trim())
-                .Any(module => string.Equals(module, "ADVCHSTAT", StringComparison.OrdinalIgnoreCase));
+                .ToList();
+
+            return moduleCodes.Any(module => string.Equals(module, moduleCode, StringComparison.OrdinalIgnoreCase))
+                || (includeSuperUser && moduleCodes.Any(module => string.Equals(module, SuperUserModuleCode, StringComparison.OrdinalIgnoreCase)));
         }
 
         private async Task<ProjectTaskUpdateViewModel> ReadTaskUpdateModelAsync()
@@ -809,7 +829,7 @@ namespace Pulse.Api.Controllers
             }
 
             var loggeduser = User.Identity.GetClaim("employeeid");
-            var obj = await _projecttaskService.GetItemListAsync(loggeduser);
+            var obj = await _projecttaskService.GetItemListAsync(HasSuperUserModule() ? null : loggeduser);
 
 
             return Ok(obj);
@@ -826,7 +846,7 @@ namespace Pulse.Api.Controllers
             }
 
             var loggeduser = User.Identity.GetClaim("employeeid");
-            var obj = (await _projecttaskService.GetItemDetailsAsync(id, loggeduser));
+            var obj = (await _projecttaskService.GetItemDetailsAsync(id, HasSuperUserModule() ? null : loggeduser));
 
 
             return Ok(obj);
@@ -842,7 +862,7 @@ namespace Pulse.Api.Controllers
             }
 
             var loggeduser = User.Identity.GetClaim("employeeid");
-            var obj = await _projecttaskService.GetItemDetailsReadOnlyAsync(id, loggeduser);
+            var obj = await _projecttaskService.GetItemDetailsReadOnlyAsync(id, HasSuperUserModule() ? null : loggeduser);
 
             return Ok(obj);
         }

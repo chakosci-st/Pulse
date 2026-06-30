@@ -276,7 +276,13 @@ namespace Pulse.Services.Implementations
         }
         public async Task<ProjectTaskItem> GetItemDetailsAsync(string projecttasksysid, string userid)
         {
-            return (await _projecttaskRepository.GetTaskItemListAsync(projecttasksysid: projecttasksysid)).Where(t => t.Members.IndexOf(userid) >= 0).SingleOrDefault();
+            var tasks = await _projecttaskRepository.GetTaskItemListAsync(projecttasksysid: projecttasksysid);
+            if (string.IsNullOrWhiteSpace(userid))
+            {
+                return tasks.SingleOrDefault();
+            }
+
+            return tasks.Where(t => (t.Members ?? string.Empty).IndexOf(userid) >= 0).SingleOrDefault();
         }
 
         public async Task<ProjectTaskItem> GetItemDetailsReadOnlyAsync(string projecttasksysid, string userid)

@@ -22,6 +22,8 @@ namespace Pulse.Api.Controllers
     [RoutePrefix("api/Projects")]
     public class ProjectsController : ApiController
     {
+        private const string SuperUserModuleCode = "SUPERUSER";
+
         private readonly IProjectService _projectService;
         private readonly IRoadmapService _roadmapService;
         private readonly IProjectMemberService _projectmemberService;
@@ -75,8 +77,18 @@ namespace Pulse.Api.Controllers
             return Content(HttpStatusCode.Forbidden, new { message });
         }
 
+        private bool HasSuperUserModule()
+        {
+            return ParseCsvToSet(User.Identity.GetClaim("modulecodes")).Contains(SuperUserModuleCode);
+        }
+
         private async Task<bool> HasActivePlantMembershipAsync(string loggedUserId, string plantCode = null)
         {
+            if (HasSuperUserModule())
+            {
+                return true;
+            }
+
             if (string.IsNullOrWhiteSpace(loggedUserId))
             {
                 return false;
@@ -98,6 +110,11 @@ namespace Pulse.Api.Controllers
 
         private async Task<bool> CanManageProjectAsync(string loggedUserId, string projectNo)
         {
+            if (HasSuperUserModule())
+            {
+                return true;
+            }
+
             if (string.IsNullOrWhiteSpace(loggedUserId) || string.IsNullOrWhiteSpace(projectNo))
             {
                 return false;
@@ -120,6 +137,11 @@ namespace Pulse.Api.Controllers
 
         private async Task<bool> IsProjectOwnerMemberAsync(string loggedUserId, string projectNo)
         {
+            if (HasSuperUserModule())
+            {
+                return true;
+            }
+
             if (string.IsNullOrWhiteSpace(loggedUserId) || string.IsNullOrWhiteSpace(projectNo))
             {
                 return false;
@@ -139,6 +161,11 @@ namespace Pulse.Api.Controllers
 
         private async Task<bool> CanViewProjectDetailsAsync(string loggedUserId, string projectNo)
         {
+            if (HasSuperUserModule())
+            {
+                return true;
+            }
+
             if (await CanManageProjectAsync(loggedUserId, projectNo))
             {
                 return true;
@@ -918,7 +945,7 @@ namespace Pulse.Api.Controllers
 
             var loggeduser = User.Identity.GetClaim("employeeid");
 
-            var obj = await _projectService.GetDashboardCardsCounter(showAllUsers ? null : loggeduser);
+            var obj = await _projectService.GetDashboardCardsCounter(showAllUsers || HasSuperUserModule() ? null : loggeduser);
 
             return Ok(obj);
         }
@@ -939,12 +966,13 @@ namespace Pulse.Api.Controllers
             }
 
             var loggeduser = User.Identity.GetClaim("employeeid");
+            var effectiveLoggedUser = HasSuperUserModule() ? null : loggeduser;
             var pageSize = Math.Max(1, Math.Min(take, 100));
             var normalizedQuery = query.ToLowerInvariant();
             var projectSearch = new ProjectExtendSearch
             {
                 Search = string.Empty,
-                LoggedUser = loggeduser,
+                LoggedUser = effectiveLoggedUser,
                 NodeType = "roadmap",
                 OrderColumn = "projectno",
                 OrderDir = "asc",
@@ -1016,7 +1044,7 @@ namespace Pulse.Api.Controllers
                 })
                 .ToList();
 
-            var nodeResults = (await _projectRepository.GetProjectNodesByUserAsync(loggeduser))
+            var nodeResults = (await _projectRepository.GetProjectNodesByUserAsync(effectiveLoggedUser))
                 .Where(item => !string.IsNullOrWhiteSpace(item.ProjectNo))
                 .Where(item => string.Equals(item.NodeType, "milestone", StringComparison.OrdinalIgnoreCase)
                     || string.Equals(item.NodeType, "activity", StringComparison.OrdinalIgnoreCase)
@@ -1066,7 +1094,7 @@ namespace Pulse.Api.Controllers
             }
 
             var loggedUser = User.Identity.GetClaim("employeeid");
-            var report = await _projectService.GetProjectMonitoringReportAsync(loggedUser);
+            var report = await _projectService.GetProjectMonitoringReportAsync(HasSuperUserModule() ? null : loggedUser);
             return Ok(report);
         }
 
@@ -1116,7 +1144,7 @@ namespace Pulse.Api.Controllers
             ////if (!allowedDirections.Contains(sortDir.ToUpper()))
             ////    sortDir = "ASC"; // default direction
             var loggeduser = User.Identity.GetClaim("employeeid");
-            var showAllUsers = request?.ShowAllUsers == true;
+            var showAllUsers = request?.ShowAllUsers == true || HasSuperUserModule();
             var searchTerm = new ProjectExtendSearch
             {
                 Search = searchValue,
@@ -1188,7 +1216,7 @@ namespace Pulse.Api.Controllers
             ////if (!allowedDirections.Contains(sortDir.ToUpper()))
             ////    sortDir = "ASC"; // default direction
             var loggeduser = User.Identity.GetClaim("employeeid");
-            var showAllUsers = request?.ShowAllUsers == true;
+            var showAllUsers = request?.ShowAllUsers == true || HasSuperUserModule();
             var searchTerm = new ProjectExtendSearch
             {
                 Search = searchValue,
@@ -1329,11 +1357,20 @@ namespace Pulse.Api.Controllers
             }
 
             var moduleCodes = ParseCsvToSet(User.Identity.GetClaim("modulecodes"));
-            return moduleCodes.Contains(moduleCode.Trim());
+            return moduleCodes.Contains(moduleCode.Trim()) || moduleCodes.Contains(SuperUserModuleCode);
         }
 
         private async Task<HashSet<string>> GetActivePlantCodesAsync(string loggedUserId)
         {
+            if (HasSuperUserModule())
+            {
+                var allPlantCodes = ((await _projectService.GetAllProjectsAsync()) ?? Enumerable.Empty<Project>())
+                    .Where(project => project != null && !string.IsNullOrWhiteSpace(project.PlantCode))
+                    .Select(project => project.PlantCode.Trim());
+
+                return new HashSet<string>(allPlantCodes, StringComparer.OrdinalIgnoreCase);
+            }
+
             var memberships = ((await _plantMemberRepository.GetListAsync(null, loggedUserId)) ?? Enumerable.Empty<PlantMember>())
                 .Where(member => member != null
                     && member.IsActive == 1
@@ -1379,6 +1416,11 @@ namespace Pulse.Api.Controllers
 
         private async Task<bool> CanUpdateFromOwnerBoardAsync(string loggedUserId, string projectNo, bool hasAdvancedStatusModule)
         {
+            if (HasSuperUserModule())
+            {
+                return true;
+            }
+
             if (string.IsNullOrWhiteSpace(loggedUserId) || string.IsNullOrWhiteSpace(projectNo))
             {
                 return false;
@@ -1822,13 +1864,14 @@ namespace Pulse.Api.Controllers
             var normalizedMode = NormalizeBoardMode(mode);
             var normalizedStatus = string.IsNullOrWhiteSpace(status) ? null : status.Trim();
             var loggedUser = User.Identity.GetClaim("employeeid");
+            var isSuperUser = HasSuperUserModule();
             var hasAdvancedStatusModule = HasModuleCode("ADVCHSTAT");
             var disabledLanes = GetOwnerBoardDisabledLanes(normalizedMode, hasAdvancedStatusModule);
 
             Func<object> permissionPayload = () => new
             {
                 hasAdvancedStatusModule,
-                accessScope = hasAdvancedStatusModule ? "PLANT" : "OWNER",
+                accessScope = isSuperUser ? "ALL" : hasAdvancedStatusModule ? "PLANT" : "OWNER",
                 disabledLanes
             };
 
@@ -1844,7 +1887,16 @@ namespace Pulse.Api.Controllers
             }
 
             HashSet<string> accessibleProjectSet;
-            if (hasAdvancedStatusModule)
+            if (isSuperUser)
+            {
+                var allProjects = (await _projectService.GetAllProjectsAsync()) ?? Enumerable.Empty<Project>();
+                accessibleProjectSet = new HashSet<string>(
+                    allProjects
+                        .Where(project => project != null && !string.IsNullOrWhiteSpace(project.ProjectNo))
+                        .Select(project => project.ProjectNo.Trim()),
+                    StringComparer.OrdinalIgnoreCase);
+            }
+            else if (hasAdvancedStatusModule)
             {
                 var activePlantCodes = await GetActivePlantCodesAsync(loggedUser);
                 if (!activePlantCodes.Any())
