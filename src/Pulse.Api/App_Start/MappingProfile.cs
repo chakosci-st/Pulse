@@ -221,7 +221,7 @@ namespace Pulse.Api
                 .ForMember(dest => dest.TargetCompletionWorkWeek, opt => opt.MapFrom(src => src.ProjectendWorkWeek))
                 .ForMember(dest => dest.ActualStartDate, opt => opt.MapFrom(src => src.ActualStartDate))
                 .ForMember(dest => dest.PlantCode, opt => opt.MapFrom(src => src.SiteValue))
-                .ForMember(dest => dest.CategoryCode, opt => opt.MapFrom(src => src.TemplateCategoryValue))
+                .ForMember(dest => dest.CategoryCode, opt => opt.MapFrom(src => string.IsNullOrWhiteSpace(src.CategoryCode) ? src.TemplateCategoryValue : src.CategoryCode))
                 .ForMember(dest => dest.ProductGroupCode, opt => opt.MapFrom(src => src.ProductgroupValue))
                 .ForMember(dest => dest.ProductDivisionCode, opt => opt.MapFrom(src => src.ProductdivisionValue))
                 .ForMember(dest => dest.ProjectOwnerUserName, opt => opt.MapFrom(src => src.OwnerValue))

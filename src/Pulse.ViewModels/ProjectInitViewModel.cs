@@ -27,6 +27,8 @@ namespace Pulse.ViewModels
         public string TemplateCategory { get; set; }
         [JsonProperty("templateCategoryValue")]
         public string TemplateCategoryValue { get; set; }
+        [JsonProperty("categoryCode")]
+        public string CategoryCode { get; set; }
         [JsonProperty("templateJson")]
         public string TemplateJson { get; set; }
         [JsonProperty("title")]

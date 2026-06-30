@@ -1533,23 +1533,27 @@ RETURNING PROJECTNO INTO :PROJECTNO
 
             var dataresult = await _dataAccess.GetMappedDataAsync<ProjectExtend, ProductGroup, ProductDivision, Plant, Category, ProjectExtend>(
                                     dataQuery: sql_flat_det + @"
-select * from flat_det
-WHERE fsum.parenttype = 'roadmap'
-ORDER BY
-    CASE WHEN :orderColumn = 'projectname' AND :orderDir = 'asc'  THEN pl.projectname || LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn = 'projectno' AND :orderDir = 'asc'  THEN pl.projectno || LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn = 'plantcode' AND :orderDir = 'asc'  THEN pl.plantcode || pl.projectname || LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn = 'productgroup' AND :orderDir = 'asc'  THEN pg.productgroupname || pl.projectname || LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn = 'productdivision' AND :orderDir = 'asc'  THEN pd.productdivisionname || pl.projectname || LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn = 'orderindex' AND :orderDir = 'asc'  THEN LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn IS NULL AND :orderDir = 'asc'  THEN pl.projectno || LPAD(fsum.orderindex, 8, '0') END ASC,
-    CASE WHEN :orderColumn = 'projectname' AND :orderDir = 'desc'  THEN pl.projectname || LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn = 'projectno' AND :orderDir = 'desc'  THEN pl.projectno || LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn = 'plantcode' AND :orderDir = 'desc'  THEN pl.plantcode || pl.projectname || LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn = 'productgroup' AND :orderDir = 'desc'  THEN pg.productgroupname || pl.projectname || LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn = 'productdivision' AND :orderDir = 'desc'  THEN pd.productdivisionname || pl.projectname || LPAD(fsum.orderindex, 8, '0')
-         WHEN :orderColumn = 'orderindex' AND :orderDir = 'desc'  THEN LPAD(fsum.orderindex, 8, '0')  
-         WHEN :orderColumn IS NULL AND :orderDir = 'desc'  THEN pl.projectno || LPAD(fsum.orderindex, 8, '0')  END DESC
+  SELECT *
+    FROM flat_det
+   WHERE fsum.parenttype = 'roadmap'
+ORDER BY CASE
+            WHEN :orderColumn = 'projectname' AND :orderDir = 'asc' THEN pl.projectname || LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn = 'projectno' AND :orderDir = 'asc' THEN pl.projectno || LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn = 'plantcode' AND :orderDir = 'asc' THEN pl.plantcode || pl.projectname || LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn = 'productgroup' AND :orderDir = 'asc' THEN pg.productgroupname || pl.projectname || LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn = 'productdivision' AND :orderDir = 'asc' THEN pd.productdivisionname || pl.projectname || LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn = 'orderindex' AND :orderDir = 'asc' THEN LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn IS NULL AND :orderDir = 'asc' THEN pl.projectno || LPAD (fsum.orderindex, 8, '0')
+         END ASC,
+         CASE
+            WHEN :orderColumn = 'projectname' AND :orderDir = 'desc' THEN pl.projectname || LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn = 'projectno' AND :orderDir = 'desc' THEN pl.projectno || LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn = 'plantcode' AND :orderDir = 'desc' THEN pl.plantcode || pl.projectname || LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn = 'productgroup' AND :orderDir = 'desc' THEN pg.productgroupname || pl.projectname || LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn = 'productdivision' AND :orderDir = 'desc' THEN pd.productdivisionname || pl.projectname || LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn = 'orderindex' AND :orderDir = 'desc' THEN LPAD (fsum.orderindex, 8, '0')
+            WHEN :orderColumn IS NULL AND :orderDir = 'desc' THEN pl.projectno || LPAD (fsum.orderindex, 8, '0')
+         END DESC
 OFFSET :startindex ROWS FETCH NEXT :lengthcount ROWS ONLY",
                                     parameters: searchTerm,
                                     ////parameters: new
