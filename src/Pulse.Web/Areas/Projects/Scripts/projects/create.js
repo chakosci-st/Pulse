@@ -686,10 +686,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $('#templateSelect').on('select2:select', function (e) {
         var selectedData = e.params.data;
+        var categoryCode = selectedData.categoryCode || (selectedData.roadmap && selectedData.roadmap.categoryCode) || '';
+        var categoryName = selectedData.categoryName || (selectedData.roadmap && selectedData.roadmap.category && selectedData.roadmap.category.categoryName) || '';
         $('#templateDescription').html(selectedData.roadmapDescription);
-        $('#templateCategory').html(selectedData.categoryName + " (" + selectedData.categoryCode + ")");
-        if (selectedData.categoryCode)
-            $('#templateCategoryValue').val(selectedData.categoryCode);
+        $('#templateCategory').html(categoryName + (categoryCode ? " (" + categoryCode + ")" : ""));
+        $('#templateCategoryValue').val(categoryCode);
 
         if (selectedData.plantRoadmapLinkSysId)
             $('#templatePlantRoadmapLinkSysId').val(selectedData.plantRoadmapLinkSysId);
@@ -754,8 +755,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const projectendYear = projectendDatePicker.value.trim();
         const projectendWorkWeek = targetendworkweekSelect.value.trim();
         const memberNames = getAllAssignableMembers();
+        const selectedTemplateData = $('#templateSelect').select2('data');
+        const selectedTemplate = selectedTemplateData.length ? selectedTemplateData[0] : {};
         const templateCategory = $('#templateCategory').html();
-        const templateCategoryValue = $('#templateCategoryValue').val();
+        const templateCategoryValue = $('#templateCategoryValue').val()
+            || selectedTemplate.categoryCode
+            || (selectedTemplate.roadmap && selectedTemplate.roadmap.categoryCode)
+            || '';
         const templateDescription = $('#templateDescription').html();
         const templateJson = $('#templateJson').val();
         const templatePlantRoadmapLinkSysId = $('#templatePlantRoadmapLinkSysId').val();
@@ -841,6 +847,7 @@ document.addEventListener('DOMContentLoaded', function () {
             templateDescription,
             templateCategory,
             templateCategoryValue,
+            categoryCode: templateCategoryValue,
             templateJson: templateJson,
             title,
             description,
